@@ -9,7 +9,9 @@
   <meta name="author" content="Shaiju E">
 
   
-  <meta name="description" content="To support &nbsp;mysql , we have to recompile kannel with &#8211;with&#8211;mysql./configure &#8211;prefix=/usr/local/kannel &#8211;with-mysqlTo &hellip;">
+  <meta name="description" content="To support mysql, we have to recompile kannel with &#8211;mysql 1
+./configure --prefix=/usr/local/kannel --with-mysql
+To store DLR information into &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -92,8 +94,77 @@
 
 
 <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on">To support &nbsp;mysql , we have to recompile kannel with &#8211;with&#8211;mysql<br /><br />./configure &#8211;prefix=/usr/local/kannel &#8211;with-mysql<br /><br />To store DLR information into a MySQL database you may use the dlr-storage = mysql<br />configuration directive in the core group.<br />In addition to that you must have a dlr-db group defined that specifies the table field names that are<br />used to the DLR attributes and a mysql-connection group that defines the connection to the MySQL server itself.<br /><br />Here is the example configuration<br /><br />group = core<br />&#8230;&#8230;&#8230;<br />dlr-storage = mysql<br /><br />group = mysql-connection<br />id = mydlr<br />host = localhost<br />username = foo<br />password = bar<br />database = dlr<br />max-connections = 1<br /><br />group = dlr-db<br />id = mydlr<br />table = dlr<br />field-smsc = smsc<br />field-timestamp = ts<br />field-destination = destination<br />field-source = source<br />field-service = service<br />field-url = url<br />field-mask = mask<br />field-status = status<br />field-boxc-id = boxc<br /><br />Create table dlr<br /><br />CREATE TABLE dlr (smsc varchar(40),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ts varchar(40),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; destination varchar(40),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; source varchar(40),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; service varchar(40),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; url varchar(255),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; mask int(10),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; status int(10),<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; boxc varchar(40)<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; )<br /><div><br /></div></div></div>
+<div dir="ltr" style="text-align: left;" trbidi="on">To support mysql, we have to recompile kannel with &#8211;mysql 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./configure --prefix=/usr/local/kannel --with-mysql</span></code></pre></td></tr></table></div></figure>
+To store DLR information into a MySQL database you may use the dlr-storage = mysql configuration directive in the core group.In addition to that you must have a dlr-db group defined that specifies the table field names that are used to the DLR attributes and a mysql-connection group that defines the connection to the MySQL server itself.
+<br/>
+Here is the example configuration
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>group = core
+</span><span class='line'>.........
+</span><span class='line'>dlr-storage = mysql
+</span><span class='line'>group = mysql-connection
+</span><span class='line'>id = mydlr
+</span><span class='line'>host = localhost
+</span><span class='line'>username = foo
+</span><span class='line'>password = bar
+</span><span class='line'>database = dlr
+</span><span class='line'>max-connections = 1
+</span><span class='line'>group = dlr-db
+</span><span class='line'>id = mydlr
+</span><span class='line'>table = dlr
+</span><span class='line'>field-smsc = smsc
+</span><span class='line'>field-timestamp = ts
+</span><span class='line'>field-destination = destination
+</span><span class='line'>field-source = source
+</span><span class='line'>field-service = service
+</span><span class='line'>field-url = url
+</span><span class='line'>field-mask = mask
+</span><span class='line'>field-status = status
+</span><span class='line'>field-boxc-id = boxc</span></code></pre></td></tr></table></div></figure>
+Create table dlr<br /><br />
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE dlr (smsc varchar(40),
+</span><span class='line'>                  ts varchar(40),
+</span><span class='line'>                  destination varchar(40),
+</span><span class='line'>                  source varchar(40),
+</span><span class='line'>                  service varchar(40),
+</span><span class='line'>                  url varchar(255),
+</span><span class='line'>                  mask int(10),
+</span><span class='line'>                  status int(10),
+</span><span class='line'>                  boxc varchar(40))</span></code></pre></td></tr></table></div></figure>
 </div>
+</div></div>
 
 
   <footer>
