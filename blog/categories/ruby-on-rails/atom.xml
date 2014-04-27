@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby on Rails | TechSleek]]></title>
   <link href="http://eshaiju.github.io/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://eshaiju.github.io/"/>
-  <updated>2014-04-28T00:22:53+05:30</updated>
+  <updated>2014-04-28T00:28:41+05:30</updated>
   <id>http://eshaiju.github.io/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -77,9 +77,8 @@ Thanks for the good post, but does not save data to the database<br />I guess it
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
   <div>Last few months I have been facing lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to reconnecting stage. I searched for a tool which will monitor kannel status Unfortunately i didn't find a tool to monitor and give alert. so decided to write a tool which will monitor kannel activities.</div>
-  {% codeblock %}
-    kannel_monitor 0.0.2
-  {% endcodeblock %}
+  <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 0.0.2</span></code></pre></td></tr></table></div></figure></notextile></div>
   This gem will monitor<br />
   <ul>
     <li>&nbsp; &nbsp;kannel status</li>
@@ -88,13 +87,11 @@ Thanks for the good post, but does not save data to the database<br />I guess it
     <li>&nbsp; &nbsp;smsc queue and will send a email alerts when something went wrong.</li>
   </ul>
   Just install gem in server using 
-    {% codeblock %}
-      gem install kannel_monitor
-    {% endcodeblock %}
+    <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install kannel_monitor</span></code></pre></td></tr></table></div></figure></notextile></div>
   run monitoring activity using command 
-  {% codeblock %}
-    kannel_monitor 'path to kannel_monitor.yml'
-  {% endcodeblock %}
+  <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 'path to kannel_monitor.yml'</span></code></pre></td></tr></table></div></figure></notextile></div>
    Example of <b>yml</b> file is given&nbsp;<b><a href="https://github.com/shaijunonu/kannel-monitor/blob/master/config/kannel_monitor.yml" style="color: #1155cc;">Here</a>.
    </b><br /><span>you need to set a crone job to run this in a specific intervals. If a smsc is permanently reconection stage and you don't want to monitor that smsc, then you can skip that particular smsc by adding in <b>sms_to_be_skipped&nbsp;</b></span>
 </div></div>
