@@ -151,61 +151,61 @@
 <span class='line-number'>55</span>
 <span class='line-number'>56</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>#---------------------------------------------
-</span><span class='line'>  # CORE
-</span><span class='line'>  #
-</span><span class='line'>  # There is only one core group and it sets all basic settings of the bearerbox (and system).
-</span><span class='line'>  group = core
-</span><span class='line'>  admin-port = 13000
-</span><span class='line'>  admin-password = passwd##
-</span><span class='line'>  smsbox-port = 13010
-</span><span class='line'>  log-file = "/var/log/kannel/kannel.log"
-</span><span class='line'>  # Log level is DEBUG
-</span><span class='line'>  log-level = 
-</span><span class='line'>  access-log = "/var/log/kannel/access.log"
-</span><span class='line'>  store-type = spool
-</span><span class='line'>  # Let no SMS be lost as far as possible
-</span><span class='line'>  store-location = "/var/spool/kannel"
-</span><span class='line'>  # Acceptable retries for temporary failures in sending SMS
-</span><span class='line'>  sms-resend-retry = 3
-</span><span class='line'>  #---------------------------------------------
-</span><span class='line'>  # SMSBOX SETUP
-</span><span class='line'>  #
-</span><span class='line'>  # Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery
-</span><span class='line'>  group = smsbox
-</span><span class='line'>  bearerbox-host = localhost
-</span><span class='line'>  sendsms-port = 13020
-</span><span class='line'>  log-file = "/var/log/kannel/smsbox.log"
-</span><span class='line'>  # Log level is DEBUG
-</span><span class='line'>  log-level = 0
-</span><span class='line'>  access-log = "/var/log/kannel/access.log"
-</span><span class='line'>  #---------------------------------------------
-</span><span class='line'>  # SEND-SMS USERS
-</span><span class='line'>  # These users are used when Kannel smsbox sendsms interface is used to send PUSH sms messages
-</span><span class='line'>  group = sendsms-user
-</span><span class='line'>  username = tester
-</span><span class='line'>  password = foobar
-</span><span class='line'>  concatenation = true
-</span><span class='line'>  max-messages = 4
-</span><span class='line'>  #---------------------------------------------
-</span><span class='line'>  # SMSC CONNECTIONS
-</span><span class='line'>  # SMSC connections are created in bearerbox and they handle SMSC 
-</span><span class='line'>  # protocol and message relying.
-</span><span class='line'>  # Example complete configuration
-</span><span class='line'>  group = smsc
-</span><span class='line'>  smsc = smpp
-</span><span class='line'>  smsc-id = PROMO-SERVICE-MESSAGE
-</span><span class='line'>  allowed-smsc-id = PROMO-SERVICE-MESSAGE
-</span><span class='line'>  host = X.X.X.X
-</span><span class='line'>  port = XXXX
-</span><span class='line'>  transceiver-mode = true
-</span><span class='line'>  smsc-username = promouser
-</span><span class='line'>  smsc-password = promopasswd
-</span><span class='line'>  source-addr-ton = 0
-</span><span class='line'>  source-addr-npi = 1
-</span><span class='line'>  dest-addr-ton = 0
-</span><span class='line'>  dest-addr-npi = 1
-</span><span class='line'>  system-type = ""
-</span><span class='line'>  address-range = ""</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'># CORE
+</span><span class='line'>#
+</span><span class='line'># There is only one core group and it sets all basic settings of the bearerbox (and system).
+</span><span class='line'>group = core
+</span><span class='line'>admin-port = 13000
+</span><span class='line'>admin-password = passwd##
+</span><span class='line'>smsbox-port = 13010
+</span><span class='line'>log-file = "/var/log/kannel/kannel.log"
+</span><span class='line'># Log level is DEBUG
+</span><span class='line'>log-level = 
+</span><span class='line'>access-log = "/var/log/kannel/access.log"
+</span><span class='line'>store-type = spool
+</span><span class='line'># Let no SMS be lost as far as possible
+</span><span class='line'>store-location = "/var/spool/kannel"
+</span><span class='line'># Acceptable retries for temporary failures in sending SMS
+</span><span class='line'>sms-resend-retry = 3
+</span><span class='line'>#---------------------------------------------
+</span><span class='line'># SMSBOX SETUP
+</span><span class='line'>#
+</span><span class='line'># Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery
+</span><span class='line'>group = smsbox
+</span><span class='line'>bearerbox-host = localhost
+</span><span class='line'>sendsms-port = 13020
+</span><span class='line'>log-file = "/var/log/kannel/smsbox.log"
+</span><span class='line'># Log level is DEBUG
+</span><span class='line'>log-level = 0
+</span><span class='line'>access-log = "/var/log/kannel/access.log"
+</span><span class='line'>#---------------------------------------------
+</span><span class='line'># SEND-SMS USERS
+</span><span class='line'># These users are used when Kannel smsbox sendsms interface is used to send PUSH sms messages
+</span><span class='line'>group = sendsms-user
+</span><span class='line'>username = tester
+</span><span class='line'>password = foobar
+</span><span class='line'>concatenation = true
+</span><span class='line'>max-messages = 4
+</span><span class='line'>#---------------------------------------------
+</span><span class='line'># SMSC CONNECTIONS
+</span><span class='line'># SMSC connections are created in bearerbox and they handle SMSC 
+</span><span class='line'># protocol and message relying.
+</span><span class='line'># Example complete configuration
+</span><span class='line'>group = smsc
+</span><span class='line'>smsc = smpp
+</span><span class='line'>smsc-id = PROMO-SERVICE-MESSAGE
+</span><span class='line'>allowed-smsc-id = PROMO-SERVICE-MESSAGE
+</span><span class='line'>host = X.X.X.X
+</span><span class='line'>port = XXXX
+</span><span class='line'>transceiver-mode = true
+</span><span class='line'>smsc-username = promouser
+</span><span class='line'>smsc-password = promopasswd
+</span><span class='line'>source-addr-ton = 0
+</span><span class='line'>source-addr-npi = 1
+</span><span class='line'>dest-addr-ton = 0
+</span><span class='line'>dest-addr-npi = 1
+</span><span class='line'>system-type = ""
+</span><span class='line'>address-range = ""</span></code></pre></td></tr></table></div></figure>
   Now start smsbox and bearerbox using 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

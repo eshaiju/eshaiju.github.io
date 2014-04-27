@@ -9,7 +9,7 @@
   <meta name="author" content="Shaiju E">
 
   
-  <meta name="description" content="Last few months I have been facing &nbsp;lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to &hellip;">
+  <meta name="description" content="Last few months I have been facing lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -92,7 +92,26 @@
 
 
 <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on"><div>Last few months I have been facing &nbsp;lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to reconnecting stage. I searched for a tool which will monitor kannel status Unfortunately i didn&#8217;t &nbsp;find a tool to monitor and give alert &nbsp;. so decided to write a tool which will monitor kannel activities.<br /><br />&nbsp; &nbsp; &nbsp; &nbsp;<span style="font-size: large;">&nbsp;&nbsp;<a href="https://rubygems.org/gems/kannel_monitor" style="color: #1155cc;">kannel_monitor&nbsp;0.0.2</a></span></div><div><br /><div class="" style="border: 1px solid rgb(180, 172, 153); color: #eeeeee; font-family: Arial, Helvetica, sans-serif; font-size: 10px; line-height: 10px; margin: 0px 36px 24px; outline: 0px; padding: 3px; text-shadow: rgba(255, 255, 255, 0.2) 1px 1px 1px; vertical-align: baseline;"><div class="" style="background-color: #ece5d6; background-image: url(https://rubygems.org/images/install.png); background-repeat: repeat no-repeat; border: 0px; color: black; font-size: 2.4em; margin: 0px; outline: 0px; padding: 12px; vertical-align: baseline;"><div class="" style="background-color: #aadd44; background-image: url(https://rubygems.org/images/go.png); background-repeat: repeat no-repeat; border: 0px; color: rgba(0, 0, 0, 0.8); height: 90px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;"><strong style="background-image: url(https://rubygems.org/images/arrow.png); background-repeat: no-repeat no-repeat; border: 0px; float: left; font-variant: small-caps; line-height: 90px; margin: 0px; outline: 0px; padding: 0px 50px 0px 10px; text-align: right; text-transform: lowercase; vertical-align: baseline; width: 100px;"><span style="font-size: large;">install</span></strong><span style="background-color: transparent; border: 0px; display: table-cell; font-family: Monaco, Consolas, 'Courier New', monospace; height: 90px; line-height: 1.2em; margin: 0px 0px 0px 0.5em; outline: 0px; padding: 0px; vertical-align: middle; width: 400px;"><span style="font-size: large;"><b>gem install kannel_monitor</b></span></span></div></div></div>This gem will monitor<br /><ul><li>&nbsp; &nbsp;kannel status</li><li>&nbsp; &nbsp;kannel sms queue</li><li>&nbsp; &nbsp;smsc status</li><li>&nbsp; &nbsp;smsc queue and will send a email alerts when something went wrong.</li></ul><div>Just install gem in server using &nbsp;<b>gem install kannel_monitor&nbsp;</b></div><div>run monitoring activity using command &nbsp;<b>kannel_monitor &nbsp;&#8216;path to kannel_monitor.yml&#8217;&nbsp;</b><br />Example of <b>yml</b> file is given&nbsp;<b><a href="https://github.com/shaijunonu/kannel-monitor/blob/master/config/kannel_monitor.yml" style="color: #1155cc;">here</a>&nbsp;.</b><br /><span style="font-size: small;">you need to set a crone job to run this in a specific intervals. If a smsc is permanently reconection stage and you don&#8217;t want to monitor that smsc, then you can skip that particular smsc by adding in <b>sms_to_be_skipped&nbsp;</b></span><br /><br /></div></div></div></div>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+  <div>Last few months I have been facing lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to reconnecting stage. I searched for a tool which will monitor kannel status Unfortunately i didn&#8217;t find a tool to monitor and give alert. so decided to write a tool which will monitor kannel activities.</div>
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 0.0.2</span></code></pre></td></tr></table></div></figure>
+  This gem will monitor<br />
+  <ul>
+    <li>&nbsp; &nbsp;kannel status</li>
+    <li>&nbsp; &nbsp;kannel sms queue</li>
+    <li>&nbsp; &nbsp;smsc status</li>
+    <li>&nbsp; &nbsp;smsc queue and will send a email alerts when something went wrong.</li>
+  </ul>
+  Just install gem in server using 
+    <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install kannel_monitor</span></code></pre></td></tr></table></div></figure>
+  run monitoring activity using command 
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 'path to kannel_monitor.yml'</span></code></pre></td></tr></table></div></figure>
+   Example of <b>yml</b> file is given&nbsp;<b><a href="https://github.com/shaijunonu/kannel-monitor/blob/master/config/kannel_monitor.yml" style="color: #1155cc;">Here</a>.
+   </b><br /><span>you need to set a crone job to run this in a specific intervals. If a smsc is permanently reconection stage and you don&#8217;t want to monitor that smsc, then you can skip that particular smsc by adding in <b>sms_to_be_skipped&nbsp;</b></span>
+</div></div>
 </div>
 
 
