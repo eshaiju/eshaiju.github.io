@@ -1,0 +1,98 @@
+---
+layout: post
+title: "Installing and configuring SQL-Based queue engine for Kannel (sqlbox)"
+date: 2013-10-31T00:57:00+05:30
+comments: false
+categories:
+ - Kannel
+---
+
+<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+  Sqlbox is a special Kannel box that sits between bearerbox and smsbox and uses a database queue to store and forward messages.Messages are queued on a configurable table (defaults to send_sms) and moved to another table (defaults to sent_sms) afterwards.
+  <br />
+  After installing gateway, we need to compile Sqlbox.
+  <br />
+  Steps:<br /><br />&nbsp;
+  1 - cd into directory where Kannel is unzipped and then type the following commands<br />
+  {% codeblock %}
+    cd addons/sqlbox/
+sudo ./bootstrap
+sudo ./configure --with-kannel-dir=/usr/local/kannel-1.5.0/
+sudo make bindir=/usr/local/kannel/kannel-1.5.0/
+{% endcodeblock %}
+  2 -Create a file named smsbox.conf and following configuration
+{%codeblock%}
+#SQL BOX CONFIG
+
+group = sqlbox
+id = sqlbox-db
+smsbox-id = sqlbox
+global-sender = ""
+bearerbox-host = localhost
+bearerbox-port = 13010
+smsbox-port = 13020
+smsbox-port-ssl = false
+sql-log-table = sent_sms
+sql-insert-table = send_sms
+log-file = "/var/log/kannel/kannel-sqlbox.log"
+
+# Database connection examples. Please uncomment as needed
+# Example MYSQL Connection
+
+group = mysql-connection
+id = sqlbox-db
+host = localhost
+username = username
+password = password
+database = kannel_db
+{%endcodeblock%}
+
+3 - create &nbsp;send_sms table using following sql command
+{%codeblock%}
+CREATE TABLE `send_sms` (
+                          `sql_id` bigint(20) NOT NULL auto_increment,
+                          `momt` enum('MO','MT') default NULL,
+                          `sender` varchar(20) default NULL,
+                          `receiver` varchar(20) default NULL,
+                          `udhdata` blob,<br />&nbsp; `msgdata` text,
+                          `time` bigint(20) default NULL,
+                          `smsc_id` varchar(255) default NULL,
+                          `service` varchar(255) default NULL,
+                          `account` varchar(255) default NULL,
+                          `id` bigint(20) default NULL,
+                          `sms_type` bigint(20) default NULL,
+                          `mclass` bigint(20) default NULL,
+                          `mwi` bigint(20) default NULL,
+                          `coding` bigint(20) default NULL,
+                          `compress` bigint(20) default NULL,
+                          `validity` bigint(20) default NULL,
+                          `deferred` bigint(20) default NULL,
+                          `dlr_mask` bigint(20) default NULL,
+                          `dlr_url` varchar(255) default NULL,
+                          `pid` bigint(20) default NULL,
+                          `alt_dcs` bigint(20) default NULL,
+                          `rpi` bigint(20) default NULL,
+                          `charset` varchar(255) default NULL,
+                          `boxc_id` varchar(255) default NULL,
+                          `meta_data` varchar(255) default NULL,
+                          `foreign_id` bigint(20) default NULL,
+                          `binfo` varchar(255) default NULL,
+                          PRIMARY KEY (`sql_id`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+{%endcodeblock%}
+
+4 - Create &nbsp;sent_sms table using same structure with changing table name <br />
+Now start bearerbox and sqlbox using commands
+{%codeblock%}
+sudo /usr/local/kannel-1.5.0/sbin bearerbox /home/shaiju/kannel/kannel.conf
+sudo /usr/local/kannel-1.5.0/sbin sqlbox /home/shaiju/kannel/sqlbox.conf
+{%endcodeblock%}
+Example<br />
+As when you're using the sendsms interface, you don't need to specify all the columns in order to succesfully enqueue a message.<br />
+Here's an example query you can use to send a simple message using Sqlbox:
+{%codeblock%}
+INSERT INTO send_sms ( &nbsp;momt, sender, receiver, msgdata, sms_type, smsc_id) VALUES ( &nbsp;'MT', 'TESTID', '9995323922', 'Hello world', 2,'testsmsc1');
+{%endcodeblock%}
+The former example would send a message with text "Hello world" to number "9995323922". If possible, the sender would be set to "TESTID".You can add other parameters to specify routing, charset encoding and any other settings your setup may require<br />
+If you are keen to learn more about this , Refer <a href="http://www.blogalex.com/wp-content/uploads/2008/11/userguide.html">Here</a><br />
+</div></div>

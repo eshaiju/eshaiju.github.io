@@ -11,62 +11,62 @@ categories:
 <div dir="ltr" style="text-align: left;" trbidi="on">Kannel is an open source WAP gateway and &nbsp;SMS gateway for GSM networks. &nbsp;The main use for Kannel is to link HTTP based services to various SMS centers using obscure protocols.Kannel is mainly being developed on Linux systems, and should be fairly easy to port to other Unix-like systems. However, kannel don't yet support other platforms.<br /><br /><b>Kannel Installation and Configuration as SMS gateway Server</b><br /><b>Installation</b><br />1 Before installing kannel you will need to install libxml. Download the source and follow the next steps for installation.We can download it from following link.<span style="color: #7a7a7a;">&nbsp;</span><a href="ftp://gd.tuwien.ac.at/pub/libxml/" style="background-color: white; border: 0px; color: #f3686d; font-family: Georgia, Times, serif; font-size: 14px; line-height: 21px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;" target="_blank">ftp://gd.tuwien.ac.at/pub/libxml/</a><br />2 Unzip it into some directory<br />3 Cd into directory where libxml is unzipped and then type the following commands<br />4 Type ./configure<br />5 Type make<br />6 Type make install<br />&nbsp; &nbsp;now you have libxml<br />7 Download latest version of Kannel <a href="http://www.kannel.org/download.shtml">http://www.kannel.org/download.shtml</a>&nbsp;and Unzip it into some directory &nbsp;or use svn co </span><a href="https://svn.kannel.org/gateway/trunk" style="white-space: pre-wrap;">https://svn.kannel.org/gateway/trunk</a>&nbsp; <span style="white-space: pre-wrap;"> to download latest version of gateway</span><br />8 cd into directory where Kannel is unzipped and then type the following commands<br />9 Type &nbsp;<span style="white-space: pre-wrap;">./configure --prefix=/usr/local/kannel-1.5.0 </span><span style="white-space: pre-wrap;">--enable-start-stop-daemon --with-mysql</span><br />10 Type make<br />11 Type make install<br /><br />&nbsp;Now kannel is ready<br /><br />Next step is to add configuration<br /><br />Kannel consists of three programs, usually run as &nbsp;daemons: &nbsp;bearerbox, wapbox, and smsbox. They implement the connection to the phone (SMS or UDP), the WAP protocol stack, and the SMS based services, respectively.<br /><br />We will need only &nbsp;bearerbox and smsbox as we are going to setup it as SMS gateway server. Bearerbox is the main queue and smsbox handles the smscs.<br /><br />Create a file named kannel.conf and add following configuration<br /><br />
 
   {% codeblock %}
-  #---------------------------------------------
-  # CORE
-  #
-  # There is only one core group and it sets all basic settings of the bearerbox (and system).
-  group = core
-  admin-port = 13000
-  admin-password = passwd##
-  smsbox-port = 13010
-  log-file = "/var/log/kannel/kannel.log"
-  # Log level is DEBUG
-  log-level = 
-  access-log = "/var/log/kannel/access.log"
-  store-type = spool
-  # Let no SMS be lost as far as possible
-  store-location = "/var/spool/kannel"
-  # Acceptable retries for temporary failures in sending SMS
-  sms-resend-retry = 3
-  #---------------------------------------------
-  # SMSBOX SETUP
-  #
-  # Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery
-  group = smsbox
-  bearerbox-host = localhost
-  sendsms-port = 13020
-  log-file = "/var/log/kannel/smsbox.log"
-  # Log level is DEBUG
-  log-level = 0
-  access-log = "/var/log/kannel/access.log"
-  #---------------------------------------------
-  # SEND-SMS USERS
-  # These users are used when Kannel smsbox sendsms interface is used to send PUSH sms messages
-  group = sendsms-user
-  username = tester
-  password = foobar
-  concatenation = true
-  max-messages = 4
-  #---------------------------------------------
-  # SMSC CONNECTIONS
-  # SMSC connections are created in bearerbox and they handle SMSC 
-  # protocol and message relying.
-  # Example complete configuration
-  group = smsc
-  smsc = smpp
-  smsc-id = PROMO-SERVICE-MESSAGE
-  allowed-smsc-id = PROMO-SERVICE-MESSAGE
-  host = X.X.X.X
-  port = XXXX
-  transceiver-mode = true
-  smsc-username = promouser
-  smsc-password = promopasswd
-  source-addr-ton = 0
-  source-addr-npi = 1
-  dest-addr-ton = 0
-  dest-addr-npi = 1
-  system-type = ""
-  address-range = "" 
+#---------------------------------------------
+# CORE
+#
+# There is only one core group and it sets all basic settings of the bearerbox (and system).
+group = core
+admin-port = 13000
+admin-password = passwd##
+smsbox-port = 13010
+log-file = "/var/log/kannel/kannel.log"
+# Log level is DEBUG
+log-level = 
+access-log = "/var/log/kannel/access.log"
+store-type = spool
+# Let no SMS be lost as far as possible
+store-location = "/var/spool/kannel"
+# Acceptable retries for temporary failures in sending SMS
+sms-resend-retry = 3
+#---------------------------------------------
+# SMSBOX SETUP
+#
+# Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery
+group = smsbox
+bearerbox-host = localhost
+sendsms-port = 13020
+log-file = "/var/log/kannel/smsbox.log"
+# Log level is DEBUG
+log-level = 0
+access-log = "/var/log/kannel/access.log"
+#---------------------------------------------
+# SEND-SMS USERS
+# These users are used when Kannel smsbox sendsms interface is used to send PUSH sms messages
+group = sendsms-user
+username = tester
+password = foobar
+concatenation = true
+max-messages = 4
+#---------------------------------------------
+# SMSC CONNECTIONS
+# SMSC connections are created in bearerbox and they handle SMSC 
+# protocol and message relying.
+# Example complete configuration
+group = smsc
+smsc = smpp
+smsc-id = PROMO-SERVICE-MESSAGE
+allowed-smsc-id = PROMO-SERVICE-MESSAGE
+host = X.X.X.X
+port = XXXX
+transceiver-mode = true
+smsc-username = promouser
+smsc-password = promopasswd
+source-addr-ton = 0
+source-addr-npi = 1
+dest-addr-ton = 0
+dest-addr-npi = 1
+system-type = ""
+address-range = "" 
 {% endcodeblock %}
   Now start smsbox and bearerbox using 
 {% codeblock %}

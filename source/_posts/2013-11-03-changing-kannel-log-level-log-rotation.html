@@ -1,0 +1,39 @@
+---
+layout: post
+title: "Changing Kannel Log Level & Log Rotation"
+date: 2013-11-03T12:40:00+05:30
+comments: false
+categories:
+ - Kannel
+---
+
+<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+  If Kannel is configured so that the bearerbox, wapbox and/or smsbox log to file each of these log files will continue to grow unless administered in some way. &nbsp;One way of reducing logs is by change log level.&nbsp;kannel allow to have 5 log-level ( 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - panic).&nbsp;We can change log level by editing log-level component in configuration file and also done by admin HTTP command without restaring bearerbox.
+  {%codeblock%}
+  http://localhost:13000/log-level?password=bar&amp;level=2
+  {%endcodeblock%}
+  Another way of administering log files is to 'rotate' the logs on a regular basis using a tool such as logrotate. A sample logrotate script is shown below.<br />
+  Setup Logrotate<br /><br />
+  Step 1 : If logrotate is not already on your VPS, install it now.<br />
+  {%codeblock%}sudo apt-get install logrotate{%endcodeblock%}
+  Step 2 : Add following script in file  <span style="font-weight: bold;">/etc/logrotate.d</span>
+  {%codeblock%}
+  /var/log/kannel/*.log {daily
+                         missingok
+                         rotate 365
+                         compress
+                         delaycompress
+                         notifempty
+                         create 640 kannel adm
+                         sharedscripts
+                         postrotate
+                         killall -HUP bearerbox smsbox wapbox || true &gt; /dev/null 2&gt; /dev/null
+                         endscript
+                        }
+{%endcodeblock%}
+In this example the Kannel log files found in <span style="font-weight: bold;">/var/log/kannel</span> are rotated and compressed daily over 365 days.&nbsp;To verify if a particular log is rotating or not and to check the last date and time of its rotation, check the <span style="font-weight: bold;"> /var/lib/logrotate/status </span>file.
+{%codeblock%}
+cat /var/lib/logrotate/status
+{%endcodeblock%}
+</div></div>
