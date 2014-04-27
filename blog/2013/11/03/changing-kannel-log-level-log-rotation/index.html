@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Changing Kannel Log Level & Log Rotation - TechSleek</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="If Kannel is configured so that the bearerbox, wapbox and/or smsbox log to file each of these log files will continue to grow unless administered in &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eshaiju.github.io/blog/2013/11/03/changing-kannel-log-level-log-rotation">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="TechSleek" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">TechSleek</a></h1>
+  
+    <h2>Its a place to write about I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eshaiju.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Changing Kannel Log Level & Log Rotation</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-03T12:40:00+05:30" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">If Kannel is configured so that the bearerbox, wapbox and/or smsbox log to file each of these log files will continue to grow unless administered in some way.One way of &nbsp;reducing logs is by change log level . kannel allow to have 5 log-level ( 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - panic).We can change log level &nbsp;by editing log-level component in&nbsp;configuration file and also done by admin HTTP command &nbsp;without restaring bearerbox.<br /><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <b>http://localhost:13000/log-level?password=bar&amp;level=2</b><br /><br />Another way of administering log files is to &#8216;rotate&#8217; the logs on a regular basis using a tool such as logrotate. A sample logrotate script is shown below.<br /><br />Setup Logrotate<br /><br />Step 1 : If logrotate is not already on your VPS, install it now.<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<b>sudo apt-get install logrotate</b><br />Step 2 : Add following script in &nbsp;file /etc/logrotate.d<br /><br />&nbsp; &nbsp; &nbsp; &nbsp; /var/log/kannel/*.log {<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; daily<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; missingok<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rotate 365<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; compress<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; delaycompress<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; notifempty<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; create 640 kannel adm<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; sharedscripts<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; postrotate<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; killall -HUP bearerbox smsbox wapbox || true &gt; /dev/null 2&gt; /dev/null<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; endscript<br />&nbsp; &nbsp; &nbsp; &nbsp; }<br /><br />In this example the Kannel log files found in /var/log/kannel are rotated and compressed daily over 365 days.To verify if a particular log is rotating or not and to check the last date and time of its rotation, check the &nbsp;/var/lib/logrotate/status file.<br /><br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<b>cat /var/lib/logrotate/status</b><br /><br /></div></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Shaiju E</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-03T12:40:00+05:30" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/kannel/'>Kannel</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://eshaiju.github.io/blog/2013/11/03/changing-kannel-log-level-log-rotation/" data-via="" data-counturl="http://eshaiju.github.io/blog/2013/11/03/changing-kannel-log-level-log-rotation/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/31/installing-and-configuring-sql-based/" title="Previous Post: Installing and configuring SQL-Based queue engine for Kannel (sqlbox)">&laquo; Installing and configuring SQL-Based queue engine for Kannel (sqlbox)</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/" title="Next Post: Autocomplete using Chosen in Rails Active_admin">Autocomplete using Chosen in Rails Active_admin &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">FullCalendar - Integration With Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">ActiveAdmin- Adding a Filter on Has_one Through Association</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Changing Kannel Log Level & Log Rotation</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

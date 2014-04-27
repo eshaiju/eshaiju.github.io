@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Kannel Monitoring Tool - Ruby Gem - TechSleek</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="Last few months I have been facing &nbsp;lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="TechSleek" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">TechSleek</a></h1>
+  
+    <h2>Its a place to write about I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eshaiju.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Kannel Monitoring Tool - Ruby Gem</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-03T23:47:00+05:30" pubdate data-updated="true">Oct 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on"><div>Last few months I have been facing &nbsp;lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to reconnecting stage. I searched for a tool which will monitor kannel status Unfortunately i didn&#8217;t &nbsp;find a tool to monitor and give alert &nbsp;. so decided to write a tool which will monitor kannel activities.<br /><br />&nbsp; &nbsp; &nbsp; &nbsp;<span style="font-size: large;">&nbsp;&nbsp;<a href="https://rubygems.org/gems/kannel_monitor" style="color: #1155cc;">kannel_monitor&nbsp;0.0.2</a></span></div><div><br /><div class="" style="border: 1px solid rgb(180, 172, 153); color: #eeeeee; font-family: Arial, Helvetica, sans-serif; font-size: 10px; line-height: 10px; margin: 0px 36px 24px; outline: 0px; padding: 3px; text-shadow: rgba(255, 255, 255, 0.2) 1px 1px 1px; vertical-align: baseline;"><div class="" style="background-color: #ece5d6; background-image: url(https://rubygems.org/images/install.png); background-repeat: repeat no-repeat; border: 0px; color: black; font-size: 2.4em; margin: 0px; outline: 0px; padding: 12px; vertical-align: baseline;"><div class="" style="background-color: #aadd44; background-image: url(https://rubygems.org/images/go.png); background-repeat: repeat no-repeat; border: 0px; color: rgba(0, 0, 0, 0.8); height: 90px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;"><strong style="background-image: url(https://rubygems.org/images/arrow.png); background-repeat: no-repeat no-repeat; border: 0px; float: left; font-variant: small-caps; line-height: 90px; margin: 0px; outline: 0px; padding: 0px 50px 0px 10px; text-align: right; text-transform: lowercase; vertical-align: baseline; width: 100px;"><span style="font-size: large;">install</span></strong><span style="background-color: transparent; border: 0px; display: table-cell; font-family: Monaco, Consolas, 'Courier New', monospace; height: 90px; line-height: 1.2em; margin: 0px 0px 0px 0.5em; outline: 0px; padding: 0px; vertical-align: middle; width: 400px;"><span style="font-size: large;"><b>gem install kannel_monitor</b></span></span></div></div></div>This gem will monitor<br /><ul><li>&nbsp; &nbsp;kannel status</li><li>&nbsp; &nbsp;kannel sms queue</li><li>&nbsp; &nbsp;smsc status</li><li>&nbsp; &nbsp;smsc queue and will send a email alerts when something went wrong.</li></ul><div>Just install gem in server using &nbsp;<b>gem install kannel_monitor&nbsp;</b></div><div>run monitoring activity using command &nbsp;<b>kannel_monitor &nbsp;&#8216;path to kannel_monitor.yml&#8217;&nbsp;</b><br />Example of <b>yml</b> file is given&nbsp;<b><a href="https://github.com/shaijunonu/kannel-monitor/blob/master/config/kannel_monitor.yml" style="color: #1155cc;">here</a>&nbsp;.</b><br /><span style="font-size: small;">you need to set a crone job to run this in a specific intervals. If a smsc is permanently reconection stage and you don&#8217;t want to monitor that smsc, then you can skip that particular smsc by adding in <b>sms_to_be_skipped&nbsp;</b></span><br /><br /></div></div></div></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Shaiju E</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-03T23:47:00+05:30" pubdate data-updated="true">Oct 3<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/kannel/'>Kannel</a>, <a class='category' href='/blog/categories/ruby-on-rails/'>Ruby On Rails</a>, <a class='category' href='/blog/categories/rubygem/'>RubyGem</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/" data-via="" data-counturl="http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/01/a-gem-for-generating-custom-error-pages/" title="Previous Post: A Gem for generating Custom error pages in Rails Application">&laquo; A Gem for generating Custom error pages in Rails Application</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/10/31/installing-and-configuring-sql-based/" title="Next Post: Installing and configuring SQL-Based queue engine for Kannel (sqlbox)">Installing and configuring SQL-Based queue engine for Kannel (sqlbox) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">FullCalendar - Integration With Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">ActiveAdmin- Adding a Filter on Has_one Through Association</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Changing Kannel Log Level & Log Rotation</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
