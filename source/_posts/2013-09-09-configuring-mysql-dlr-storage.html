@@ -1,0 +1,55 @@
+---
+layout: post
+title: "Configuring MySQL DLR storage"
+date: 2013-09-09T18:45:00+05:30
+comments: false
+categories:
+ - Kannel
+---
+
+<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">To support mysql, we have to recompile kannel with --mysql 
+{% codeblock %}
+./configure --prefix=/usr/local/kannel --with-mysql
+{% endcodeblock %}
+To store DLR information into a MySQL database you may use the dlr-storage = mysql configuration directive in the core group.In addition to that you must have a dlr-db group defined that specifies the table field names that are used to the DLR attributes and a mysql-connection group that defines the connection to the MySQL server itself.
+<br/>
+Here is the example configuration
+{% codeblock %}
+group = core
+.........
+dlr-storage = mysql
+group = mysql-connection
+id = mydlr
+host = localhost
+username = foo
+password = bar
+database = dlr
+max-connections = 1
+group = dlr-db
+id = mydlr
+table = dlr
+field-smsc = smsc
+field-timestamp = ts
+field-destination = destination
+field-source = source
+field-service = service
+field-url = url
+field-mask = mask
+field-status = status
+field-boxc-id = boxc
+{% endcodeblock %}
+Create table dlr<br /><br />
+{% codeblock %}
+CREATE TABLE dlr (smsc varchar(40),
+                  ts varchar(40),
+                  destination varchar(40),
+                  source varchar(40),
+                  service varchar(40),
+                  url varchar(255),
+                  mask int(10),
+                  status int(10),
+                  boxc varchar(40))
+{% endcodeblock %}
+</div>
+</div>
