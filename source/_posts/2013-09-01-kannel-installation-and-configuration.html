@@ -8,7 +8,82 @@ categories:
 ---
 
 <div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on">Kannel is an open source WAP gateway and &nbsp;SMS gateway for GSM networks. &nbsp;The main use for Kannel is to link HTTP based services to various SMS centers using obscure protocols.Kannel is mainly being developed on Linux systems, and should be fairly easy to port to other Unix-like systems. However, kannel don't yet support other platforms.<br /><br /><b>Kannel Installation and Configuration as SMS gateway Server</b><br /><br /><b>Installation</b><br /><br />1 Before installing kannel you will need to install libxml. Download the source and follow the next steps for installation.We can download it from following link.<span style="color: #7a7a7a;">&nbsp;</span><a href="ftp://gd.tuwien.ac.at/pub/libxml/" style="background-color: white; border: 0px; color: #f3686d; font-family: Georgia, Times, serif; font-size: 14px; line-height: 21px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;" target="_blank">ftp://gd.tuwien.ac.at/pub/libxml/</a><br />2 Unzip it into some directory<br />3 Cd into directory where libxml is unzipped and then type the following commands<br />4 Type ./configure<br />5 Type make<br />6 Type make install<br />&nbsp; &nbsp;now you have libxml<br /><br />7 Download latest version of Kannel <a href="http://www.kannel.org/download.shtml">http://www.kannel.org/download.shtml</a>&nbsp;and Unzip it into some &nbsp; &nbsp; &nbsp;directory &nbsp;or use&nbsp;<span style="white-space: pre-wrap;">  &nbsp;</span><br /><span style="white-space: pre-wrap;">      svn co </span><a href="https://svn.kannel.org/gateway/trunk" style="white-space: pre-wrap;">https://svn.kannel.org/gateway/trunk</a>&nbsp; <span style="white-space: pre-wrap;"> to download latest version of gateway</span><br />8 cd into directory where Kannel is unzipped and then type the following commands<br />9 Type &nbsp;<span style="white-space: pre-wrap;">./configure --prefix=/usr/local/kannel-1.5.0 </span><span style="white-space: pre-wrap;">--enable-start-stop-daemon --with-mysql</span><br />10 Type make<br />11 Type make install<br /><br />&nbsp;Now kannel is ready<br /><br />Next step is to add configuration<br /><br />Kannel consists of three programs, usually run as &nbsp;daemons: &nbsp;bearerbox, wapbox, and smsbox. They implement the connection to the phone (SMS or UDP), the WAP protocol stack, and the SMS based services, respectively.<br /><br />We will need only &nbsp;bearerbox and smsbox as we are going to setup it as SMS gateway server. Bearerbox is the main queue and smsbox handles the smscs.<br /><br />Create a file named kannel.conf and add following configuration<br /><br />#---------------------------------------------<br /># CORE<br />#<br /># There is only one core group and it sets all basic settings of the bearerbox (and system).<br /><br /><b>group = core</b><br /><b>admin-port = 13000</b><br /><b>admin-password = passwd##</b><br /><b>smsbox-port = 13010</b><br /><b>log-file = "/var/log/kannel/kannel.log"</b><br /><b># Log level is DEBUG</b><br /><b>log-level = 0</b><br /><b>access-log = "/var/log/kannel/access.log"</b><br /><b>store-type = spool</b><br /><b># Let no SMS be lost as far as possible</b><br /><b>store-location = "/var/spool/kannel"</b><br /><b># Acceptable retries for temporary failures in sending SMS</b><br /><b>sms-resend-retry = 3</b><br /><br />#---------------------------------------------<br /># SMSBOX SETUP<br />#<br /># Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery<br /><br /><b>group = smsbox</b><br /><b>bearerbox-host = localhost</b><br /><b>sendsms-port = 13020</b><br /><b>log-file = "/var/log/kannel/smsbox.log"</b><br /><b># Log level is DEBUG</b><br /><b>log-level = 0</b><br /><b>access-log = "/var/log/kannel/access.log"</b><br /><b><br /></b>#---------------------------------------------<br /># SEND-SMS USERS<br /># These users are used when Kannel smsbox sendsms interface is used<br />#to &nbsp;send PUSH sms messages<br /><br /><b>group = sendsms-user</b><br /><b>username = tester</b><br /><b>password = foobar</b><br /><b>concatenation = true</b><br /><b>max-messages = 4</b><br /><br />#---------------------------------------------<br /># SMSC CONNECTIONS<br />#<br /># SMSC connections are created in bearerbox and they handle SMSC specific<br /># protocol and message relying.<br /><br /><br /><b># Example complete configuration</b><br /><b>&nbsp;group = smsc</b><br /><b>&nbsp;smsc = smpp</b><br /><b>&nbsp;smsc-id = PROMO-SERVICE-MESSAGE</b><br /><b>&nbsp;allowed-smsc-id = PROMO-SERVICE-MESSAGE</b><br /><b>&nbsp;host = X.X.X.X</b><br /><b>&nbsp;port = XXXX</b><br /><b>&nbsp;transceiver-mode = true</b><br /><b>&nbsp;smsc-username = promouser</b><br /><b>&nbsp;smsc-password = promopasswd</b><br /><b>&nbsp;source-addr-ton = 0</b><br /><b>&nbsp;source-addr-npi = 1</b><br /><b>&nbsp;dest-addr-ton = 0</b><br /><b>&nbsp;dest-addr-npi = 1</b><br /><b>&nbsp;system-type = ""</b><br /><b>&nbsp;address-range = ""</b><br /><br /><br />Now start smsbox and bearerbox using commands<br /><br /><b>sudo /usr/local/kannel-1.5.0/sbin/bearerbox /home/shaiju/kannel/kannel.conf</b><br /><b><br /></b><b>sudo /usr/local/kannel-1.5.0/sbin/smsbox /home/shaiju/kannel/kannel.conf</b><br /><br />To see running process use<br /><br /><b>sudo ps -ef | grep kannel&nbsp;</b><br /><br />To stop the kannel service<br /><br /><b>/etc/init.d/kannel stop</b><br /><br />To see kannel logs<br /><br /><b>tail -f /var/log/kannel/kannel.log&nbsp;</b><br /><br />Now you can send sms using send sms url<br /><br /><b>http://kannel.machine.ip:13010/cgi-bin/sendsms?username=tester&amp;password=foobar&amp;from=SENDERID&amp;to=9999999999&amp;text=test sms &amp;smsc=PROMO-SERVICE-MESSAGE</b><br /><b><br /></b><span>If you are keen to learn more about this , Refer&nbsp;</span><a href="http://www.kannel.org/download/1.5.0/userguide-1.5.0/userguide.html" >Here</a><br />For Sample kannel configuration, check <a href="http://www.kannel.org/download/1.4.1/gateway-1.4.1/gw/smskannel.conf">Here</a><br /><br /></div></div>
+<div dir="ltr" style="text-align: left;" trbidi="on">Kannel is an open source WAP gateway and &nbsp;SMS gateway for GSM networks. &nbsp;The main use for Kannel is to link HTTP based services to various SMS centers using obscure protocols.Kannel is mainly being developed on Linux systems, and should be fairly easy to port to other Unix-like systems. However, kannel don't yet support other platforms.<br /><br /><b>Kannel Installation and Configuration as SMS gateway Server</b><br /><b>Installation</b><br />1 Before installing kannel you will need to install libxml. Download the source and follow the next steps for installation.We can download it from following link.<span style="color: #7a7a7a;">&nbsp;</span><a href="ftp://gd.tuwien.ac.at/pub/libxml/" style="background-color: white; border: 0px; color: #f3686d; font-family: Georgia, Times, serif; font-size: 14px; line-height: 21px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;" target="_blank">ftp://gd.tuwien.ac.at/pub/libxml/</a><br />2 Unzip it into some directory<br />3 Cd into directory where libxml is unzipped and then type the following commands<br />4 Type ./configure<br />5 Type make<br />6 Type make install<br />&nbsp; &nbsp;now you have libxml<br />7 Download latest version of Kannel <a href="http://www.kannel.org/download.shtml">http://www.kannel.org/download.shtml</a>&nbsp;and Unzip it into some directory &nbsp;or use svn co </span><a href="https://svn.kannel.org/gateway/trunk" style="white-space: pre-wrap;">https://svn.kannel.org/gateway/trunk</a>&nbsp; <span style="white-space: pre-wrap;"> to download latest version of gateway</span><br />8 cd into directory where Kannel is unzipped and then type the following commands<br />9 Type &nbsp;<span style="white-space: pre-wrap;">./configure --prefix=/usr/local/kannel-1.5.0 </span><span style="white-space: pre-wrap;">--enable-start-stop-daemon --with-mysql</span><br />10 Type make<br />11 Type make install<br /><br />&nbsp;Now kannel is ready<br /><br />Next step is to add configuration<br /><br />Kannel consists of three programs, usually run as &nbsp;daemons: &nbsp;bearerbox, wapbox, and smsbox. They implement the connection to the phone (SMS or UDP), the WAP protocol stack, and the SMS based services, respectively.<br /><br />We will need only &nbsp;bearerbox and smsbox as we are going to setup it as SMS gateway server. Bearerbox is the main queue and smsbox handles the smscs.<br /><br />Create a file named kannel.conf and add following configuration<br /><br />
+
+  {% codeblock %}
+  #---------------------------------------------
+  # CORE
+  #
+  # There is only one core group and it sets all basic settings of the bearerbox (and system).
+  group = core
+  admin-port = 13000
+  admin-password = passwd##
+  smsbox-port = 13010
+  log-file = "/var/log/kannel/kannel.log"
+  # Log level is DEBUG
+  log-level = 
+  access-log = "/var/log/kannel/access.log"
+  store-type = spool
+  # Let no SMS be lost as far as possible
+  store-location = "/var/spool/kannel"
+  # Acceptable retries for temporary failures in sending SMS
+  sms-resend-retry = 3
+  #---------------------------------------------
+  # SMSBOX SETUP
+  #
+  # Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery
+  group = smsbox
+  bearerbox-host = localhost
+  sendsms-port = 13020
+  log-file = "/var/log/kannel/smsbox.log"
+  # Log level is DEBUG
+  log-level = 0
+  access-log = "/var/log/kannel/access.log"
+  #---------------------------------------------
+  # SEND-SMS USERS
+  # These users are used when Kannel smsbox sendsms interface is used to send PUSH sms messages
+  group = sendsms-user
+  username = tester
+  password = foobar
+  concatenation = true
+  max-messages = 4
+  #---------------------------------------------
+  # SMSC CONNECTIONS
+  # SMSC connections are created in bearerbox and they handle SMSC 
+  # protocol and message relying.
+  # Example complete configuration
+  group = smsc
+  smsc = smpp
+  smsc-id = PROMO-SERVICE-MESSAGE
+  allowed-smsc-id = PROMO-SERVICE-MESSAGE
+  host = X.X.X.X
+  port = XXXX
+  transceiver-mode = true
+  smsc-username = promouser
+  smsc-password = promopasswd
+  source-addr-ton = 0
+  source-addr-npi = 1
+  dest-addr-ton = 0
+  dest-addr-npi = 1
+  system-type = ""
+  address-range = "" 
+{% endcodeblock %}
+  Now start smsbox and bearerbox using 
+{% codeblock %}
+  sudo /usr/local/kannel-1.5.0/sbin/bearerbox /home/shaiju/kannel/kannel.conf
+sudo /usr/local/kannel-1.5.0/sbin/smsbox /home/shaiju/kannel/kannel.conf
+{% endcodeblock %}
+To see running process use
+{% codeblock %}
+  sudo ps -ef | grep kannel
+{% endcodeblock %}
+To stop the kannel service
+{% codeblock %}/etc/init.d/kannel stop{% endcodeblock %}
+To see kannel logs
+{% codeblock %}tail -f /var/log/kannel/kannel.log{% endcodeblock %}
+Now you can send sms using send sms url
+{% codeblock %}http://kannel.machine.ip:13010/cgi-bin/sendsms?username=tester&amp;password=foobar&amp;from=SENDERID&amp;to=9999999999&amp;text=test sms &amp;smsc=PROMO-SERVICE-MESSAGE{% endcodeblock %}
+If you are keen to learn more about this , Refer&nbsp;</span><a href="http://www.kannel.org/download/1.5.0/userguide-1.5.0/userguide.html" >Here</a><br />For Sample kannel configuration, check <a href="http://www.kannel.org/download/1.4.1/gateway-1.4.1/gw/smskannel.conf">Here</a><br /><br /></div></div>
 <h2>Comments</h2>
 <div class='comments'>
 <div class='comment'>
