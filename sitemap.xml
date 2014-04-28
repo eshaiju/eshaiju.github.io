@@ -2,60 +2,60 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration/</loc>
-        <lastmod>2014-04-28T00:26:13+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage/</loc>
-        <lastmod>2014-04-28T00:28:13+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>
             http://eshaiju.github.io/blog/2013/10/01/a-gem-for-generating-custom-error-pages/
         </loc>
-        <lastmod>2014-04-28T00:28:19+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/</loc>
-        <lastmod>2014-04-28T00:28:24+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/blog/2013/10/31/installing-and-configuring-sql-based/</loc>
-        <lastmod>2014-04-28T00:28:30+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>
             http://eshaiju.github.io/blog/2013/11/03/changing-kannel-log-level-log-rotation/
         </loc>
-        <lastmod>2014-04-28T00:28:37+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/blog/2014/01/01/autocomplete-using-chosen-in-rails/</loc>
-        <lastmod>2014-04-28T00:28:40+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/blog/2014/02/04/activeadmin-adding-filter-on-hasone/</loc>
-        <lastmod>2014-04-27T14:51:05+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/blog/2014/03/05/fullcalendar-integration-with-ruby-on/</loc>
-        <lastmod>2014-04-27T14:51:05+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>
             http://eshaiju.github.io/blog/2014/03/16/nested-forms-for-belongsto-relationship/
         </loc>
-        <lastmod>2014-04-27T14:51:05+05:30</lastmod>
-    </url>
-    <url>
-        <loc>http://eshaiju.github.io/blog/archives/</loc>
-        <lastmod>2014-04-28T00:28:40+05:30</lastmod>
-    </url>
-    <url>
-        <loc>http://eshaiju.github.io/</loc>
-        <lastmod>2014-04-28T00:28:40+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/robots.txt</loc>
-        <lastmod>2014-04-26T23:37:08+05:30</lastmod>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
+    </url>
+    <url>
+        <loc>http://eshaiju.github.io/</loc>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
+    </url>
+    <url>
+        <loc>http://eshaiju.github.io/blog/archives/</loc>
+        <lastmod>2014-04-28T12:55:06+05:30</lastmod>
     </url>
 </urlset>
