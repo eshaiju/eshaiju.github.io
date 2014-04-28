@@ -169,7 +169,45 @@
 
 
   <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on"><h2 class="discussion-topic-title js-comment-body-title" style="background-color: white; border-bottom-style: none; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 21px; line-height: 1.1; margin: 0px; padding-right: 50px;"></h2><div style="background-color: #fbfbfb; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 13px; line-height: 22px; margin-bottom: 15px;">Given&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Project</code>,&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Task</code>, and&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Activity</code>, I&#8217;ve managed to set up a&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">has_one :through</code>&nbsp;relationship filter with the following:</div><div class="highlight highlight-ruby" style="background-color: #fbfbfb; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 13px; line-height: 22px; margin-bottom: 0px !important;"><pre style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; line-height: 19px; margin-bottom: 15px; margin-top: 15px; overflow: auto; padding: 6px 10px; word-wrap: normal;"><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Project</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:tasks</span><br /><span class="k" style="font-weight: bold;">end</span><br /><br /><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Task</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">belongs_to</span> <span class="ss" style="color: #990073;">:project</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:activities, :dependent =&gt; :destroy</span><br /><span class="k" style="font-weight: bold;">end</span><br /><br /><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Activity</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:tasks</span><br />  <span class="n">has_one  </span><span class="ss" style="color: #990073;">:project, through: :task</span><br /><span class="k" style="font-weight: bold;">end</span><br /></pre><pre style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; line-height: 19px; margin-bottom: 15px; margin-top: 15px; overflow: auto; padding: 6px 10px; word-wrap: normal;"><span class="no" style="color: teal;">ActiveAdmin</span><span class="o" style="font-weight: bold;">.</span><span class="n">register</span> <span class="no" style="color: teal;">User</span> <span class="k" style="font-weight: bold;">do</span><br />  <span class="n">filter</span> <span class="ss" style="color: #990073;">:task_project_id</span><span class="p">,</span> <span class="ss" style="color: #990073;">as</span><span class="p">:</span> <span class="ss" style="color: #990073;">:select</span><span class="p">,</span> <span class="ss" style="color: #990073;">collection</span><span class="p">:</span> <span class="no" style="color: teal;">Project</span><span class="o" style="font-weight: bold;">.</span><span class="n">all</span><span class="p">,</span> <span class="ss" style="color: #990073;">label</span><span class="p">:</span> <span class="s1" style="color: #dd1144;">'Project'</span><br /><span class="k" style="font-weight: bold;">end</span></pre></div></div></div>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+
+
+
+
+Given Project, Task,  and Activity, I&#8217;ve managed to set up has_one :through relationship filter with the following:
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Project &lt; ActiveRecord::Base
+</span><span class='line'>  has_many :tasks
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Task &lt; ActiveRecord::Base
+</span><span class='line'>  belongs_to :project
+</span><span class='line'>  has_many :activities, :dependent => :destroy
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Activity &lt; ActiveRecord::Base
+</span><span class='line'>  has_many :tasks
+</span><span class='line'>  has_one  :project, through: :task
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.register User do
+</span><span class='line'>  filter :task_project_id, as: :select, collection: Project.all, label: 'Project'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+  </div>
+</div>
 </div>
   
   
