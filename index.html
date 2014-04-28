@@ -1,0 +1,1039 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>TechSleek</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.classProduct&lt;ActiveRecord &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eshaiju.github.io">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="TechSleek" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">TechSleek</a></h1>
+  
+    <h2>Its a place to write about I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eshaiju.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-16T12:27:00+05:30" pubdate data-updated="true">Mar 16<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on"><div style="text-align: left;"><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: helvetica, arial, clean, sans-serif;"><span style="font-size: x-small;"><span style="background: #ffffff;">For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.</span></span></span></span></div><div align="LEFT" style="margin-bottom: 0cm;"><br /></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; line-height: 0.48cm; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: Times New Roman;"><span style="font-size: x-small;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">class</span></b></span></span><span style="color: #333333;"><span style="background: #ffffff;"></span></span><span style="color: #445588;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">Product</span></b></span></span><span style="color: #333333;"><span style="background: #ffffff;"></span></span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">&lt;</span></b></span></span><span style="color: #333333;"><span style="background: #ffffff;"></span></span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="background: #ffffff;">ActiveRecord</span></span></span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">::</span></b></span></span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="background: #ffffff;">Base</span></span></span></span></span></span></div><div dir="LTR" id="LC17"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;">belongs_to <span style="color: #990073;">:cost</span>, <span style="color: #990073;">:class_name</span> <b>=&gt;</b> <span style="color: #dd1144;">'Currency'</span>, foreign_key: <span style="color: #dd1144;">'cost_id'</span></span></pre></div><div dir="LTR" id="LC18"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;">accepts_nested_attributes_for <span style="color: #990073;">:cost</span></span></pre></div><div dir="LTR" id="LC19"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;"><b>attr_accessor</b> <span style="color: #990073;">:cost_id</span></span></pre></div><div align="LEFT" style="line-height: 0.48cm; margin-bottom: 0cm;"><span style="font-size: x-small;"><span style="font-variant: normal;"><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">end</span></span></span></span></span></span></span></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; line-height: 0.48cm; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: Times New Roman;"><span style="font-size: x-small;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>class</b></span></span><span style="color: #333333;">&nbsp;</span><span style="color: #445588;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>Currency</b></span></span><span style="color: #333333;">&nbsp;</span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>&lt;</b></span></span><span style="color: #333333;">&nbsp;</span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;">ActiveRecord</span></span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>::</b></span></span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;">Base</span></span></span></span></span></div><div dir="LTR" id="LC2"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;"><b>def</b> <span style="color: #445588;"><b>self</b></span><b>.</b><span style="color: #990000;"><b>currency_types</b></span></span></pre></div><div dir="LTR" id="LC11"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>[</b><span style="color: #dd1144;">'SAR'</span>,<span style="color: #dd1144;">'AED'</span>,<span style="color: #dd1144;">'USD'</span>,<span style="color: #dd1144;">'EUR'</span>,<span style="color: #dd1144;">'INR'</span><b>]</b></span></pre></div><div dir="LTR" id="LC12"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;"><b>end</b></span><br /><span style="font-size: x-small;"><b>end</b></span></pre></div><pre class="western" style="text-align: left;"></pre><div align="LEFT" style="line-height: 0.48cm; margin-bottom: 0cm;"><span style="font-size: x-small;"><span style="font-variant: normal;"><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">ActiveAdmin</span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><b><span style="background: #ffffff;">.</span></b></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">register</span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Times New Roman;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;"></span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">Product</span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Times New Roman;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;"></span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><b><span style="background: #ffffff;">do</span></b></span></span></span></span></span></div><div dir="LTR" id="LC194"><pre class="western" style="border: none; padding: 0cm; text-align: left;"> <span style="font-size: x-small;">form <b>do</b> <b>|</b>f<b>|</b></span></pre></div><div dir="LTR" id="LC195"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>semantic_errors <b>*</b>f<b>.</b>object<b>.</b>errors<b>.</b>keys</span></pre></div><div dir="LTR" id="LC196"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>inputs <span style="color: #dd1144;">"Details"</span> <b>do</b></span></pre></div><div dir="LTR" id="LC197"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>input <span style="color: #990073;">:name</span></span></pre></div><div dir="LTR" id="LC201"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>inputs <span style="color: #dd1144;">"cost"</span> <b>do</b></span></pre></div><div dir="LTR" id="LC202"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>semantic_fields_for <span style="color: #990073;">:cost_attributes</span>  <b>do</b> <b>|</b>j<b>|</b></span></pre></div><div dir="LTR" id="LC203"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">j<b>.</b>inputs <b>do</b></span></pre></div><div dir="LTR" id="LC204"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">j<b>.</b>input <span style="color: #990073;">:currency_type</span>, <span style="color: #990073;">:as</span> <b>=&gt;</b> <span style="color: #990073;">:select</span>, <span style="color: #990073;">:collection</span> <b>=&gt;</b> <span style="color: teal;">Currency</span><b>.</b>currency_types,<span style="color: #990073;">:label</span> <b>=&gt;</b><span style="color: #dd1144;">'Cost'</span></span></pre></div><div dir="LTR" id="LC205"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">j<b>.</b>input <span style="color: #990073;">:value</span></span></pre></div><div dir="LTR" id="LC206"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC207"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC208"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC209"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC211"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp; &nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC219"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp; &nbsp;<span style="font-size: x-small;">f<b>.</b>actions</span></pre></div><div dir="LTR" id="LC220"><pre class="western" style="border: none; padding: 0cm; text-align: left;"> <span style="font-size: x-small;"><b>end</b></span></pre></div><pre class="western" style="text-align: left;"></pre><div dir="LTR" id="Section1"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC220"></a> <span style="font-size: x-small;">controller <b>do</b></span></pre></div><pre class="western" style="text-align: left;"><span style="font-variant: normal;">&nbsp;&nbsp; </span><span style="font-size: x-small;"><span style="font-variant: normal;"><span style="font-style: normal;"><b>def</b></span></span><span style="font-variant: normal;"><span style="font-style: normal;"><span style="font-weight: normal;"> </span></span></span><span style="font-variant: normal;"><span style="color: #990000;"><span style="font-style: normal;"><b>permitted_params</b></span></span></span></span></pre><div dir="LTR" id="LC233"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp; &nbsp;<span style="font-size: x-small;">params<b>.</b>permit <span style="color: #990073;">product</span>: <b>[</b><span style="color: #990073;">:name</span>,cost_attributes:<b>[</b><span style="color: #990073;">:id</span>,<span style="color: #990073;">:currency_type</span>,<span style="color: #990073;">:value</span><b>]]</b></span></pre></div><div dir="LTR" id="LC234"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp; <span style="font-size: x-small;"><b>end</b></span></pre></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"></div><pre class="western" style="border: none; padding: 0cm;"> <span style="font-size: 11pt;"><b>end</b></span><br /><span style="font-size: 11pt;"><span style="font-family: Consolas, Liberation Mono, Courier, monospace;"><b>end</b></span></span></pre></div></div></div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">FullCalendar - Integration With Ruby on Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-05T13:02:00+05:30" pubdate data-updated="true">Mar 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on"><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">FullCalendar is a&nbsp;</span><a href="http://jquery.com/" style="background-color: white; color: #710000; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">jQuery</a><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">&nbsp;plugin that provides a&nbsp;</span><b style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">full-sized</b><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">,&nbsp;</span><b style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">drag &amp; drop</b><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">&nbsp;calendar like the one below. It uses AJAX to fetch events on-the-fly for each month and is easily configured to use your own feed format (an extension is provided for&nbsp;</span><b style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Google Calendar</b><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">). It is visually customizable and exposes hooks for user-triggered events (like clicking or dragging an event). It is open source licensed under an&nbsp;</span><a href="http://arshaw.com/js/fullcalendar-1.6.4/license.txt" style="background-color: white; color: #710000; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">MIT license</a><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">.</span><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-qa_L3JuaqW4/UvxSTF0KUgI/AAAAAAAAAUw/7kbq7plSXAU/s1600/calender.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-qa_L3JuaqW4/UvxSTF0KUgI/AAAAAAAAAUw/7kbq7plSXAU/s1600/calender.png" height="426" width="640" /></a></div><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Step 1 : Download the JQuery fullcalendar plugin by <a href="http://arshaw.com/fullcalendar/download/">here</a>&nbsp;and a</span>dd fullcalender.js and fullcalender.css in to&nbsp;javascripts and&nbsp;stylesheets folder<br />or<br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">fullcalendar is also available as a gem for Ruby on Rails which fits well with Asset Pipeline.</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">gem &nbsp;&#8216;fullcalendar-rails&#8217;</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Once the gem is installed, include fullcalendar javascript and css assets to your js and css file&nbsp;</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Step 2 : In view page index.html.erb or some other html.erb page add &nbsp;a div with id &#8216;calendar&#8217;&nbsp;</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><br /><pre style="background-color: whitesmoke; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; border: 1px solid rgba(0, 0, 0, 0.14902); color: #333333; font-family: Monaco, Menlo, Consolas, 'Courier New', monospace; font-size: 13px; line-height: 20px; margin-bottom: 10px; outline: 0px; padding: 9.5px; vertical-align: baseline; white-space: pre-wrap; word-break: break-all; word-wrap: break-word;">&lt;div id='calendar'&gt;&lt;/div&gt;</pre><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">Then add &nbsp;following code to js file&nbsp;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;"><br /></span></span><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">$(document).ready(function() {</span></span><br /><span style="font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">&nbsp; $(&#8220;#calendar&#8221;).fullCalendar({</span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; header: {</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; &nbsp; left: &#8220;prev,next today&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; &nbsp; center: &#8220;title&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; &nbsp; right: &#8220;month,agendaWeek,agendaDay&#8221;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; },</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; defaultView: &#8220;month&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; height: 500,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; slotMinutes: 15,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; events: &#8220;/dashboard/get_events&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; timeFormat: &#8220;h:mm t{ - h:mm t} &#8220;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; dragOpacity: &#8220;0.5&#8221;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; });</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">});</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">Now we need to write a method to fetch Json data which we are going to display on calender&nbsp;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">In my example&nbsp;</span></span><br /><pre class="western" style="text-align: left;"><span style="font-size: x-small;"><b>class</b> <span style="color: #445588;"><b>DashboardController</b></span> <b>&lt;</b> <span style="color: teal;">ApplicationController</span></span></pre><div dir="LTR" id="LC2"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;respond_to <span style="color: #990073;">:json</span></pre></div><div dir="LTR" id="LC22"><pre class="western" style="border: none; line-height: 0.56cm; padding: 0cm;">&nbsp;<b>def</b> <span style="color: black;"><span style="font-family: 'Lucida Sans', Arial, sans-serif;"><span style="font-size: x-small;">get_events</span></span></span></pre></div><div dir="LTR" id="LC23"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: teal;">@task</span> <b>=</b> current_user<b>.</b>tasks</pre></div><div dir="LTR" id="LC24"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;events <b>=</b> <b>[]</b></pre></div><div dir="LTR" id="LC25"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: teal;">@task</span><b>.</b>each <b>do</b> <b>|</b>task<b>|</b></pre></div><div dir="LTR" id="LC26"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;events <b>&lt;&lt;</b> {<span style="color: #990073;">:id</span> <b>=&gt;</b> task<b>.</b>id, <span style="color: #990073;">:title</span> <b>=&gt;</b> <span style="color: #dd1144;">"#{</span>task<b>.</b>taskable<b>.</b>try(<span style="color: #990073;">:name</span>)<span style="color: #dd1144;">} : #{</span>task<b>.</b>task<span style="color: #dd1144;">}"</span>, <span style="color: #990073;">:start</span> <b>=&gt;</b> <span style="color: #dd1144;">"#{</span>task<b>.</b>planned_start_date<span style="color: #dd1144;">}"</span>,<span style="color: #990073;">:end</span> <b>=&gt;</b>&nbsp;<span style="color: #dd1144;">"#{</span>task<b>.</b>planned_end_date<span style="color: #dd1144;">}"</span> }</pre></div><div dir="LTR" id="LC34"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<b>end</b></pre></div><div dir="LTR" id="LC35"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="background: #ffffff;">render </span><span style="color: #990073;"><span style="background: #ffffff;">:text</span></span><span style="background: #ffffff;"> </span><b><span style="background: #ffffff;">=&gt;</span></b><span style="background: #ffffff;"> events</span><b><span style="background: #ffffff;">.</span></b><span style="background: #ffffff;">to_json</span></pre></div><div dir="LTR" id="LC36"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;<b>end</b></pre></div><div dir="LTR" id="Section1"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC36"></a><b>end</b></pre></div><div dir="LTR" id="Section2"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC361"></a><span style="color: teal;"><span style="background: #ffffff;">DemoApp</span></span><b><span style="background: #ffffff;">::</span></b><span style="color: teal;"><span style="background: #ffffff;">Application</span></span><b><span style="background: #ffffff;">.</span></b><span style="background: #ffffff;">routes</span><b><span style="background: #ffffff;">.</span></b><span style="background: #ffffff;">draw </span><b><span style="background: #ffffff;">do</span></b></pre></div><div dir="LTR" id="Section3"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC362"></a><span style="background: #ffffff;">  </span>&nbsp;resources <span style="color: #990073;">:dashboard</span> <b>do</b></pre></div><div dir="LTR" id="LC27"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;get <span style="color: #990073;">:get_events</span>, <span style="color: #990073;">on</span>: <span style="color: #990073;">:collection</span></pre></div><div dir="LTR" id="Section4"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC27"></a><span style="color: #990073;">   end</span></pre></div><div dir="LTR" id="Section5"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC363"></a><b><span style="background: #ffffff;">end</span></b></pre></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: Times New Roman;"><span style="font-size: medium;">that&#8217;s it , now you can see calender in your dashboard</span></span></span></div><br /><br /></div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">ActiveAdmin- Adding a Filter on Has_one Through Association</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-04T12:34:00+05:30" pubdate data-updated="true">Feb 4<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on"><h2 class="discussion-topic-title js-comment-body-title" style="background-color: white; border-bottom-style: none; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 21px; line-height: 1.1; margin: 0px; padding-right: 50px;"></h2><div style="background-color: #fbfbfb; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 13px; line-height: 22px; margin-bottom: 15px;">Given&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Project</code>,&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Task</code>, and&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Activity</code>, I&#8217;ve managed to set up a&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">has_one :through</code>&nbsp;relationship filter with the following:</div><div class="highlight highlight-ruby" style="background-color: #fbfbfb; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 13px; line-height: 22px; margin-bottom: 0px !important;"><pre style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; line-height: 19px; margin-bottom: 15px; margin-top: 15px; overflow: auto; padding: 6px 10px; word-wrap: normal;"><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Project</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:tasks</span><br /><span class="k" style="font-weight: bold;">end</span><br /><br /><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Task</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">belongs_to</span> <span class="ss" style="color: #990073;">:project</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:activities, :dependent =&gt; :destroy</span><br /><span class="k" style="font-weight: bold;">end</span><br /><br /><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Activity</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:tasks</span><br />  <span class="n">has_one  </span><span class="ss" style="color: #990073;">:project, through: :task</span><br /><span class="k" style="font-weight: bold;">end</span><br /></pre><pre style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; line-height: 19px; margin-bottom: 15px; margin-top: 15px; overflow: auto; padding: 6px 10px; word-wrap: normal;"><span class="no" style="color: teal;">ActiveAdmin</span><span class="o" style="font-weight: bold;">.</span><span class="n">register</span> <span class="no" style="color: teal;">User</span> <span class="k" style="font-weight: bold;">do</span><br />  <span class="n">filter</span> <span class="ss" style="color: #990073;">:task_project_id</span><span class="p">,</span> <span class="ss" style="color: #990073;">as</span><span class="p">:</span> <span class="ss" style="color: #990073;">:select</span><span class="p">,</span> <span class="ss" style="color: #990073;">collection</span><span class="p">:</span> <span class="no" style="color: teal;">Project</span><span class="o" style="font-weight: bold;">.</span><span class="n">all</span><span class="p">,</span> <span class="ss" style="color: #990073;">label</span><span class="p">:</span> <span class="s1" style="color: #dd1144;">'Project'</span><br /><span class="k" style="font-weight: bold;">end</span></pre></div></div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T16:29:00+05:30" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+
+In one of my recent project, i need to implement a autocomplte in active_admin interface to select one or more users from user list. I tried googling on this and zeroed in on the library Chosen.Chosen by default supports multiple select, selected state.Chosen is available as a gem for Ruby on Rails which fits well with Asset Pipeline.
+<br/>Include Chosen gem in your Gemfile.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem ‘chosen-rails’</span></code></pre></td></tr></table></div></figure>
+Once the gem is installed, include chosen javascript assets to your js file. 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//= require chosen-jquery</span></code></pre></td></tr></table></div></figure>
+In /app/admin/modelname.rb
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.register Modlename do
+</span><span class='line'>  #Customize create and edit form
+</span><span class='line'>  form do |f|
+</span><span class='line'>    f.inputs do
+</span><span class='line'>       f.input :name
+</span><span class='line'>       f.input :othermodel, :input_html => { :class => "chosen-input" } # other model with has_many relation ship
+</span><span class='line'>    end
+</span><span class='line'>    f.buttons
+</span><span class='line'>  end   
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+in active_admin.js
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$(document).ready(function(){
+</span><span class='line'>   $(".chosen-input").chosen();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+if you are using coffee script instead of js then use this 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ->
+</span><span class='line'>  # enable chosen js
+</span><span class='line'>  $('.chosen-input').chosen
+</span><span class='line'>    allow_single_deselect: true
+</span><span class='line'>    no_results_text: 'No results matched'</span></code></pre></td></tr></table></div></figure>
+Then, include Chosen stylesheet assets to your css file.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>*= require chosen</span></code></pre></td></tr></table></div></figure>
+To include more details check <a href='http://harvesthq.github.io/chosen/'>Here </a>
+Thats it, you will have a nice autocomplte with multiselect . Happy coding…
+<br/><br/>
+</div></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Lobna Mohamed</div>
+<div class='content'>
+Thanks for the good post, but does not save data to the database<br />I guess it related to permit_params I am trying this <br />permit_params :name, :othermodel_ids<br />but still not working, have you another idea??</div>
+
+
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Changing Kannel Log Level & Log Rotation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-03T12:40:00+05:30" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time>
+        
+           | <a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+  If Kannel is configured so that the bearerbox, wapbox and/or smsbox log to file each of these log files will continue to grow unless administered in some way. &nbsp;One way of reducing logs is by change log level.&nbsp;kannel allow to have 5 log-level ( 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - panic).&nbsp;We can change log level by editing log-level component in configuration file and also done by admin HTTP command without restaring bearerbox.
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://localhost:13000/log-level?password=bar&amp;level=2</span></code></pre></td></tr></table></div></figure>
+  Another way of administering log files is to &#8216;rotate&#8217; the logs on a regular basis using a tool such as logrotate. A sample logrotate script is shown below.<br />
+  Setup Logrotate<br /><br />
+  Step 1 : If logrotate is not already on your VPS, install it now.<br />
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install logrotate</span></code></pre></td></tr></table></div></figure>
+  Step 2 : Add following script in file  <span style="font-weight: bold;">/etc/logrotate.d</span>
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/var/log/kannel/*.log {daily
+</span><span class='line'>                         missingok
+</span><span class='line'>                         rotate 365
+</span><span class='line'>                         compress
+</span><span class='line'>                         delaycompress
+</span><span class='line'>                         notifempty
+</span><span class='line'>                         create 640 kannel adm
+</span><span class='line'>                         sharedscripts
+</span><span class='line'>                         postrotate
+</span><span class='line'>                         killall -HUP bearerbox smsbox wapbox || true &gt; /dev/null 2&gt; /dev/null
+</span><span class='line'>                         endscript
+</span><span class='line'>                        }</span></code></pre></td></tr></table></div></figure>
+In this example the Kannel log files found in <span style="font-weight: bold;">/var/log/kannel</span> are rotated and compressed daily over 365 days.&nbsp;To verify if a particular log is rotating or not and to check the last date and time of its rotation, check the <span style="font-weight: bold;"> /var/lib/logrotate/status </span>file.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /var/lib/logrotate/status</span></code></pre></td></tr></table></div></figure>
+</div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/31/installing-and-configuring-sql-based/">Installing and Configuring SQL-Based Queue Engine for Kannel (Sqlbox)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-31T00:57:00+05:30" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
+        
+           | <a href="/blog/2013/10/31/installing-and-configuring-sql-based/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/10/31/installing-and-configuring-sql-based/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+  Sqlbox is a special Kannel box that sits between bearerbox and smsbox and uses a database queue to store and forward messages.Messages are queued on a configurable table (defaults to send_sms) and moved to another table (defaults to sent_sms) afterwards.
+  <br />
+  After installing gateway, we need to compile Sqlbox.
+  <br />
+  Steps:<br /><br />&nbsp;
+  1 - cd into directory where Kannel is unzipped and then type the following commands<br />
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd addons/sqlbox/
+</span><span class='line'>sudo ./bootstrap
+</span><span class='line'>sudo ./configure --with-kannel-dir=/usr/local/kannel-1.5.0/
+</span><span class='line'>sudo make bindir=/usr/local/kannel/kannel-1.5.0/</span></code></pre></td></tr></table></div></figure>
+  2 -Create a file named smsbox.conf and following configuration
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#SQL BOX CONFIG
+</span><span class='line'>
+</span><span class='line'>group = sqlbox
+</span><span class='line'>id = sqlbox-db
+</span><span class='line'>smsbox-id = sqlbox
+</span><span class='line'>global-sender = ""
+</span><span class='line'>bearerbox-host = localhost
+</span><span class='line'>bearerbox-port = 13010
+</span><span class='line'>smsbox-port = 13020
+</span><span class='line'>smsbox-port-ssl = false
+</span><span class='line'>sql-log-table = sent_sms
+</span><span class='line'>sql-insert-table = send_sms
+</span><span class='line'>log-file = "/var/log/kannel/kannel-sqlbox.log"
+</span><span class='line'>
+</span><span class='line'># Database connection examples. Please uncomment as needed
+</span><span class='line'># Example MYSQL Connection
+</span><span class='line'>
+</span><span class='line'>group = mysql-connection
+</span><span class='line'>id = sqlbox-db
+</span><span class='line'>host = localhost
+</span><span class='line'>username = username
+</span><span class='line'>password = password
+</span><span class='line'>database = kannel_db</span></code></pre></td></tr></table></div></figure>
+
+3 - create &nbsp;send_sms table using following sql command
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE `send_sms` (
+</span><span class='line'>                          `sql_id` bigint(20) NOT NULL auto_increment,
+</span><span class='line'>                          `momt` enum('MO','MT') default NULL,
+</span><span class='line'>                          `sender` varchar(20) default NULL,
+</span><span class='line'>                          `receiver` varchar(20) default NULL,
+</span><span class='line'>                          `udhdata` blob,&lt;br />&nbsp; `msgdata` text,
+</span><span class='line'>                          `time` bigint(20) default NULL,
+</span><span class='line'>                          `smsc_id` varchar(255) default NULL,
+</span><span class='line'>                          `service` varchar(255) default NULL,
+</span><span class='line'>                          `account` varchar(255) default NULL,
+</span><span class='line'>                          `id` bigint(20) default NULL,
+</span><span class='line'>                          `sms_type` bigint(20) default NULL,
+</span><span class='line'>                          `mclass` bigint(20) default NULL,
+</span><span class='line'>                          `mwi` bigint(20) default NULL,
+</span><span class='line'>                          `coding` bigint(20) default NULL,
+</span><span class='line'>                          `compress` bigint(20) default NULL,
+</span><span class='line'>                          `validity` bigint(20) default NULL,
+</span><span class='line'>                          `deferred` bigint(20) default NULL,
+</span><span class='line'>                          `dlr_mask` bigint(20) default NULL,
+</span><span class='line'>                          `dlr_url` varchar(255) default NULL,
+</span><span class='line'>                          `pid` bigint(20) default NULL,
+</span><span class='line'>                          `alt_dcs` bigint(20) default NULL,
+</span><span class='line'>                          `rpi` bigint(20) default NULL,
+</span><span class='line'>                          `charset` varchar(255) default NULL,
+</span><span class='line'>                          `boxc_id` varchar(255) default NULL,
+</span><span class='line'>                          `meta_data` varchar(255) default NULL,
+</span><span class='line'>                          `foreign_id` bigint(20) default NULL,
+</span><span class='line'>                          `binfo` varchar(255) default NULL,
+</span><span class='line'>                          PRIMARY KEY (`sql_id`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;</span></code></pre></td></tr></table></div></figure>
+
+4 - Create &nbsp;sent_sms table using same structure with changing table name <br />
+Now start bearerbox and sqlbox using commands
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /usr/local/kannel-1.5.0/sbin bearerbox /home/shaiju/kannel/kannel.conf
+</span><span class='line'>sudo /usr/local/kannel-1.5.0/sbin sqlbox /home/shaiju/kannel/sqlbox.conf</span></code></pre></td></tr></table></div></figure>
+Example<br />
+As when you&#8217;re using the sendsms interface, you don&#8217;t need to specify all the columns in order to succesfully enqueue a message.<br />
+Here&#8217;s an example query you can use to send a simple message using Sqlbox:
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>INSERT INTO send_sms ( &nbsp;momt, sender, receiver, msgdata, sms_type, smsc_id) VALUES ( &nbsp;'MT', 'TESTID', '9995323922', 'Hello world', 2,'testsmsc1');</span></code></pre></td></tr></table></div></figure>
+The former example would send a message with text &#8220;Hello world&#8221; to number &#8220;9995323922&#8221;. If possible, the sender would be set to &#8220;TESTID&#8221;.You can add other parameters to specify routing, charset encoding and any other settings your setup may require<br />
+If you are keen to learn more about this , Refer <a href="http://www.blogalex.com/wp-content/uploads/2008/11/userguide.html">Here</a><br />
+</div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/">Kannel Monitoring Tool - Ruby Gem</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-03T23:47:00+05:30" pubdate data-updated="true">Oct 3<span>rd</span>, 2013</time>
+        
+           | <a href="/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+  <div>Last few months I have been facing lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to reconnecting stage. I searched for a tool which will monitor kannel status Unfortunately i didn&#8217;t find a tool to monitor and give alert. so decided to write a tool which will monitor kannel activities.</div>
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 0.0.2</span></code></pre></td></tr></table></div></figure>
+  This gem will monitor<br />
+  <ul>
+    <li>&nbsp; &nbsp;kannel status</li>
+    <li>&nbsp; &nbsp;kannel sms queue</li>
+    <li>&nbsp; &nbsp;smsc status</li>
+    <li>&nbsp; &nbsp;smsc queue and will send a email alerts when something went wrong.</li>
+  </ul>
+  Just install gem in server using 
+    <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install kannel_monitor</span></code></pre></td></tr></table></div></figure>
+  run monitoring activity using command 
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 'path to kannel_monitor.yml'</span></code></pre></td></tr></table></div></figure>
+   Example of <b>yml</b> file is given&nbsp;<b><a href="https://github.com/shaijunonu/kannel-monitor/blob/master/config/kannel_monitor.yml" style="color: #1155cc;">Here</a>.
+   </b><br /><span>you need to set a crone job to run this in a specific intervals. If a smsc is permanently reconection stage and you don&#8217;t want to monitor that smsc, then you can skip that particular smsc by adding in <b>sms_to_be_skipped&nbsp;</b></span>
+</div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/01/a-gem-for-generating-custom-error-pages/">A Gem for Generating Custom Error Pages in Rails Application</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-01T09:30:00+05:30" pubdate data-updated="true">Oct 1<span>st</span>, 2013</time>
+        
+           | <a href="/blog/2013/10/01/a-gem-for-generating-custom-error-pages/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/10/01/a-gem-for-generating-custom-error-pages/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on"><div class="separator" style="clear: both;"><span style="color: #222222;">Writing a Ruby Gem was my long time wish, but i couldn&#8217;t find an idea to make a gem. Finally got it, for which i didn&#8217;t find a gem, a generator which will automatically generate a custom code for handling 404 and 500 errors and pages in rails application (Thanks to Sreekanth for noting there is no &nbsp;gem for this taks). Here it is&nbsp;</span></div>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails_error_pages 1.0.5</span></code></pre></td></tr></table></div></figure>
+How to use :
+<br/>
+Simply add it to your Gemfile and bundle install.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'rails_error_pages'</span></code></pre></td></tr></table></div></figure>
+Next step is to use a generator, to add auto generated code into our application using
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g rails_error_pages</span></code></pre></td></tr></table></div></figure>
+That&#8217;s it! run your application and try with a false URL. <br/></div></div></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/09/configuring-mysql-dlr-storage/">Configuring MySQL DLR Storage</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-09T18:45:00+05:30" pubdate data-updated="true">Sep 9<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/09/09/configuring-mysql-dlr-storage/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">To support mysql, we have to recompile kannel with &#8211;mysql 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./configure --prefix=/usr/local/kannel --with-mysql</span></code></pre></td></tr></table></div></figure>
+To store DLR information into a MySQL database you may use the dlr-storage = mysql configuration directive in the core group.In addition to that you must have a dlr-db group defined that specifies the table field names that are used to the DLR attributes and a mysql-connection group that defines the connection to the MySQL server itself.
+<br/>
+Here is the example configuration
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>group = core
+</span><span class='line'>.........
+</span><span class='line'>dlr-storage = mysql
+</span><span class='line'>group = mysql-connection
+</span><span class='line'>id = mydlr
+</span><span class='line'>host = localhost
+</span><span class='line'>username = foo
+</span><span class='line'>password = bar
+</span><span class='line'>database = dlr
+</span><span class='line'>max-connections = 1
+</span><span class='line'>group = dlr-db
+</span><span class='line'>id = mydlr
+</span><span class='line'>table = dlr
+</span><span class='line'>field-smsc = smsc
+</span><span class='line'>field-timestamp = ts
+</span><span class='line'>field-destination = destination
+</span><span class='line'>field-source = source
+</span><span class='line'>field-service = service
+</span><span class='line'>field-url = url
+</span><span class='line'>field-mask = mask
+</span><span class='line'>field-status = status
+</span><span class='line'>field-boxc-id = boxc</span></code></pre></td></tr></table></div></figure>
+Create table dlr<br /><br />
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE dlr (smsc varchar(40),
+</span><span class='line'>                  ts varchar(40),
+</span><span class='line'>                  destination varchar(40),
+</span><span class='line'>                  source varchar(40),
+</span><span class='line'>                  service varchar(40),
+</span><span class='line'>                  url varchar(255),
+</span><span class='line'>                  mask int(10),
+</span><span class='line'>                  status int(10),
+</span><span class='line'>                  boxc varchar(40))</span></code></pre></td></tr></table></div></figure>
+</div>
+</div></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/01/kannel-installation-and-configuration/">Kannel Installation and Configuration as SMS Gateway Server</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-01T17:53:00+05:30" pubdate data-updated="true">Sep 1<span>st</span>, 2013</time>
+        
+           | <a href="/blog/2013/09/01/kannel-installation-and-configuration/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">Kannel is an open source WAP gateway and &nbsp;SMS gateway for GSM networks. &nbsp;The main use for Kannel is to link HTTP based services to various SMS centers using obscure protocols.Kannel is mainly being developed on Linux systems, and should be fairly easy to port to other Unix-like systems. However, kannel don&#8217;t yet support other platforms.<br /><br /><b>Kannel Installation and Configuration as SMS gateway Server</b><br /><b>Installation</b><br />1 Before installing kannel you will need to install libxml. Download the source and follow the next steps for installation.We can download it from following link.<span style="color: #7a7a7a;">&nbsp;</span><a href="ftp://gd.tuwien.ac.at/pub/libxml/" style="background-color: white; border: 0px; color: #f3686d; font-family: Georgia, Times, serif; font-size: 14px; line-height: 21px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;" target="_blank">ftp://gd.tuwien.ac.at/pub/libxml/</a><br />2 Unzip it into some directory<br />3 Cd into directory where libxml is unzipped and then type the following commands<br />4 Type ./configure<br />5 Type make<br />6 Type make install<br />&nbsp; &nbsp;now you have libxml<br />7 Download latest version of Kannel <a href="http://www.kannel.org/download.shtml">http://www.kannel.org/download.shtml</a>&nbsp;and Unzip it into some directory &nbsp;or use svn co </span><a href="https://svn.kannel.org/gateway/trunk" style="white-space: pre-wrap;">https://svn.kannel.org/gateway/trunk</a>&nbsp; <span style="white-space: pre-wrap;"> to download latest version of gateway</span><br />8 cd into directory where Kannel is unzipped and then type the following commands<br />9 Type &nbsp;<span style="white-space: pre-wrap;">./configure &#8211;prefix=/usr/local/kannel-1.5.0 </span><span style="white-space: pre-wrap;">&#8211;enable-start-stop-daemon &#8211;with-mysql</span><br />10 Type make<br />11 Type make install<br /><br />&nbsp;Now kannel is ready<br /><br />Next step is to add configuration<br /><br />Kannel consists of three programs, usually run as &nbsp;daemons: &nbsp;bearerbox, wapbox, and smsbox. They implement the connection to the phone (SMS or UDP), the WAP protocol stack, and the SMS based services, respectively.<br /><br />We will need only &nbsp;bearerbox and smsbox as we are going to setup it as SMS gateway server. Bearerbox is the main queue and smsbox handles the smscs.<br /><br />Create a file named kannel.conf and add following configuration<br /><br />
+
+  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#---------------------------------------------
+</span><span class='line'># CORE
+</span><span class='line'>#
+</span><span class='line'># There is only one core group and it sets all basic settings of the bearerbox (and system).
+</span><span class='line'>group = core
+</span><span class='line'>admin-port = 13000
+</span><span class='line'>admin-password = passwd##
+</span><span class='line'>smsbox-port = 13010
+</span><span class='line'>log-file = "/var/log/kannel/kannel.log"
+</span><span class='line'># Log level is DEBUG
+</span><span class='line'>log-level = 
+</span><span class='line'>access-log = "/var/log/kannel/access.log"
+</span><span class='line'>store-type = spool
+</span><span class='line'># Let no SMS be lost as far as possible
+</span><span class='line'>store-location = "/var/spool/kannel"
+</span><span class='line'># Acceptable retries for temporary failures in sending SMS
+</span><span class='line'>sms-resend-retry = 3
+</span><span class='line'>#---------------------------------------------
+</span><span class='line'># SMSBOX SETUP
+</span><span class='line'>#
+</span><span class='line'># Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery
+</span><span class='line'>group = smsbox
+</span><span class='line'>bearerbox-host = localhost
+</span><span class='line'>sendsms-port = 13020
+</span><span class='line'>log-file = "/var/log/kannel/smsbox.log"
+</span><span class='line'># Log level is DEBUG
+</span><span class='line'>log-level = 0
+</span><span class='line'>access-log = "/var/log/kannel/access.log"
+</span><span class='line'>#---------------------------------------------
+</span><span class='line'># SEND-SMS USERS
+</span><span class='line'># These users are used when Kannel smsbox sendsms interface is used to send PUSH sms messages
+</span><span class='line'>group = sendsms-user
+</span><span class='line'>username = tester
+</span><span class='line'>password = foobar
+</span><span class='line'>concatenation = true
+</span><span class='line'>max-messages = 4
+</span><span class='line'>#---------------------------------------------
+</span><span class='line'># SMSC CONNECTIONS
+</span><span class='line'># SMSC connections are created in bearerbox and they handle SMSC 
+</span><span class='line'># protocol and message relying.
+</span><span class='line'># Example complete configuration
+</span><span class='line'>group = smsc
+</span><span class='line'>smsc = smpp
+</span><span class='line'>smsc-id = PROMO-SERVICE-MESSAGE
+</span><span class='line'>allowed-smsc-id = PROMO-SERVICE-MESSAGE
+</span><span class='line'>host = X.X.X.X
+</span><span class='line'>port = XXXX
+</span><span class='line'>transceiver-mode = true
+</span><span class='line'>smsc-username = promouser
+</span><span class='line'>smsc-password = promopasswd
+</span><span class='line'>source-addr-ton = 0
+</span><span class='line'>source-addr-npi = 1
+</span><span class='line'>dest-addr-ton = 0
+</span><span class='line'>dest-addr-npi = 1
+</span><span class='line'>system-type = ""
+</span><span class='line'>address-range = ""</span></code></pre></td></tr></table></div></figure>
+  Now start smsbox and bearerbox using 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /usr/local/kannel-1.5.0/sbin/bearerbox /home/shaiju/kannel/kannel.conf
+</span><span class='line'>sudo /usr/local/kannel-1.5.0/sbin/smsbox /home/shaiju/kannel/kannel.conf</span></code></pre></td></tr></table></div></figure>
+To see running process use
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo ps -ef | grep kannel</span></code></pre></td></tr></table></div></figure>
+To stop the kannel service
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>/etc/init.d/kannel stop</span></code></pre></td></tr></table></div></figure>
+To see kannel logs
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tail -f /var/log/kannel/kannel.log</span></code></pre></td></tr></table></div></figure>
+Now you can send sms using send sms url
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://kannel.machine.ip:13010/cgi-bin/sendsms?username=tester&amp;password=foobar&amp;from=SENDERID&amp;to=9999999999&amp;text=test sms &amp;smsc=PROMO-SERVICE-MESSAGE</span></code></pre></td></tr></table></div></figure>
+If you are keen to learn more about this , Refer&nbsp;</span><a href="http://www.kannel.org/download/1.5.0/userguide-1.5.0/userguide.html" >Here</a><br />For Sample kannel configuration, check <a href="http://www.kannel.org/download/1.4.1/gateway-1.4.1/gw/smskannel.conf">Here</a><br /><br /></div></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Anthony</div>
+<div class='content'>
+Thanks for this. The send SMS from kannel is not any troublesome. Would you do a guide on receiving SMSs? I have tried everything and but still I cannot received SMS from the same e220 modem that works fine sending from kannel. Thanks again, you guide so far has been very usefull</div>
+</div>
+<div class='comment'>
+<div class='author'>Sreekanth G S</div>
+<div class='content'>
+Start bearerbox first. Smsbox needs to connect to an already running bearerbox instance. </div>
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">FullCalendar - Integration With Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">ActiveAdmin- Adding a Filter on Has_one Through Association</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Changing Kannel Log Level & Log Rotation</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eshaijugithubio';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

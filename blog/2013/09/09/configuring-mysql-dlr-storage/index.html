@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Configuring MySQL DLR Storage - TechSleek</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="To support mysql, we have to recompile kannel with &#8211;mysql 1
+./configure --prefix=/usr/local/kannel --with-mysql
+To store DLR information into &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="TechSleek" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">TechSleek</a></h1>
+  
+    <h2>Its a place to write about I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eshaiju.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Configuring MySQL DLR Storage</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-09T18:45:00+05:30" pubdate data-updated="true">Sep 9<span>th</span>, 2013</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">To support mysql, we have to recompile kannel with &#8211;mysql 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>./configure --prefix=/usr/local/kannel --with-mysql</span></code></pre></td></tr></table></div></figure>
+To store DLR information into a MySQL database you may use the dlr-storage = mysql configuration directive in the core group.In addition to that you must have a dlr-db group defined that specifies the table field names that are used to the DLR attributes and a mysql-connection group that defines the connection to the MySQL server itself.
+<br/>
+Here is the example configuration
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>group = core
+</span><span class='line'>.........
+</span><span class='line'>dlr-storage = mysql
+</span><span class='line'>group = mysql-connection
+</span><span class='line'>id = mydlr
+</span><span class='line'>host = localhost
+</span><span class='line'>username = foo
+</span><span class='line'>password = bar
+</span><span class='line'>database = dlr
+</span><span class='line'>max-connections = 1
+</span><span class='line'>group = dlr-db
+</span><span class='line'>id = mydlr
+</span><span class='line'>table = dlr
+</span><span class='line'>field-smsc = smsc
+</span><span class='line'>field-timestamp = ts
+</span><span class='line'>field-destination = destination
+</span><span class='line'>field-source = source
+</span><span class='line'>field-service = service
+</span><span class='line'>field-url = url
+</span><span class='line'>field-mask = mask
+</span><span class='line'>field-status = status
+</span><span class='line'>field-boxc-id = boxc</span></code></pre></td></tr></table></div></figure>
+Create table dlr<br /><br />
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CREATE TABLE dlr (smsc varchar(40),
+</span><span class='line'>                  ts varchar(40),
+</span><span class='line'>                  destination varchar(40),
+</span><span class='line'>                  source varchar(40),
+</span><span class='line'>                  service varchar(40),
+</span><span class='line'>                  url varchar(255),
+</span><span class='line'>                  mask int(10),
+</span><span class='line'>                  status int(10),
+</span><span class='line'>                  boxc varchar(40))</span></code></pre></td></tr></table></div></figure>
+</div>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Shaiju E</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-09T18:45:00+05:30" pubdate data-updated="true">Sep 9<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/kannel/'>Kannel</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage/" data-via="" data-counturl="http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/01/kannel-installation-and-configuration/" title="Previous Post: Kannel Installation and Configuration as SMS gateway Server">&laquo; Kannel Installation and Configuration as SMS gateway Server</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/10/01/a-gem-for-generating-custom-error-pages/" title="Next Post: A Gem for generating Custom error pages in Rails Application">A Gem for generating Custom error pages in Rails Application &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">FullCalendar - Integration With Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">ActiveAdmin- Adding a Filter on Has_one Through Association</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Changing Kannel Log Level & Log Rotation</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eshaijugithubio';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage/';
+        var disqus_url = 'http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
