@@ -4,7 +4,7 @@
   <title><![CDATA[TechSleek]]></title>
   <link href="http://eshaiju.github.io/atom.xml" rel="self"/>
   <link href="http://eshaiju.github.io/"/>
-  <updated>2014-04-28T16:57:45+05:30</updated>
+  <updated>2014-04-28T17:30:26+05:30</updated>
   <id>http://eshaiju.github.io/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -100,8 +100,7 @@ if you are using coffee script instead of js then use this
 Then, include Chosen stylesheet assets to your css file.
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>*= require chosen</span></code></pre></td></tr></table></div></figure>
-To include more details check <a href='http://harvesthq.github.io/chosen/'>Here <a/>
-<br/>
+To include more details check <a href='http://harvesthq.github.io/chosen/'>Here </a>
 Thats it, you will have a nice autocomplte with multiselect . Happy coding…
 <br/><br/>
 </div></div>
