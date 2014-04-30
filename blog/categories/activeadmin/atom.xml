@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ActiveAdmin | TechSleek]]></title>
   <link href="http://eshaiju.github.io/blog/categories/activeadmin/atom.xml" rel="self"/>
   <link href="http://eshaiju.github.io/"/>
-  <updated>2014-04-30T12:19:48+05:30</updated>
+  <updated>2014-04-30T19:08:35+05:30</updated>
   <id>http://eshaiju.github.io/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[In Page Editing in 'Active Admin' - Using Gem 'Best in Place']]></title>
+    <link href="http://eshaiju.github.io/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/"/>
+    <updated>2014-04-30T18:20:30+05:30</updated>
+    <id>http://eshaiju.github.io/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place</id>
+    <content type="html"><![CDATA[<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
+<br/>
+To add Best in Place to our app we first need to add its gem to our application's Gemfile and run bundle.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'best_in_place', github: 'bernat/best_in_place'</span></code></pre></td></tr></table></div></figure></notextile></div>
+Require best in place in active_admin.js.coffee and initialise it
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#= require best_in_place
+</span><span class='line'>#= require best_in_place.purr
+</span><span class='line'>
+</span><span class='line'>$(document).ready ->
+</span><span class='line'>  jQuery(".best_in_place").best_in_place()</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+To make text field editable in active admin show page 
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :name do |project|
+</span><span class='line'> best_in_place project, :name, :type => :input,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+To make select field editable
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status do |project|
+</span><span class='line'>  best_in_place project, :status, :type => :select,:path =>[:admin,project],:collection => Project.statuses.map{|status| [status,status]}
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+Textarea can be make editable using following code
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status_description  do |project|
+</span><span class='line'>  best_in_place project, :status_description, :type => :textarea,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+For Editable Datepicker with formated output use <span style="font-weight: bold;">display_with</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row "Planned Start Date" do |project|
+</span><span class='line'>  best_in_place project, :planned_start_date , :type => :date ,:path =>[:admin,project],  :display_with => lambda { |v| v.try(:strftime,'%b %d, %Y') }
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+</div>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Nested Forms for Belongs_to Relationship - ActiveAdmin]]></title>

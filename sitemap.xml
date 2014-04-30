@@ -47,15 +47,21 @@
         <lastmod>2014-04-29T19:28:27+05:30</lastmod>
     </url>
     <url>
+        <loc>
+            http://eshaiju.github.io/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/
+        </loc>
+        <lastmod>2014-04-30T19:06:35+05:30</lastmod>
+    </url>
+    <url>
         <loc>http://eshaiju.github.io/robots.txt</loc>
         <lastmod>2014-04-29T19:28:27+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/</loc>
-        <lastmod>2014-04-29T19:28:27+05:30</lastmod>
+        <lastmod>2014-04-30T19:06:35+05:30</lastmod>
     </url>
     <url>
         <loc>http://eshaiju.github.io/blog/archives/</loc>
-        <lastmod>2014-04-29T19:28:27+05:30</lastmod>
+        <lastmod>2014-04-30T19:06:35+05:30</lastmod>
     </url>
 </urlset>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby on Rails | TechSleek]]></title>
   <link href="http://eshaiju.github.io/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://eshaiju.github.io/"/>
-  <updated>2014-04-30T12:19:48+05:30</updated>
+  <updated>2014-04-30T19:08:35+05:30</updated>
   <id>http://eshaiju.github.io/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[In Page Editing in 'Active Admin' - Using Gem 'Best in Place']]></title>
+    <link href="http://eshaiju.github.io/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/"/>
+    <updated>2014-04-30T18:20:30+05:30</updated>
+    <id>http://eshaiju.github.io/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place</id>
+    <content type="html"><![CDATA[<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
+<br/>
+To add Best in Place to our app we first need to add its gem to our application's Gemfile and run bundle.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'best_in_place', github: 'bernat/best_in_place'</span></code></pre></td></tr></table></div></figure></notextile></div>
+Require best in place in active_admin.js.coffee and initialise it
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#= require best_in_place
+</span><span class='line'>#= require best_in_place.purr
+</span><span class='line'>
+</span><span class='line'>$(document).ready ->
+</span><span class='line'>  jQuery(".best_in_place").best_in_place()</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+To make text field editable in active admin show page 
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :name do |project|
+</span><span class='line'> best_in_place project, :name, :type => :input,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+To make select field editable
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status do |project|
+</span><span class='line'>  best_in_place project, :status, :type => :select,:path =>[:admin,project],:collection => Project.statuses.map{|status| [status,status]}
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+Textarea can be make editable using following code
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status_description  do |project|
+</span><span class='line'>  best_in_place project, :status_description, :type => :textarea,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+For Editable Datepicker with formated output use <span style="font-weight: bold;">display_with</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row "Planned Start Date" do |project|
+</span><span class='line'>  best_in_place project, :planned_start_date , :type => :date ,:path =>[:admin,project],  :display_with => lambda { |v| v.try(:strftime,'%b %d, %Y') }
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+</div>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Nested Forms for Belongs_to Relationship - ActiveAdmin]]></title>
@@ -313,36 +371,6 @@ Thanks for the good post, but does not save data to the database<br />I guess it
 
 </div>
 </div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Kannel Monitoring Tool - Ruby Gem]]></title>
-    <link href="http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/"/>
-    <updated>2013-10-03T23:47:00+05:30</updated>
-    <id>http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem</id>
-    <content type="html"><![CDATA[<div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on">
-  <div>Last few months I have been facing lots of issues in kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to reconnecting stage. I searched for a tool which will monitor kannel status Unfortunately i didn't find a tool to monitor and give alert. so decided to write a tool which will monitor kannel activities.</div>
-  <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 0.0.2</span></code></pre></td></tr></table></div></figure></notextile></div>
-  This gem will monitor<br />
-  <ul>
-    <li>&nbsp; &nbsp;kannel status</li>
-    <li>&nbsp; &nbsp;kannel sms queue</li>
-    <li>&nbsp; &nbsp;smsc status</li>
-    <li>&nbsp; &nbsp;smsc queue and will send a email alerts when something went wrong.</li>
-  </ul>
-  Just install gem in server using 
-    <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem install kannel_monitor</span></code></pre></td></tr></table></div></figure></notextile></div>
-  run monitoring activity using command 
-  <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>kannel_monitor 'path to kannel_monitor.yml'</span></code></pre></td></tr></table></div></figure></notextile></div>
-   Example of <b>yml</b> file is given&nbsp;<b><a href="https://github.com/shaijunonu/kannel-monitor/blob/master/config/kannel_monitor.yml" style="color: #1155cc;">Here</a>.
-   </b><br /><span>you need to set a crone job to run this in a specific intervals. If a smsc is permanently reconection stage and you don't want to monitor that smsc, then you can skip that particular smsc by adding in <b>sms_to_be_skipped&nbsp;</b></span>
-</div></div>
 
 ]]></content>
   </entry>
