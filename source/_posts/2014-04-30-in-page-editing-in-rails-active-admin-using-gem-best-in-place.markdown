@@ -12,7 +12,7 @@ categories:
 <span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
 <br/>
 To add Best in Place to our app we first need to add its gem to our application's Gemfile and run bundle.
-{%codeblock%}
+{%codeblock Gemfile%}
 gem 'best_in_place', github: 'bernat/best_in_place'
 {%endcodeblock%}
 Require best in place in active_admin.js.coffee and initialise it
