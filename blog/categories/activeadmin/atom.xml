@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ActiveAdmin | TechSleek]]></title>
   <link href="http://eshaiju.github.io/blog/categories/activeadmin/atom.xml" rel="self"/>
   <link href="http://eshaiju.github.io/"/>
-  <updated>2014-04-30T19:08:35+05:30</updated>
+  <updated>2014-04-30T19:24:22+05:30</updated>
   <id>http://eshaiju.github.io/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -23,7 +23,8 @@
 <span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
 <br/>
 To add Best in Place to our app we first need to add its gem to our application's Gemfile and run bundle.
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>gem 'best_in_place', github: 'bernat/best_in_place'</span></code></pre></td></tr></table></div></figure></notextile></div>
 Require best in place in active_admin.js.coffee and initialise it
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

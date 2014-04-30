@@ -4,7 +4,7 @@
   <title><![CDATA[TechSleek]]></title>
   <link href="http://eshaiju.github.io/atom.xml" rel="self"/>
   <link href="http://eshaiju.github.io/"/>
-  <updated>2014-04-30T19:08:35+05:30</updated>
+  <updated>2014-04-30T19:24:22+05:30</updated>
   <id>http://eshaiju.github.io/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -24,7 +24,8 @@
 <br/>
 To add Best in Place to our app we first need to add its gem to our application&#8217;s Gemfile and run bundle.
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>gem 'best_in_place', github: 'bernat/best_in_place'</span></code></pre></td></tr></table></div></figure>
 
 Require best in place in active_admin.js.coffee and initialise it
