@@ -9,7 +9,7 @@
   <meta name="author" content="Shaiju E">
 
   
-  <meta name="description" content="For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.classProduct&lt;ActiveRecord &hellip;">
+  <meta name="description" content="Best in place is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -31,6 +31,19 @@
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50480030-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
@@ -71,6 +84,107 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/">In Page Editing in &#8216;Active Admin&#8217; - Using Gem &#8216;Best in Place&#8217;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-30T18:20:30+05:30" pubdate data-updated="true">Apr 30<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
+<br/>
+To add Best in Place to our app we first need to add its gem to our application&#8217;s Gemfile and run bundle.
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'best_in_place', github: 'bernat/best_in_place'</span></code></pre></td></tr></table></div></figure>
+
+Require best in place in active_admin.js.coffee and initialise it
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#= require best_in_place
+</span><span class='line'>#= require best_in_place.purr
+</span><span class='line'>
+</span><span class='line'>$(document).ready ->
+</span><span class='line'>  jQuery(".best_in_place").best_in_place()</span></code></pre></td></tr></table></div></figure>
+
+
+To make text field editable in active admin show page 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :name do |project|
+</span><span class='line'> best_in_place project, :name, :type => :input,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+To make select field editable
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status do |project|
+</span><span class='line'>  best_in_place project, :status, :type => :select,:path =>[:admin,project],:collection => Project.statuses.map{|status| [status,status]}
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+Textarea can be make editable using following code
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status_description  do |project|
+</span><span class='line'>  best_in_place project, :status_description, :type => :textarea,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+For Editable Datepicker with formated output use <span style="font-weight: bold;">display_with</span>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row "Planned Start Date" do |project|
+</span><span class='line'>  best_in_place project, :planned_start_date , :type => :date ,:path =>[:admin,project],  :display_with => lambda { |v| v.try(:strftime,'%b %d, %Y') }
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a></h1>
     
     
@@ -89,13 +203,86 @@
 
 <time datetime="2014-03-16T12:27:00+05:30" pubdate data-updated="true">Mar 16<span>th</span>, 2014</time>
         
+           | <a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Comments</a>
+        
       </p>
     
   </header>
 
 
   <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on"><div style="text-align: left;"><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: helvetica, arial, clean, sans-serif;"><span style="font-size: x-small;"><span style="background: #ffffff;">For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.</span></span></span></span></div><div align="LEFT" style="margin-bottom: 0cm;"><br /></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; line-height: 0.48cm; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: Times New Roman;"><span style="font-size: x-small;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">class</span></b></span></span><span style="color: #333333;"><span style="background: #ffffff;"></span></span><span style="color: #445588;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">Product</span></b></span></span><span style="color: #333333;"><span style="background: #ffffff;"></span></span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">&lt;</span></b></span></span><span style="color: #333333;"><span style="background: #ffffff;"></span></span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="background: #ffffff;">ActiveRecord</span></span></span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b><span style="background: #ffffff;">::</span></b></span></span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="background: #ffffff;">Base</span></span></span></span></span></span></div><div dir="LTR" id="LC17"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;">belongs_to <span style="color: #990073;">:cost</span>, <span style="color: #990073;">:class_name</span> <b>=&gt;</b> <span style="color: #dd1144;">'Currency'</span>, foreign_key: <span style="color: #dd1144;">'cost_id'</span></span></pre></div><div dir="LTR" id="LC18"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;">accepts_nested_attributes_for <span style="color: #990073;">:cost</span></span></pre></div><div dir="LTR" id="LC19"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;"><b>attr_accessor</b> <span style="color: #990073;">:cost_id</span></span></pre></div><div align="LEFT" style="line-height: 0.48cm; margin-bottom: 0cm;"><span style="font-size: x-small;"><span style="font-variant: normal;"><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">end</span></span></span></span></span></span></span></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; line-height: 0.48cm; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: Times New Roman;"><span style="font-size: x-small;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>class</b></span></span><span style="color: #333333;">&nbsp;</span><span style="color: #445588;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>Currency</b></span></span><span style="color: #333333;">&nbsp;</span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>&lt;</b></span></span><span style="color: #333333;">&nbsp;</span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;">ActiveRecord</span></span><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><b>::</b></span></span><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;">Base</span></span></span></span></span></div><div dir="LTR" id="LC2"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;"><b>def</b> <span style="color: #445588;"><b>self</b></span><b>.</b><span style="color: #990000;"><b>currency_types</b></span></span></pre></div><div dir="LTR" id="LC11"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>[</b><span style="color: #dd1144;">'SAR'</span>,<span style="color: #dd1144;">'AED'</span>,<span style="color: #dd1144;">'USD'</span>,<span style="color: #dd1144;">'EUR'</span>,<span style="color: #dd1144;">'INR'</span><b>]</b></span></pre></div><div dir="LTR" id="LC12"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;<span style="font-size: x-small;"><b>end</b></span><br /><span style="font-size: x-small;"><b>end</b></span></pre></div><pre class="western" style="text-align: left;"></pre><div align="LEFT" style="line-height: 0.48cm; margin-bottom: 0cm;"><span style="font-size: x-small;"><span style="font-variant: normal;"><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">ActiveAdmin</span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><b><span style="background: #ffffff;">.</span></b></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">register</span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Times New Roman;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;"></span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: teal;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;">Product</span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Times New Roman;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #ffffff;"></span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: #333333;"><span style="font-family: Consolas, 'Liberation Mono', Courier, monospace;"><span style="font-style: normal;"><b><span style="background: #ffffff;">do</span></b></span></span></span></span></span></div><div dir="LTR" id="LC194"><pre class="western" style="border: none; padding: 0cm; text-align: left;"> <span style="font-size: x-small;">form <b>do</b> <b>|</b>f<b>|</b></span></pre></div><div dir="LTR" id="LC195"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>semantic_errors <b>*</b>f<b>.</b>object<b>.</b>errors<b>.</b>keys</span></pre></div><div dir="LTR" id="LC196"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>inputs <span style="color: #dd1144;">"Details"</span> <b>do</b></span></pre></div><div dir="LTR" id="LC197"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>input <span style="color: #990073;">:name</span></span></pre></div><div dir="LTR" id="LC201"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>inputs <span style="color: #dd1144;">"cost"</span> <b>do</b></span></pre></div><div dir="LTR" id="LC202"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">f<b>.</b>semantic_fields_for <span style="color: #990073;">:cost_attributes</span>  <b>do</b> <b>|</b>j<b>|</b></span></pre></div><div dir="LTR" id="LC203"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">j<b>.</b>inputs <b>do</b></span></pre></div><div dir="LTR" id="LC204"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">j<b>.</b>input <span style="color: #990073;">:currency_type</span>, <span style="color: #990073;">:as</span> <b>=&gt;</b> <span style="color: #990073;">:select</span>, <span style="color: #990073;">:collection</span> <b>=&gt;</b> <span style="color: teal;">Currency</span><b>.</b>currency_types,<span style="color: #990073;">:label</span> <b>=&gt;</b><span style="color: #dd1144;">'Cost'</span></span></pre></div><div dir="LTR" id="LC205"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;">j<b>.</b>input <span style="color: #990073;">:value</span></span></pre></div><div dir="LTR" id="LC206"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC207"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC208"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC209"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC211"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp; &nbsp;&nbsp;<span style="font-size: x-small;"><b>end</b></span></pre></div><div dir="LTR" id="LC219"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp; &nbsp;<span style="font-size: x-small;">f<b>.</b>actions</span></pre></div><div dir="LTR" id="LC220"><pre class="western" style="border: none; padding: 0cm; text-align: left;"> <span style="font-size: x-small;"><b>end</b></span></pre></div><pre class="western" style="text-align: left;"></pre><div dir="LTR" id="Section1"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC220"></a> <span style="font-size: x-small;">controller <b>do</b></span></pre></div><pre class="western" style="text-align: left;"><span style="font-variant: normal;">&nbsp;&nbsp; </span><span style="font-size: x-small;"><span style="font-variant: normal;"><span style="font-style: normal;"><b>def</b></span></span><span style="font-variant: normal;"><span style="font-style: normal;"><span style="font-weight: normal;"> </span></span></span><span style="font-variant: normal;"><span style="color: #990000;"><span style="font-style: normal;"><b>permitted_params</b></span></span></span></span></pre><div dir="LTR" id="LC233"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp; &nbsp;<span style="font-size: x-small;">params<b>.</b>permit <span style="color: #990073;">product</span>: <b>[</b><span style="color: #990073;">:name</span>,cost_attributes:<b>[</b><span style="color: #990073;">:id</span>,<span style="color: #990073;">:currency_type</span>,<span style="color: #990073;">:value</span><b>]]</b></span></pre></div><div dir="LTR" id="LC234"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp; <span style="font-size: x-small;"><b>end</b></span></pre></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"></div><pre class="western" style="border: none; padding: 0cm;"> <span style="font-size: 11pt;"><b>end</b></span><br /><span style="font-size: 11pt;"><span style="font-family: Consolas, Liberation Mono, Courier, monospace;"><b>end</b></span></span></pre></div></div></div></div>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Product&lt;ActiveRecord::Base
+</span><span class='line'> belongs_to :cost, :class_name => 'Currency', foreign_key: 'cost_id'
+</span><span class='line'> accepts_nested_attributes_for :cost
+</span><span class='line'> attr_accessor :cost_id
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Currency &lt; ActiveRecord::Base
+</span><span class='line'> def self.currency_types
+</span><span class='line'>   ['SAR','AED','USD','EUR','INR']
+</span><span class='line'> end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.registerProductdo
+</span><span class='line'> form do |f|
+</span><span class='line'>    f.semantic_errors *f.object.errors.keys
+</span><span class='line'>    f.inputs "Details" do
+</span><span class='line'>      f.input :name
+</span><span class='line'>      f.inputs "cost" do
+</span><span class='line'>         f.semantic_fields_for :cost_attributes  do |j|
+</span><span class='line'>            j.inputs do
+</span><span class='line'>              j.input :currency_type, :as => :select, :collection => Currency.currency_types,:label =>'Cost'
+</span><span class='line'>              j.input :value
+</span><span class='line'>            end
+</span><span class='line'>          end
+</span><span class='line'>        end
+</span><span class='line'>      end
+</span><span class='line'>    end
+</span><span class='line'>    f.actions
+</span><span class='line'> end
+</span><span class='line'>
+</span><span class='line'> controller do
+</span><span class='line'>   def permitted_params
+</span><span class='line'>    params.permit product: [:name,cost_attributes:[:id,:currency_type,:value]]
+</span><span class='line'>   end
+</span><span class='line'> end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+</div></div>
 </div>
   
   
@@ -126,13 +313,99 @@
 
 <time datetime="2014-03-05T13:02:00+05:30" pubdate data-updated="true">Mar 5<span>th</span>, 2014</time>
         
+           | <a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">Comments</a>
+        
       </p>
     
   </header>
 
 
   <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on"><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">FullCalendar is a&nbsp;</span><a href="http://jquery.com/" style="background-color: white; color: #710000; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">jQuery</a><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">&nbsp;plugin that provides a&nbsp;</span><b style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">full-sized</b><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">,&nbsp;</span><b style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">drag &amp; drop</b><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">&nbsp;calendar like the one below. It uses AJAX to fetch events on-the-fly for each month and is easily configured to use your own feed format (an extension is provided for&nbsp;</span><b style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Google Calendar</b><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">). It is visually customizable and exposes hooks for user-triggered events (like clicking or dragging an event). It is open source licensed under an&nbsp;</span><a href="http://arshaw.com/js/fullcalendar-1.6.4/license.txt" style="background-color: white; color: #710000; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">MIT license</a><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">.</span><br /><div class="separator" style="clear: both; text-align: center;"><a href="http://1.bp.blogspot.com/-qa_L3JuaqW4/UvxSTF0KUgI/AAAAAAAAAUw/7kbq7plSXAU/s1600/calender.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://1.bp.blogspot.com/-qa_L3JuaqW4/UvxSTF0KUgI/AAAAAAAAAUw/7kbq7plSXAU/s1600/calender.png" height="426" width="640" /></a></div><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Step 1 : Download the JQuery fullcalendar plugin by <a href="http://arshaw.com/fullcalendar/download/">here</a>&nbsp;and a</span>dd fullcalender.js and fullcalender.css in to&nbsp;javascripts and&nbsp;stylesheets folder<br />or<br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">fullcalendar is also available as a gem for Ruby on Rails which fits well with Asset Pipeline.</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">gem &nbsp;&#8216;fullcalendar-rails&#8217;</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Once the gem is installed, include fullcalendar javascript and css assets to your js and css file&nbsp;</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">Step 2 : In view page index.html.erb or some other html.erb page add &nbsp;a div with id &#8216;calendar&#8217;&nbsp;</span><br /><span style="background-color: white; font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;"><br /></span><br /><pre style="background-color: whitesmoke; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border-top-left-radius: 4px; border-top-right-radius: 4px; border: 1px solid rgba(0, 0, 0, 0.14902); color: #333333; font-family: Monaco, Menlo, Consolas, 'Courier New', monospace; font-size: 13px; line-height: 20px; margin-bottom: 10px; outline: 0px; padding: 9.5px; vertical-align: baseline; white-space: pre-wrap; word-break: break-all; word-wrap: break-word;">&lt;div id='calendar'&gt;&lt;/div&gt;</pre><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">Then add &nbsp;following code to js file&nbsp;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;"><br /></span></span><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">$(document).ready(function() {</span></span><br /><span style="font-family: 'Lucida Sans', Arial, sans-serif; font-size: 14px; line-height: 21px;">&nbsp; $(&#8220;#calendar&#8221;).fullCalendar({</span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; header: {</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; &nbsp; left: &#8220;prev,next today&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; &nbsp; center: &#8220;title&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; &nbsp; right: &#8220;month,agendaWeek,agendaDay&#8221;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; },</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; defaultView: &#8220;month&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; height: 500,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; slotMinutes: 15,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; events: &#8220;/dashboard/get_events&#8221;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; timeFormat: &#8220;h:mm t{ - h:mm t} &#8220;,</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; &nbsp; dragOpacity: &#8220;0.5&#8221;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">&nbsp; });</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">});</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">Now we need to write a method to fetch Json data which we are going to display on calender&nbsp;</span></span><br /><span style="font-family: Lucida Sans, Arial, sans-serif;"><span style="font-size: 14px; line-height: 21px;">In my example&nbsp;</span></span><br /><pre class="western" style="text-align: left;"><span style="font-size: x-small;"><b>class</b> <span style="color: #445588;"><b>DashboardController</b></span> <b>&lt;</b> <span style="color: teal;">ApplicationController</span></span></pre><div dir="LTR" id="LC2"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;respond_to <span style="color: #990073;">:json</span></pre></div><div dir="LTR" id="LC22"><pre class="western" style="border: none; line-height: 0.56cm; padding: 0cm;">&nbsp;<b>def</b> <span style="color: black;"><span style="font-family: 'Lucida Sans', Arial, sans-serif;"><span style="font-size: x-small;">get_events</span></span></span></pre></div><div dir="LTR" id="LC23"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: teal;">@task</span> <b>=</b> current_user<b>.</b>tasks</pre></div><div dir="LTR" id="LC24"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;events <b>=</b> <b>[]</b></pre></div><div dir="LTR" id="LC25"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: teal;">@task</span><b>.</b>each <b>do</b> <b>|</b>task<b>|</b></pre></div><div dir="LTR" id="LC26"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;events <b>&lt;&lt;</b> {<span style="color: #990073;">:id</span> <b>=&gt;</b> task<b>.</b>id, <span style="color: #990073;">:title</span> <b>=&gt;</b> <span style="color: #dd1144;">"#{</span>task<b>.</b>taskable<b>.</b>try(<span style="color: #990073;">:name</span>)<span style="color: #dd1144;">} : #{</span>task<b>.</b>task<span style="color: #dd1144;">}"</span>, <span style="color: #990073;">:start</span> <b>=&gt;</b> <span style="color: #dd1144;">"#{</span>task<b>.</b>planned_start_date<span style="color: #dd1144;">}"</span>,<span style="color: #990073;">:end</span> <b>=&gt;</b>&nbsp;<span style="color: #dd1144;">"#{</span>task<b>.</b>planned_end_date<span style="color: #dd1144;">}"</span> }</pre></div><div dir="LTR" id="LC34"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<b>end</b></pre></div><div dir="LTR" id="LC35"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="background: #ffffff;">render </span><span style="color: #990073;"><span style="background: #ffffff;">:text</span></span><span style="background: #ffffff;"> </span><b><span style="background: #ffffff;">=&gt;</span></b><span style="background: #ffffff;"> events</span><b><span style="background: #ffffff;">.</span></b><span style="background: #ffffff;">to_json</span></pre></div><div dir="LTR" id="LC36"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;<b>end</b></pre></div><div dir="LTR" id="Section1"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC36"></a><b>end</b></pre></div><div dir="LTR" id="Section2"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC361"></a><span style="color: teal;"><span style="background: #ffffff;">DemoApp</span></span><b><span style="background: #ffffff;">::</span></b><span style="color: teal;"><span style="background: #ffffff;">Application</span></span><b><span style="background: #ffffff;">.</span></b><span style="background: #ffffff;">routes</span><b><span style="background: #ffffff;">.</span></b><span style="background: #ffffff;">draw </span><b><span style="background: #ffffff;">do</span></b></pre></div><div dir="LTR" id="Section3"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC362"></a><span style="background: #ffffff;">  </span>&nbsp;resources <span style="color: #990073;">:dashboard</span> <b>do</b></pre></div><div dir="LTR" id="LC27"><pre class="western" style="border: none; padding: 0cm; text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;get <span style="color: #990073;">:get_events</span>, <span style="color: #990073;">on</span>: <span style="color: #990073;">:collection</span></pre></div><div dir="LTR" id="Section4"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC27"></a><span style="color: #990073;">   end</span></pre></div><div dir="LTR" id="Section5"><pre class="western" style="border: none; padding: 0cm; text-align: left;"><a href="https://www.blogger.com/blogger.g?blogID=6740215146536444584" name="LC363"></a><b><span style="background: #ffffff;">end</span></b></pre></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: Times New Roman;"><span style="font-size: medium;">that&#8217;s it , now you can see calender in your dashboard</span></span></span></div><br /><br /></div></div>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+
+  FullCalendar is a jQuery plugin that provides a full-sized drag drop calendar like the one below. It uses AJAX to fetch events on-the-fly for each month and is easily configured to use your own feed format (an extension is provided for Google Calendar. It is visually customizable and exposes hooks for user-triggered events (like clicking or dragging an event). It is open source licensed under an MIT license
+  <br/>
+<img border="0" src="http://1.bp.blogspot.com/-qa_L3JuaqW4/UvxSTF0KUgI/AAAAAAAAAUw/7kbq7plSXAU/s1600/calender.png" height="426" width="640" />
+<br/>
+Step 1 : Download the JQuery fullcalendar plugin by <a href="http://arshaw.com/fullcalendar/download/">here</a> and add fullcalender.js and fullcalender.css in to javascripts and stylesheets folder.Fullcalendar is also available as a gem for Ruby on Rails which fits well with Asset Pipeline.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'fullcalendar-rails'</span></code></pre></td></tr></table></div></figure>
+Once the gem is installed, include fullcalendar javascript and css assets to your js and css file
+<br/>
+Step 2 : In view page index.html.erb or some other html.erb page add a div with id &#8216;calendar&#8217;
+<br/>
+Then add following code to js file
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$(document).ready(function() {
+</span><span class='line'>   $("#calendar").fullCalendar({
+</span><span class='line'>     header: 
+</span><span class='line'>     left: "prev,next today",
+</span><span class='line'>     center: "title",
+</span><span class='line'>     right: "month,agendaWeek,agendaDay"
+</span><span class='line'>     defaultView: "month",
+</span><span class='line'>     height: 500,
+</span><span class='line'>     slotMinutes: 15,
+</span><span class='line'>     events: "/dashboard/get_events",
+</span><span class='line'>     timeFormat: "h:mm t{ - h:mm t} ",
+</span><span class='line'>     dragOpacity: "0.5"
+</span><span class='line'>  });
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+Now we need to write a method to fetch Json data which we are going to display on calender
+<br/>
+In my example 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class DashboardController &lt; ApplicationController
+</span><span class='line'>  respond_to :json
+</span><span class='line'>  def get_events
+</span><span class='line'>    @task = current_user.tasks
+</span><span class='line'>    events = []
+</span><span class='line'>    @task.each do |task|
+</span><span class='line'>      events &lt;&lt; {:id => task.id, :title => "#{task.taskable.try(:name)} : #{task.task}", :start => "#{task.planned_start_date}",:end => "#{task.planned_end_date}" }
+</span><span class='line'>    end
+</span><span class='line'>    render :text => events.to_json
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DemoApp::Application.routes.draw do
+</span><span class='line'>  resources :dashboard do
+</span><span class='line'>    get :get_events, on: :collection
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+that&#8217;s it , now you can see calender in your dashboard
+<br/>
+
+</div></div>
 </div>
   
   
@@ -163,13 +436,54 @@
 
 <time datetime="2014-02-04T12:34:00+05:30" pubdate data-updated="true">Feb 4<span>th</span>, 2014</time>
         
+           | <a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">Comments</a>
+        
       </p>
     
   </header>
 
 
   <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on"><h2 class="discussion-topic-title js-comment-body-title" style="background-color: white; border-bottom-style: none; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 21px; line-height: 1.1; margin: 0px; padding-right: 50px;"></h2><div style="background-color: #fbfbfb; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 13px; line-height: 22px; margin-bottom: 15px;">Given&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Project</code>,&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Task</code>, and&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">Activity</code>, I&#8217;ve managed to set up a&nbsp;<code style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; font-size: 12px; margin: 0px 2px; padding: 0px 5px; white-space: nowrap;">has_one :through</code>&nbsp;relationship filter with the following:</div><div class="highlight highlight-ruby" style="background-color: #fbfbfb; color: #333333; font-family: Helvetica, arial, freesans, clean, sans-serif; font-size: 13px; line-height: 22px; margin-bottom: 0px !important;"><pre style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; line-height: 19px; margin-bottom: 15px; margin-top: 15px; overflow: auto; padding: 6px 10px; word-wrap: normal;"><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Project</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:tasks</span><br /><span class="k" style="font-weight: bold;">end</span><br /><br /><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Task</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">belongs_to</span> <span class="ss" style="color: #990073;">:project</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:activities, :dependent =&gt; :destroy</span><br /><span class="k" style="font-weight: bold;">end</span><br /><br /><span class="k" style="font-weight: bold;">class</span> <span class="nc" style="color: #445588; font-weight: bold;">Activity</span> <span class="o" style="font-weight: bold;">&lt;</span> <span class="no" style="color: teal;">ActiveRecord</span><span class="o" style="font-weight: bold;">::</span><span class="no" style="color: teal;">Base</span><br />  <span class="n">has_many</span> <span class="ss" style="color: #990073;">:tasks</span><br />  <span class="n">has_one  </span><span class="ss" style="color: #990073;">:project, through: :task</span><br /><span class="k" style="font-weight: bold;">end</span><br /></pre><pre style="background-color: #f8f8f8; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; border-top-left-radius: 3px; border-top-right-radius: 3px; border: 1px solid rgb(221, 221, 221); font-family: Consolas, 'Liberation Mono', Courier, monospace; line-height: 19px; margin-bottom: 15px; margin-top: 15px; overflow: auto; padding: 6px 10px; word-wrap: normal;"><span class="no" style="color: teal;">ActiveAdmin</span><span class="o" style="font-weight: bold;">.</span><span class="n">register</span> <span class="no" style="color: teal;">User</span> <span class="k" style="font-weight: bold;">do</span><br />  <span class="n">filter</span> <span class="ss" style="color: #990073;">:task_project_id</span><span class="p">,</span> <span class="ss" style="color: #990073;">as</span><span class="p">:</span> <span class="ss" style="color: #990073;">:select</span><span class="p">,</span> <span class="ss" style="color: #990073;">collection</span><span class="p">:</span> <span class="no" style="color: teal;">Project</span><span class="o" style="font-weight: bold;">.</span><span class="n">all</span><span class="p">,</span> <span class="ss" style="color: #990073;">label</span><span class="p">:</span> <span class="s1" style="color: #dd1144;">'Project'</span><br /><span class="k" style="font-weight: bold;">end</span></pre></div></div></div>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+
+
+
+
+Given Project, Task,  and Activity, I&#8217;ve managed to set up has_one :through relationship filter with the following:
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Project &lt; ActiveRecord::Base
+</span><span class='line'>  has_many :tasks
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Task &lt; ActiveRecord::Base
+</span><span class='line'>  belongs_to :project
+</span><span class='line'>  has_many :activities, :dependent => :destroy
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Activity &lt; ActiveRecord::Base
+</span><span class='line'>  has_many :tasks
+</span><span class='line'>  has_one  :project, through: :task
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.register User do
+</span><span class='line'>  filter :task_project_id, as: :select, collection: Project.all, label: 'Project'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+  </div>
+</div>
 </div>
   
   
@@ -200,19 +514,79 @@
 
 <time datetime="2014-01-01T16:29:00+05:30" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
         
+           | <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Comments</a>
+        
       </p>
     
   </header>
 
 
   <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on"><div align="LEFT" style="margin-bottom: 0cm;"><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="background: transparent;">In one of my recent project, i need to implement a autocomplte in active_admin interface to select one or more users from user list. I tried googling on this and zeroed in on the library Chosen.&nbsp;Chosen by default supports multiple select, selected state.</span></span></span></span></div><div align="LEFT" style="margin-bottom: 0cm;"><br /></div><div align="LEFT" style="margin-bottom: 0cm;"><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">Chosen is available as a&nbsp;</span></span></span></span></span></span></span><a href="https://github.com/tsechingho/chosen-rails"><span style="font-variant: normal;"><span style="color: blue;"><span style="text-decoration: none;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">gem</span></span></span></span></span></span></span></span></a><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Times New Roman;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">&nbsp;</span></span></span></span></span></span></span><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">for Ruby on Rails which fits well with Asset Pipeline.</span></span></span></span></span></span></span></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;">Include Chosen gem in your Gemfile.</span></span></span><br /><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><br /></span></span></span></div><div align="LEFT" style="margin-bottom: 0cm;"><span style="font-family: Arial, sans-serif;">gem &#8216;chosen-rails&#8217;</span><br /><span style="font-family: Arial, sans-serif;"><br /></span></div><div align="LEFT" style="margin-bottom: 0cm;"><span style="font-family: Arial, sans-serif; line-height: 0.56cm;">Once the gem is installed, include chosen javascript assets to your js file.&nbsp;</span><br /><span style="font-family: Arial, sans-serif; line-height: 0.56cm;"><br /></span></div><div align="LEFT" style="margin-bottom: 0cm;"><span style="font-family: Arial, sans-serif;">//= require chosen-jquery</span></div><h3 align="LEFT" class="western" style="border: none; margin-bottom: 0cm; margin-top: 0cm; padding: 0cm;"><span style="font-variant: normal;"><span style="color: black;"><span style="font-size: small;"><span style="font-style: normal;">In&nbsp;</span></span></span></span><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="background: #eeeeee;">/app/admin/modelname.rb</span></span></span></span></span></span></code></h3><div><code style="line-height: 0.48cm;"><span style="color: #2b91af;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="background-position: initial initial; background-repeat: initial initial;">ActiveAdmin</span></span></span></span></code><code style="line-height: 0.48cm;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="background-position: initial initial; background-repeat: initial initial;">.register </span></span></span></span></code><code style="line-height: 0.48cm;"><span style="color: #2b91af;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="background-position: initial initial; background-repeat: initial initial;">Modlename</span></span></span></span></code><code style="line-height: 0.48cm;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="background-position: initial initial; background-repeat: initial initial;"> </span></span></span></span></code><code style="line-height: 0.48cm;"><span style="color: darkblue;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="background-position: initial initial; background-repeat: initial initial;">do</span></span></span></span></code></div><pre style="border: none; line-height: 0.48cm; padding: 0cm; text-align: left;"><code><span style="font-variant: normal;"><span style="color: grey;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">#Customize create and edit form</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">form </span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: darkblue;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">do</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;"> |f|</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: transparent;">    </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">f.inputs </span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: darkblue;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">do</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: transparent;">       </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">f.input :name</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: transparent;">       </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">f.input :othermodel, :input_html =&gt; { :</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: darkblue;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">class</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;"> =&gt; </span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: maroon;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">"chosen-input"</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;"> } </span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;"># other model with </span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><b><span style="background: transparent;">has_many</span></b></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;"> relation ship</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: transparent;">    </span></span></span></code><code><span style="font-variant: normal;"><span style="color: darkblue;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">end</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: transparent;">  </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">f.buttons</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: transparent;">  </span></span></span></code><code><span style="font-variant: normal;"><span style="color: darkblue;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">end</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">   </span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: darkblue;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">end</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;"> &nbsp;</span></span></span></span></span></span></span></code></pre><pre style="border: none; line-height: 0.48cm; padding: 0cm; text-align: left;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="background: #eeeeee;">in active_admin.js</span></span></span></span></pre><pre style="border: none; line-height: 0.48cm; padding: 0cm; text-align: left;"><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">$(document).ready(function(){</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: transparent;">   </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">$(</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: maroon;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">".chosen-input"</span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">).chosen();</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: transparent;">});</span></span></span></span></span></span></span></code></pre><pre style="border: none; line-height: 0.48cm; padding: 0cm; text-align: left;"><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">if you are using coffee script instead of js then use this&nbsp;</span></span></span></span></span></span></span></code></pre><pre style="border: none; line-height: 0.48cm; padding: 0cm; text-align: left;"><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">$ -&gt;</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: #eeeeee;">  </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;"># enable chosen js</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: #eeeeee;">  </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">$('.chosen-input').chosen</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: #eeeeee;">    </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">allow_single_deselect: true</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="background: #eeeeee;">    </span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">no_results_text: 'No results matched'</span></span></span></span></span></span></span></code></pre><div align="LEFT" style="border: none; line-height: 0.56cm; margin-bottom: 0cm; padding: 0cm;"><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">Then, include Chosen stylesheet assets to your css file.</span></span></span></span></span></span></span></code></div><div align="LEFT" style="border: none; line-height: 0.37cm; margin-bottom: 0cm; padding: 0cm;"><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">*= require chosen</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;"><br /></span></span></span></span></span></span></span></code><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;">To include more details check <a href="http://harvesthq.github.io/chosen/">here</a>&nbsp;</span></span></span></span></span></span></span></code><br /><code><span style="font-variant: normal;"><span style="color: black;"><span style="font-family: Arial, sans-serif;"><span style="font-size: small;"><span style="font-style: normal;"><span style="font-weight: normal;"><span style="background: #eeeeee;"><br /></span></span></span></span></span></span></span></code></div><div align="LEFT" style="border: none; line-height: 0.56cm; margin-bottom: 0cm; padding: 0cm;"><span style="background-color: #eeeeee; font-family: Arial, sans-serif; line-height: 0.37cm;">Thats it, you will have a nice autocomplte with multiselect .&nbsp;Happy coding&#8230;</span></div><div align="LEFT" style="font-style: normal; font-variant: normal; font-weight: normal; margin-bottom: 0cm;"><br /></div></div><div><code class="ruby string" style="-webkit-box-shadow: none !important; background-image: none !important; border-bottom-left-radius: 0px !important; border-bottom-right-radius: 0px !important; border-top-left-radius: 0px !important; border-top-right-radius: 0px !important; border: 0px !important; bottom: auto !important; box-shadow: none !important; box-sizing: content-box !important; color: blue !important; direction: ltr !important; display: inline !important; float: none !important; font-family: Consolas, 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace !important; font-size: 13px; height: auto !important; left: auto !important; line-height: 14.296875px; margin: 0px !important; outline: 0px !important; overflow: visible !important; padding: 0px !important; position: static !important; right: auto !important; top: auto !important; vertical-align: baseline !important; white-space: pre; width: auto !important;"></code></div></div></div>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+
+In one of my recent project, i need to implement a autocomplte in active_admin interface to select one or more users from user list. I tried googling on this and zeroed in on the library Chosen.Chosen by default supports multiple select, selected state.Chosen is available as a gem for Ruby on Rails which fits well with Asset Pipeline.
+<br/>Include Chosen gem in your Gemfile.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem ‘chosen-rails’</span></code></pre></td></tr></table></div></figure>
+Once the gem is installed, include chosen javascript assets to your js file. 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//= require chosen-jquery</span></code></pre></td></tr></table></div></figure>
+In /app/admin/modelname.rb
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.register Modlename do
+</span><span class='line'>  #Customize create and edit form
+</span><span class='line'>  form do |f|
+</span><span class='line'>    f.inputs do
+</span><span class='line'>       f.input :name
+</span><span class='line'>       f.input :othermodel, :input_html => { :class => "chosen-input" } # other model with has_many relation ship
+</span><span class='line'>    end
+</span><span class='line'>    f.buttons
+</span><span class='line'>  end   
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+in active_admin.js
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$(document).ready(function(){
+</span><span class='line'>   $(".chosen-input").chosen();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+if you are using coffee script instead of js then use this 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ->
+</span><span class='line'>  # enable chosen js
+</span><span class='line'>  $('.chosen-input').chosen
+</span><span class='line'>    allow_single_deselect: true
+</span><span class='line'>    no_results_text: 'No results matched'</span></code></pre></td></tr></table></div></figure>
+Then, include Chosen stylesheet assets to your css file.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>*= require chosen</span></code></pre></td></tr></table></div></figure>
+To include more details check <a href='http://harvesthq.github.io/chosen/'>Here </a>
+<br/>
+Thats it, you will have a nice autocomplte with multiselect . Happy coding…
+<br/><br/>
+</div></div>
 <h2>Comments</h2>
 <div class='comments'>
 <div class='comment'>
 <div class='author'>Lobna Mohamed</div>
 <div class='content'>
 Thanks for the good post, but does not save data to the database<br />I guess it related to permit_params I am trying this <br />permit_params :name, :othermodel_ids<br />but still not working, have you another idea??</div>
+
+
 </div>
 </div>
 </div>
@@ -244,6 +618,9 @@ Thanks for the good post, but does not save data to the database<br />I guess it
 
 
 <time datetime="2013-11-03T12:40:00+05:30" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time>
+        
+           | <a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Comments</a>
         
       </p>
     
@@ -318,6 +695,9 @@ In this example the Kannel log files found in <span style="font-weight: bold;">/
 
 
 <time datetime="2013-10-31T00:57:00+05:30" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
+        
+           | <a href="/blog/2013/10/31/installing-and-configuring-sql-based/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/10/31/installing-and-configuring-sql-based/">Comments</a>
         
       </p>
     
@@ -492,6 +872,9 @@ If you are keen to learn more about this , Refer <a href="http://www.blogalex.co
 
 <time datetime="2013-10-03T23:47:00+05:30" pubdate data-updated="true">Oct 3<span>rd</span>, 2013</time>
         
+           | <a href="/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/">Comments</a>
+        
       </p>
     
   </header>
@@ -548,6 +931,9 @@ If you are keen to learn more about this , Refer <a href="http://www.blogalex.co
 
 <time datetime="2013-10-01T09:30:00+05:30" pubdate data-updated="true">Oct 1<span>st</span>, 2013</time>
         
+           | <a href="/blog/2013/10/01/a-gem-for-generating-custom-error-pages/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/10/01/a-gem-for-generating-custom-error-pages/">Comments</a>
+        
       </p>
     
   </header>
@@ -594,6 +980,9 @@ That&#8217;s it! run your application and try with a false URL. <br/></div></div
 
 
 <time datetime="2013-09-09T18:45:00+05:30" pubdate data-updated="true">Sep 9<span>th</span>, 2013</time>
+        
+           | <a href="/blog/2013/09/09/configuring-mysql-dlr-storage/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/09/09/configuring-mysql-dlr-storage/">Comments</a>
         
       </p>
     
@@ -678,188 +1067,9 @@ Create table dlr<br /><br />
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/01/kannel-installation-and-configuration/">Kannel Installation and Configuration as SMS Gateway Server</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-01T17:53:00+05:30" pubdate data-updated="true">Sep 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on">Kannel is an open source WAP gateway and &nbsp;SMS gateway for GSM networks. &nbsp;The main use for Kannel is to link HTTP based services to various SMS centers using obscure protocols.Kannel is mainly being developed on Linux systems, and should be fairly easy to port to other Unix-like systems. However, kannel don&#8217;t yet support other platforms.<br /><br /><b>Kannel Installation and Configuration as SMS gateway Server</b><br /><b>Installation</b><br />1 Before installing kannel you will need to install libxml. Download the source and follow the next steps for installation.We can download it from following link.<span style="color: #7a7a7a;">&nbsp;</span><a href="ftp://gd.tuwien.ac.at/pub/libxml/" style="background-color: white; border: 0px; color: #f3686d; font-family: Georgia, Times, serif; font-size: 14px; line-height: 21px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;" target="_blank">ftp://gd.tuwien.ac.at/pub/libxml/</a><br />2 Unzip it into some directory<br />3 Cd into directory where libxml is unzipped and then type the following commands<br />4 Type ./configure<br />5 Type make<br />6 Type make install<br />&nbsp; &nbsp;now you have libxml<br />7 Download latest version of Kannel <a href="http://www.kannel.org/download.shtml">http://www.kannel.org/download.shtml</a>&nbsp;and Unzip it into some directory &nbsp;or use svn co </span><a href="https://svn.kannel.org/gateway/trunk" style="white-space: pre-wrap;">https://svn.kannel.org/gateway/trunk</a>&nbsp; <span style="white-space: pre-wrap;"> to download latest version of gateway</span><br />8 cd into directory where Kannel is unzipped and then type the following commands<br />9 Type &nbsp;<span style="white-space: pre-wrap;">./configure &#8211;prefix=/usr/local/kannel-1.5.0 </span><span style="white-space: pre-wrap;">&#8211;enable-start-stop-daemon &#8211;with-mysql</span><br />10 Type make<br />11 Type make install<br /><br />&nbsp;Now kannel is ready<br /><br />Next step is to add configuration<br /><br />Kannel consists of three programs, usually run as &nbsp;daemons: &nbsp;bearerbox, wapbox, and smsbox. They implement the connection to the phone (SMS or UDP), the WAP protocol stack, and the SMS based services, respectively.<br /><br />We will need only &nbsp;bearerbox and smsbox as we are going to setup it as SMS gateway server. Bearerbox is the main queue and smsbox handles the smscs.<br /><br />Create a file named kannel.conf and add following configuration<br /><br />
-
-  <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#---------------------------------------------
-</span><span class='line'># CORE
-</span><span class='line'>#
-</span><span class='line'># There is only one core group and it sets all basic settings of the bearerbox (and system).
-</span><span class='line'>group = core
-</span><span class='line'>admin-port = 13000
-</span><span class='line'>admin-password = passwd##
-</span><span class='line'>smsbox-port = 13010
-</span><span class='line'>log-file = "/var/log/kannel/kannel.log"
-</span><span class='line'># Log level is DEBUG
-</span><span class='line'>log-level = 
-</span><span class='line'>access-log = "/var/log/kannel/access.log"
-</span><span class='line'>store-type = spool
-</span><span class='line'># Let no SMS be lost as far as possible
-</span><span class='line'>store-location = "/var/spool/kannel"
-</span><span class='line'># Acceptable retries for temporary failures in sending SMS
-</span><span class='line'>sms-resend-retry = 3
-</span><span class='line'>#---------------------------------------------
-</span><span class='line'># SMSBOX SETUP
-</span><span class='line'>#
-</span><span class='line'># Smsbox(es) do higher-level SMS handling after they have been received from SMS centers by #bearerbox, or before they are given to bearerbox for delivery
-</span><span class='line'>group = smsbox
-</span><span class='line'>bearerbox-host = localhost
-</span><span class='line'>sendsms-port = 13020
-</span><span class='line'>log-file = "/var/log/kannel/smsbox.log"
-</span><span class='line'># Log level is DEBUG
-</span><span class='line'>log-level = 0
-</span><span class='line'>access-log = "/var/log/kannel/access.log"
-</span><span class='line'>#---------------------------------------------
-</span><span class='line'># SEND-SMS USERS
-</span><span class='line'># These users are used when Kannel smsbox sendsms interface is used to send PUSH sms messages
-</span><span class='line'>group = sendsms-user
-</span><span class='line'>username = tester
-</span><span class='line'>password = foobar
-</span><span class='line'>concatenation = true
-</span><span class='line'>max-messages = 4
-</span><span class='line'>#---------------------------------------------
-</span><span class='line'># SMSC CONNECTIONS
-</span><span class='line'># SMSC connections are created in bearerbox and they handle SMSC 
-</span><span class='line'># protocol and message relying.
-</span><span class='line'># Example complete configuration
-</span><span class='line'>group = smsc
-</span><span class='line'>smsc = smpp
-</span><span class='line'>smsc-id = PROMO-SERVICE-MESSAGE
-</span><span class='line'>allowed-smsc-id = PROMO-SERVICE-MESSAGE
-</span><span class='line'>host = X.X.X.X
-</span><span class='line'>port = XXXX
-</span><span class='line'>transceiver-mode = true
-</span><span class='line'>smsc-username = promouser
-</span><span class='line'>smsc-password = promopasswd
-</span><span class='line'>source-addr-ton = 0
-</span><span class='line'>source-addr-npi = 1
-</span><span class='line'>dest-addr-ton = 0
-</span><span class='line'>dest-addr-npi = 1
-</span><span class='line'>system-type = ""
-</span><span class='line'>address-range = ""</span></code></pre></td></tr></table></div></figure>
-  Now start smsbox and bearerbox using 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo /usr/local/kannel-1.5.0/sbin/bearerbox /home/shaiju/kannel/kannel.conf
-</span><span class='line'>sudo /usr/local/kannel-1.5.0/sbin/smsbox /home/shaiju/kannel/kannel.conf</span></code></pre></td></tr></table></div></figure>
-To see running process use
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo ps -ef | grep kannel</span></code></pre></td></tr></table></div></figure>
-To stop the kannel service
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>/etc/init.d/kannel stop</span></code></pre></td></tr></table></div></figure>
-To see kannel logs
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>tail -f /var/log/kannel/kannel.log</span></code></pre></td></tr></table></div></figure>
-Now you can send sms using send sms url
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>http://kannel.machine.ip:13010/cgi-bin/sendsms?username=tester&amp;password=foobar&amp;from=SENDERID&amp;to=9999999999&amp;text=test sms &amp;smsc=PROMO-SERVICE-MESSAGE</span></code></pre></td></tr></table></div></figure>
-If you are keen to learn more about this , Refer&nbsp;</span><a href="http://www.kannel.org/download/1.5.0/userguide-1.5.0/userguide.html" >Here</a><br />For Sample kannel configuration, check <a href="http://www.kannel.org/download/1.4.1/gateway-1.4.1/gw/smskannel.conf">Here</a><br /><br /></div></div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>Anthony</div>
-<div class='content'>
-Thanks for this. The send SMS from kannel is not any troublesome. Would you do a guide on receiving SMSs? I have tried everything and but still I cannot received SMS from the same e220 modem that works fine sending from kannel. Thanks again, you guide so far has been very usefull</div>
-</div>
-<div class='comment'>
-<div class='author'>Sreekanth G S</div>
-<div class='content'>
-Start bearerbox first. Smsbox needs to connect to an already running bearerbox instance. </div>
-</div>
-</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -870,6 +1080,10 @@ Start bearerbox first. Smsbox needs to connect to an already running bearerbox i
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/">In Page Editing in &#8216;Active Admin&#8217; - Using Gem &#8216;Best in Place&#8217;</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a>
@@ -885,10 +1099,6 @@ Start bearerbox first. Smsbox needs to connect to an already running bearerbox i
     
       <li class="post">
         <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/03/changing-kannel-log-level-log-rotation/">Changing Kannel Log Level & Log Rotation</a>
       </li>
     
   </ul>
@@ -911,9 +1121,39 @@ Start bearerbox first. Smsbox needs to connect to an already running bearerbox i
 </footer>
   
 
+<script type="text/javascript">
+      var disqus_shortname = 'eshaijugithubio';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 

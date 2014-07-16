@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Kannel Installation and Configuration as SMS Gateway Server - TechSleek</title>
+  <title>TechSleek</title>
   <meta name="author" content="Shaiju E">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration">
+  <link rel="canonical" href="http://eshaiju.github.io/blog/page/2">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="TechSleek" type="application/atom+xml">
@@ -76,12 +76,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">Kannel Installation and Configuration as SMS Gateway Server</h1>
+      <h1 class="entry-title"><a href="/blog/2013/09/01/kannel-installation-and-configuration/">Kannel Installation and Configuration as SMS Gateway Server</a></h1>
     
     
       <p class="meta">
@@ -99,15 +102,15 @@
 
 <time datetime="2013-09-01T17:53:00+05:30" pubdate data-updated="true">Sep 1<span>st</span>, 2013</time>
         
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://eshaiju.github.io">Comments</a>
+           | <a href="/blog/2013/09/01/kannel-installation-and-configuration/#disqus_thread"
+             data-disqus-identifier="http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration/">Comments</a>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><div class='post'>
+  <div class="entry-content"><div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">Kannel is an open source WAP gateway and &nbsp;SMS gateway for GSM networks. &nbsp;The main use for Kannel is to link HTTP based services to various SMS centers using obscure protocols.Kannel is mainly being developed on Linux systems, and should be fairly easy to port to other Unix-like systems. However, kannel don&#8217;t yet support other platforms.<br /><br /><b>Kannel Installation and Configuration as SMS gateway Server</b><br /><b>Installation</b><br />1 Before installing kannel you will need to install libxml. Download the source and follow the next steps for installation.We can download it from following link.<span style="color: #7a7a7a;">&nbsp;</span><a href="ftp://gd.tuwien.ac.at/pub/libxml/" style="background-color: white; border: 0px; color: #f3686d; font-family: Georgia, Times, serif; font-size: 14px; line-height: 21px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;" target="_blank">ftp://gd.tuwien.ac.at/pub/libxml/</a><br />2 Unzip it into some directory<br />3 Cd into directory where libxml is unzipped and then type the following commands<br />4 Type ./configure<br />5 Type make<br />6 Type make install<br />&nbsp; &nbsp;now you have libxml<br />7 Download latest version of Kannel <a href="http://www.kannel.org/download.shtml">http://www.kannel.org/download.shtml</a>&nbsp;and Unzip it into some directory &nbsp;or use svn co </span><a href="https://svn.kannel.org/gateway/trunk" style="white-space: pre-wrap;">https://svn.kannel.org/gateway/trunk</a>&nbsp; <span style="white-space: pre-wrap;"> to download latest version of gateway</span><br />8 cd into directory where Kannel is unzipped and then type the following commands<br />9 Type &nbsp;<span style="white-space: pre-wrap;">./configure &#8211;prefix=/usr/local/kannel-1.5.0 </span><span style="white-space: pre-wrap;">&#8211;enable-start-stop-daemon &#8211;with-mysql</span><br />10 Type make<br />11 Type make install<br /><br />&nbsp;Now kannel is ready<br /><br />Next step is to add configuration<br /><br />Kannel consists of three programs, usually run as &nbsp;daemons: &nbsp;bearerbox, wapbox, and smsbox. They implement the connection to the phone (SMS or UDP), the WAP protocol stack, and the SMS based services, respectively.<br /><br />We will need only &nbsp;bearerbox and smsbox as we are going to setup it as SMS gateway server. Bearerbox is the main queue and smsbox handles the smscs.<br /><br />Create a file named kannel.conf and add following configuration<br /><br />
 
   <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -254,69 +257,20 @@ Start bearerbox first. Smsbox needs to connect to an already running bearerbox i
 </div>
 </div>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Shaiju E</span></span>
-
-      
-
-
-
-
-
-
-
-
   
 
 
-<time datetime="2013-09-01T17:53:00+05:30" pubdate data-updated="true">Sep 1<span>st</span>, 2013</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/kannel/'>Kannel</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration/" data-via="" data-counturl="http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/09/09/configuring-mysql-dlr-storage/" title="Next Post: Configuring MySQL DLR storage">Configuring MySQL DLR storage &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
 </div>
-  </section>
-
-</div>
-
 <aside class="sidebar">
   
     <section>
@@ -324,7 +278,7 @@ Start bearerbox first. Smsbox needs to connect to an already running bearerbox i
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/">In Page Editing in 'Active Admin' - Using Gem 'Best in Place'</a>
+        <a href="/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/">In Page Editing in &#8216;Active Admin&#8217; - Using Gem &#8216;Best in Place&#8217;</a>
       </li>
     
       <li class="post">
@@ -353,7 +307,6 @@ Start bearerbox first. Smsbox needs to connect to an already running bearerbox i
   
 </aside>
 
-
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -368,10 +321,7 @@ Start bearerbox first. Smsbox needs to connect to an already running bearerbox i
       var disqus_shortname = 'eshaijugithubio';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration/';
-        var disqus_url = 'http://eshaiju.github.io/blog/2013/09/01/kannel-installation-and-configuration/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
