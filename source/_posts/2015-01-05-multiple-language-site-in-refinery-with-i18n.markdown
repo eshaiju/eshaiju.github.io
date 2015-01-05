@@ -3,7 +3,9 @@ layout: post
 title: "Multiple language site in refinery with i18n"
 date: 2015-01-05 09:50:40 +0530
 comments: true
-categories: 
+categories:
+- Refinery CMS
+- Ruby On Rails
 ---
 
 <div class='post'>
