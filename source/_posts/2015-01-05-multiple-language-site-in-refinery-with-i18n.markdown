@@ -57,7 +57,7 @@ Now we need to add multi language support for our extensions. For this we need t
 	rails g refinery:engine Service title:string description:text icon:image --i18n title description
 {%endcodeblock%}
 
-We can add link to toggle between languages using following code
+We can add link to toggle between languages in Frontend website using following code
 {%codeblock%}
 	<nav id='locale'>
 	  <% ::Refinery::I18n.frontend_locales.each do |locale| %>
