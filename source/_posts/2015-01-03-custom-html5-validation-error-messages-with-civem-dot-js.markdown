@@ -9,6 +9,10 @@ categories:
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
 		HTML5 allows us to implement client-side form validation without any JavaScript coding. However, error messages are hard-coded to the browser. In my recent project I faced situation, I have to use custome error message and show error message in both english and arabic. I achived error message customisation with <a href='https://github.com/javanto/civem.js'>Civem.js </a> which let you easily change the message to whatever you wish.
+        <br/>
+		{% img /images/img-en.jpg 350 250  %}
+		{% img /images/imgo-ar.jpg 333 250  %}
+        
 		<br/>
 		Following are steps to add custome error messages to our project.
     <br/>
