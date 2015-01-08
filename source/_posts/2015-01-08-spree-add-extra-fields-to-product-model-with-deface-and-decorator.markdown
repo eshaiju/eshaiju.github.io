@@ -13,7 +13,7 @@ categories:
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
 
-<a href="spreecommerce.com">Spree</a> is a fully-featured e-commerce solution that can be easily integrated into a Rails application. If you need to turn a Rails app into a store that sells products then Spree is one of the quickest ways to do this. We can customise all the built in features in spree and can also and new features and fileds to spree models.
+<a href="https://spreecommerce.com">Spree</a> is a fully-featured e-commerce solution that can be easily integrated into a Rails application. If you need to turn a Rails app into a store that sells products then Spree is one of the quickest ways to do this. We can customise all the built in features in spree and can also and new features and fileds to spree models.
 <br/>
 <br/>
 In this post I am discussing about adding a extra field for uploading company logo in to products. For customising view of product form we can use <a href ="https://github.com/spree/deface">Deface</a>. To add <strong>has_attached_file</strong> relation to product model we use <strong>decorator</strong>.
