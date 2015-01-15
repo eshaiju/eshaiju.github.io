@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Check Rspec Test Coverage With SimpleCov Gem"
+title: "Check Test Coverage With SimpleCov Gem"
 date: 2015-01-15 10:25:59 +0530
 comments: true
 categories: 
@@ -34,7 +34,7 @@ Due to this code <strong>SimpleCov.start if ENV["COVERAGE"]</strong> SimpleCov w
 {%codeblock%}
 COVERAGE=true bundle exec rspec
 {%endcodeblock%}
-Run your tests, open up coverage/index.html in your browser you can see detailed report on test coverage.
+Run your tests, open up <strong>coverage/index.html</strong> in your browser you can see detailed report on test coverage.
 {% img /images/simplecov1.png 800 250  %}
 {% img /images/simplecov2.png 800 250  %}
 	</div>
