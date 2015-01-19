@@ -10,7 +10,7 @@ categories:
 
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-	  Rails is all about 'Convention over Configuration'. There are community-driven <a href="https://github.com/bbatsov/ruby-style-guide">Ruby coding style guide</a>. But there is no such convention of following a 'standard' for the order of arranging associations, scopes, includes, validations in a Rails Model. But we can create one for our project and be consistent with it in all the models. This is what I follow. Thanks to this <a href="http://stackoverflow.com/a/16967431/2045617">stackoverflow post</a>.
+	  Rails is all about 'Convention over Configuration'. There are community-driven <a href="https://github.com/bbatsov/ruby-style-guide">Ruby coding style guides</a>. But there is no such convention of following a 'standard' for the order of arranging associations, scopes, includes, validations in a Rails Model. But we can create one for our project and be consistent with it in all the models. This is what I follow. Thanks to this <a href="http://stackoverflow.com/a/16967431/2045617">stackoverflow post</a>.
 {%codeblock%}
 class Model < ActiveRecord::Base   
   #all mixins
