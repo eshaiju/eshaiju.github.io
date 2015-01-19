@@ -14,9 +14,7 @@ categories:
 		{% img /images/imgo-ar.jpg 333 250  %}
         
 		<br/>
-		{% img /images/validation1.jpg 300 260  %}
-		{% img /images/validation2.jpg 286 260  %}
-		<br/>
+		
 		Following are steps to add custome error messages to our project.
     <br/>
 		1 - Grab the latest <a href='https://github.com/javanto/civem.js/downloads'>download</a>
