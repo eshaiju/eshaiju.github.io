@@ -10,9 +10,10 @@ categories:
 
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-	In my current company <strong>Ruby Software Pvt.Ltd</strong>, I gave a talk on  Ruby on Rails to New joinies. My primary goal of this talk was to give a introduction to Ruby on Rails Framework and make them to do a sample application from scratch.
+	In my current company <strong>Ruby Software Pvt.Ltd</strong>, I gave a session on Ruby on Rails to New joinies. The primary goal of this session to give an introduction about Ruby on Rails Framework and make them do a sample application from scratch. 
+
     <br/>
-		The slides of my talk are available below
+		The slides of the session is available below..
 		<br/><br/>
 		<iframe src="//slides.com/shaijunonu/introduction-to-ror/embed" width="95%" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 			<br/><br/>
