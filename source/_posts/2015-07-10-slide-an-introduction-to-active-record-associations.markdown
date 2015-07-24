@@ -4,6 +4,7 @@ title: "Slide - An introduction to Active Record Associations"
 date: 2015-07-10 12:35:59 +0530
 comments: true
 categories: 
+- Ruby On Rails
 ---
 
 <div class='post'>
