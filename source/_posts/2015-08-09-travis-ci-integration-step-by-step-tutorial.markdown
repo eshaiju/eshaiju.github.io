@@ -71,5 +71,6 @@ MySQL on Travis CI is started on boot, binds to 127.0.0.1 and requires authentic
     {% img /images/travis-ci-2.png 390 230  %}
 {% img /images/travis-ci-3.png 325 230 %}
   </ol>
+  Example of Travis Ci builds can be seen <a href="https://travis-ci.org/eshaiju/demo_app_with_travis_ci">here.</a>
 	</div>
 </div>
