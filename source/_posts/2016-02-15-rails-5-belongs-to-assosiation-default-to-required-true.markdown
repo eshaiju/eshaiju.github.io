@@ -13,11 +13,10 @@ categories:
 	<br/>
   For example, if your User model has city_id as forign key, then if you create user without adding city_id then rails 5 will trow validation error.
   {%codeblock user.rb%}
-  class User < ApplicationRecord
-  belongs_to :city
+class User < ApplicationRecord
+	belongs_to :city
 end
-
-  {%endcodeblock%}
+{%endcodeblock%}
 
    {%codeblock%}
  2.3.0 :003 > user = User.create(name:'Shaiju')
@@ -31,11 +30,12 @@ end
   If we want to turn of this behaviour we can use <strong>:optional => true </strong>. When set to true, the association will not have its presence validated.
 
   {%codeblock user.rb%}
-  class User < ApplicationRecord
+class User < ApplicationRecord
   belongs_to :city,optional: true 
 end
-  {%endcodeblock%}
-  {%codeblock%}
+{%endcodeblock%}
+
+{%codeblock%}
 2.3.0 :001 > user = User.create(name:'Shaiju')
    (0.3ms)  BEGIN
   SQL (25.2ms)  INSERT INTO `users` (`name`, `created_at`, `updated_at`) VALUES ('Shaiju', '2016-02-15 12:25:55', '2016-02-15 12:25:55')
@@ -50,7 +50,6 @@ end
 # default, so it is introduced as a configuration option to ensure that apps
 # made on earlier versions of Rails are not affected when upgrading.
 Rails.application.config.active_record.belongs_to_required_by_default = false
-
  {%endcodeblock%}
 	</div>
 </div>
