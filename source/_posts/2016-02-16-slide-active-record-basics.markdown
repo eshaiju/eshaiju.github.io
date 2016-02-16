@@ -4,7 +4,7 @@ title: "slide-Active Record Basics"
 date: 2016-02-16 10:02:47 +0530
 comments: true
 categories: 
-- Ruby On Rails, Rails 5
+- Ruby On Rails
 ---
 
 <div class='post'>

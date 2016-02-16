@@ -4,7 +4,8 @@ title: "Rails 5 'belongs_to' assosiation default to required true"
 date: 2016-02-15 17:46:29 +0530
 comments: true
 categories: 
-- Ruby On Rails, Rails 5
+- Ruby On Rails
+- Rails 5
 ---
 
 <div class='post'>
