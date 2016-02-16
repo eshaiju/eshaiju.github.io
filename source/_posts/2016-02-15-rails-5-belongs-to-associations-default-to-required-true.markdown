@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Rails 5 'belongs_to' assosiation default to required true"
+title: "Rails 5 'belongs_to' associations default to required true"
 date: 2016-02-15 17:46:29 +0530
 comments: true
 categories: 
@@ -10,7 +10,7 @@ categories:
 
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-	5.0.0.beta2 version is released. One of the change I noticed is <strong>belongs_to</strong> assosiation by default required is true, that means if you create a object by setting foreign key to be nil it will trow a <strong>must exist</strong> validation error. This change will have some impact if you are migrating an existing rails 4 application in to rails 5 and foreign key is not mandatory in your application.
+	5.0.0.beta2 version is released. One of the change I noticed is <strong>belongs_to</strong> associations by default required is true, that means if you create a object by setting foreign key to be nil it will trow a <strong>must exist</strong> validation error. This change will have some impact if you are migrating an existing rails 4 application in to rails 5 and foreign key is not mandatory in your application.
 	<br/>
   For example, if your User model has city_id as forign key, then if you create user without adding city_id then rails 5 will trow validation error.
   {%codeblock user.rb%}
