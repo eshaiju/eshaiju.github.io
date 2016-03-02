@@ -11,7 +11,7 @@ categories:
 <div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
 
-In one of my recent project, i need to implement a autocomplte in active_admin interface to select one or more users from user list. I tried googling on this and zeroed in on the library Chosen.Chosen by default supports multiple select, selected state.Chosen is available as a gem for Ruby on Rails which fits well with Asset Pipeline.
+In one of my recent project, I need to implement an autocomplete in active_admin interface to select one or more users from the user list. I tried googling on this and zeroed in on the library Chosen.Chosen by default supports multiple select, selected state.Chosen is available as a gem for Ruby on Rails which fits well with Asset Pipeline.
 <br/>Include Chosen gem in your Gemfile.
 {%codeblock%}
 	gem ‘chosen-rails’
@@ -23,7 +23,7 @@ Once the gem is installed, include chosen javascript assets to your js file.
 In /app/admin/modelname.rb
 {%codeblock%}
 ActiveAdmin.register Modlename do
-  #Customize create and edit form
+  #Customize creates and edit form
   form do |f|
     f.inputs do
        f.input :name

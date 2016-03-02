@@ -10,7 +10,7 @@ categories:
 
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-	In my current company <strong>Ruby Software Pvt.Ltd</strong>, I gave a session on Ruby on Rails to New joinies. The primary goal of this session to give an introduction about Ruby on Rails Framework and make them do a sample application from scratch. 
+	In my current company <strong>Ruby Software Pvt.Ltd</strong>, I gave a session on Ruby on Rails to New joiners. The primary goal of this session to give an introduction about Ruby on Rails Framework and make them do a sample application from scratch. 
 
     <br/>
 		The slides of the session is available below..

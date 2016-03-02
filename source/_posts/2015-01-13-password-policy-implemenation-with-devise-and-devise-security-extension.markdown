@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Password policy implemenation with Devise and Devise Security Extension"
+title: "Password policy implementation with Devise and Devise Security Extension"
 date: 2015-01-13 14:31:48 +0530
 comments: true
 categories: 
@@ -95,7 +95,7 @@ add_index :users, :password_changed_at
 config.password_length = 10..128
 {%endcodeblock%}
 <strong>4 - password must meet complexity requirements - Should be a combination of letters, numbers and symbols</strong>
-   <br/>Add password_regex with Regular expresion which satisfy our needs.
+   <br/>Add password_regex with Regular expression which satisfies our needs.
 {%codeblock%}
    # Need 1 char of A-Z, a-z and 0-9 and special charactor
 config.password_regex = /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W])/
@@ -113,7 +113,7 @@ config.unlock_in = 30.minutes
 {%endcodeblock%}
 <strong>7 - Email validation - Accept only emails of allowed set of domains</strong>
 <br/>
-  For this I added a custome validator which will check the domain name of user entered email.
+  For this, I added a custom validator which will check the domain name of user entered an email.
 {%codeblock%}
 validate :presence_of_domain_in_email
 

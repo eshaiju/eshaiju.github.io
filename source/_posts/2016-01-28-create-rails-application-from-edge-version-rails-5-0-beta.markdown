@@ -8,7 +8,7 @@ categories:
 ---
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-		<b>5.0.0.beta1.1</b> version is released which has some exciting stuffs like Action Cable, API mode, new Rails commands. To test all these new items we need to setup rails application from Edge Version. There are different ways to setup a rails project using Edge version. In this post Iam explaining how I setup a project in Rails 5.0.0.beta.
+		<b>5.0.0.beta1.1</b> version is released which has some exciting stuffs like Action Cable, API mode, new Rails commands. To test all these new items we need to setup rails application from Edge Version. There are different ways to setup a rails project using Edge version. In this post I am explaining how I setup a project in Rails 5.0.0.beta.
     <br/>
 		First We need to create an application folder with the name of the application and add a Gemfile.
 		{%codeblock %}
@@ -37,6 +37,6 @@ bundle exec rails new . --force --dev
 {%endcodeblock %}
 The --force flag will allow Rails to overwrite our Gemfile, and the --dev flag tells Rails to point to the edge version of Rails that we just bundled.
 <br/>
-Thats it, now we will have a brand new Rails application with Edge Version.
+That's it, now we will have a brand new Rails application with Edge Version.
 	</div>
 </div>

@@ -8,7 +8,7 @@ categories:
 
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-	<a href="https://travis-ci.org/">Travis-CI</a> is a open source, free and hosted continuous integration service that could build and run the unit tests for you, on every commit to a GitHub repository. It supports projects in a multitude of languages. The service allows you to configure steps that would be run before, after and during the build and test process, with just one YAMLfile (named .travis.yml) in the root of your repo. Apart from running the many unit tests in the project and letting you know how your latest check-in affected the health of the project, the Travis-CI service could also do custom build tasks like a post-build deployment. Testing your open source project is free,to integrate Travis Ci in private project we have to purchace suitable <a href="https://travis-ci.com/plans">plan </a>.
+	<a href="https://travis-ci.org/">Travis-CI</a> is an open source, free and hosted continuous integration service that could build and run the unit tests for you, on every commit to a GitHub repository. It supports projects in a multitude of languages. The service allows you to configure steps that would be run before, after and during the build and test process, with just one YAMLfile (named .travis.yml) in the root of your repo. Apart from running the many unit tests in the project and letting you know how your latest check-in affected the health of the project, the Travis-CI service could also do custom build tasks like a post-build deployment. Testing your open source project is free. To integrate Travis Ci in a private project we have to purchase suitable <a href="https://travis-ci.com/plans">plan </a>.
   <br/>
 	Features created to help projects and teams
 	<ul>
@@ -24,7 +24,7 @@ categories:
   <br/>
   <ol>
 	  <li>
-	  	Sign in to Travis CI with your GitHub account, accepting the GitHub access permissions confirmation.
+	  	Sign into Travis CI with your GitHub account, accepting the GitHub access permissions confirmation.
 		</li>
 		<li>
 			Once you’re signed in, and Travis synchronized your repositories from GitHub, go to your profile page and enable Travis CI builds for your repository.  (Note: You can only enable Travis CI builds for repositories you have admin access to.)</li>
@@ -62,7 +62,7 @@ MySQL on Travis CI is started on boot, binds to 127.0.0.1 and requires authentic
 
     {%endcodeblock%}
     <li>
-    Commit this to github
+    Commit this to GitHub
 (Note: Travis only runs a build on the commits you push after adding the repository to Travis.)
     </li>
     <li>

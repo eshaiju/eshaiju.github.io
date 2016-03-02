@@ -29,7 +29,7 @@ ar:
         title: لقب
 		  # will translate Project attribute "title" as "لقب"
 {%endcodeblock%}
-thats it, now if you switch your application to arabic you can see every where project is translated in to <strong>مشروع</strong> and projects is translate in to <strong>مشاريع</strong>. Project attribute title will be translated in to <strong>لقبs</strong>.
+that's it, now if you switch your application to Arabic you can see everywhere in the project is translated into <strong>مشروع</strong> and projects is translate into <strong>مشاريع</strong>. Project attribute title will be translated into <strong>لقبs</strong>.
 <br/>
 <br/>
 Active Record validation error messages can also be translated easily. Active Record gives you a couple of namespaces where you can place your message translations in order to provide different messages and translation for certain models, attributes, and/or validations.

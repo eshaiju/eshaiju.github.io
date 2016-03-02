@@ -13,10 +13,10 @@ categories:
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
 
-<a href="https://spreecommerce.com">Spree</a> is a fully-featured e-commerce solution that can be easily integrated into a Rails application. If you need to turn a Rails app into a store that sells products then Spree is one of the quickest ways to do this. We can customise all the built in features in spree and can also and new features and fileds to spree models.
+<a href="https://spreecommerce.com">Spree</a> is a fully-featured e-commerce solution that can be easily integrated into a Rails application. If you need to turn a Rails app into a store that sells products then Spree is one of the quickest ways to do this. We can customise all the built-in features in Spree and can also and new features and fields to Spree models.
 <br/>
 <br/>
-In this post I am discussing about adding a extra field for uploading company logo in to products. For customising view of product form we can use <a href ="https://github.com/spree/deface">Deface</a>. To add <strong>has_attached_file</strong> relation to product model we use <strong>decorator</strong>.
+In this post, I am discussing adding an extra field for the uploading company logo into products. For customising view of product form we can use <a href ="https://github.com/spree/deface">Deface</a>. To add <strong>has_attached_file</strong> relation to product model we use <strong>decorator</strong>.
 <br/>
 
 First we need to create migration for adding company logo field to <strong>spree_products</strong> table.
@@ -39,7 +39,7 @@ Now we only can add file upload filed to product form using deface.
 
 Deface is a standalone Rails library that enables you to customize Erb templates without needing to directly edit the underlying view file. Deface allows you to use standard CSS3 style selectors to target any element (including Ruby blocks), and perform an action against all the matching elements
 <br/>
-Add deface code in to <strong>app/overrides/company_logo_to_admin_product.rb</strong>
+Add deface code into <strong>app/overrides/company_logo_to_admin_product.rb</strong>
 {%codeblock%}
 Deface::Override.new(
     :virtual_path   => "spree/admin/products/_form",

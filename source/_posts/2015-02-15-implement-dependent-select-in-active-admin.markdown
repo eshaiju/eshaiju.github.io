@@ -64,6 +64,6 @@ DependentSelect::Application.routes.draw do
 end
 {%endcodeblock%}
 
-Thats it now you can see catelog select box will be repopulated when we select a product in product select box. This can be implemented in any of formastic input forms.
+That's it now you can see catalog select box will be repopulated when we select a product in product select box. This can be implemented in any of formastic input forms.
 	</div>
 </div>

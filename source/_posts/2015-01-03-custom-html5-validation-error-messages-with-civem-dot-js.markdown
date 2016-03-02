@@ -15,7 +15,7 @@ categories:
         
 		<br/>
 		
-		Following are steps to add custome error messages to our project.
+		Following are steps to add custom error messages to our project.
     <br/>
 		1 - Grab the latest <a href='https://github.com/javanto/civem.js/downloads'>download</a>
 		<br/>

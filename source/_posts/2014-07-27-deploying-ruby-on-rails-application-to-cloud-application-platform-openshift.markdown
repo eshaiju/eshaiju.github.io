@@ -29,7 +29,7 @@ git remote add openshift <OpenShift repo URL>
 
 3- Configure Database
 <br/>
-Since your database address may change, you will need to access it using an environment variable. A random username and password was also generated for you when your application was created. But you don't need to hard code it into your application, there are environment variables for that too!
+Since your database address may change, you will need to access it using an environment variable. A random username and password were also generated for you when your application was created. But you don't need to hardcode it into your application, there are environment variables for that too!
 Add this configuration to database.yml file
 
 {%codeblock %}
@@ -55,11 +55,11 @@ git push openshift master
 
 If everything went well, your app should deploy and be accessible. If not, pay attention to the output from the git push, if anything failed, it will tell you there.
 <br/>
- If your application require some persistent directory for your data then you can use directory (app-root/data/) you can access this directory in your application using enviroment variable OPENSHIFT_DATA_DIR
+ If your application requires some persistent directory for your data then you can use directory (app-root/data/) you can access this directory in your application using environment variable OPENSHIFT_DATA_DIR
 <br/>
-5- Managing apps :
+5- Managing apps:
 <br/>
-To ssh into your server, type :
+To ssh into your server, type:
 {%codeblock %}
 rhc ssh app-name
 {%endcodeblock%}
@@ -74,7 +74,7 @@ Migrate Database:
 bundle exec rake db:migrate RAILS_ENV="production"
 {%endcodeblock%}
 
- If you want to associate your own domain name eg. (www.yourdomain.com) with your openshift rails app url then you will need to create url alias as shown below 
+ If you want to associate your own domain name eg. (www.yourdomain.com) with your Openshift rails application URL then you will need to create URL alias as shown below 
 {%codeblock %}
 rhc alias add railsapp www.yourdomain.com
 {%endcodeblock%}

@@ -9,7 +9,7 @@ categories:
 
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-		<a href="https://github.com/Apipie/apipie-rails">Apipie-rails</a> is a DSL and Rails engine for documenting your RESTful API. Instead of traditional use of <strong>#comments</strong>, Apipie lets you describe the code, through the code. With Apipie you can specify the methods available to your API, describe every possible parameter. Apipie using Ruby syntax so no need to learn yet another syntax. The documentation is available from within your app (by default under the /apipie path.)
+		<a href="https://github.com/Apipie/apipie-rails">Apipie-rails</a> is a DSL and Rails engine for documenting your RESTful API. Instead of the traditional use of <strong>#comments</strong>, Apipie lets you describe the code, through the code. With Apipie you can specify the methods available to your API, describe every possible parameter. Apipie using Ruby syntax so no need to learn yet another syntax. The documentation is available from within your app (by default under the /apipie path.)
 		<br/>
 		<br/>
 		<strong>

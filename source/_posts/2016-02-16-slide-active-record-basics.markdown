@@ -9,7 +9,7 @@ categories:
 
 <div class='post'>
 	<div dir="ltr" style="text-align: left;" trbidi="on">
-		In my current company <strong>Ruby Software Pvt.Ltd</strong>, I gave a session on Active Record Basics to New joinies. The primary goal of this session to give an introduction about active record basics and make them to do basic CRUD operation using AR. 
+		In my current company <strong>Ruby Software Pvt.Ltd</strong>, I gave a session on Active Record Basics to New joiners. The primary goal of this session to give an introduction to active record basics and make them do basic CRUD operation using AR. 
 
     <br/>
 		The slides of the session is available below..

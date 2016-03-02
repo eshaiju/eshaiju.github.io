@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Installing and configuring SQL-Based queue engine for Kannel (sqlbox)"
+title: "Installing and configuring SQL-Based queue engine for Kannel (SQL box)"
 date: 2013-10-31T00:57:00+05:30
 comments: true
 categories:
@@ -9,19 +9,19 @@ categories:
 
 <div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
-  Sqlbox is a special Kannel box that sits between bearerbox and smsbox and uses a database queue to store and forward messages.Messages are queued on a configurable table (defaults to send_sms) and moved to another table (defaults to sent_sms) afterwards.
+  SQL box is a special Kannel box that sits between bearer box and SMS box and uses a database queue to store and forward messages. Messages are queued on a configurable table (defaults to send_sms) and moved to another table (defaults to sent_sms) afterwards.
   <br />
-  After installing gateway, we need to compile Sqlbox.
+  After installing gateway, we need to compile SQL box.
   <br />
   Steps:<br /><br />&nbsp;
-  1 - cd into directory where Kannel is unzipped and then type the following commands<br />
+  1 - cd to directory where Kannel is unzipped and then type the following commands<br />
   {% codeblock %}
     cd addons/sqlbox/
 sudo ./bootstrap
 sudo ./configure --with-kannel-dir=/usr/local/kannel-1.5.0/
 sudo make bindir=/usr/local/kannel/kannel-1.5.0/
 {% endcodeblock %}
-  2 -Create a file named smsbox.conf and following configuration
+  2 -Create a file named smsbox.conf and the following configuration
 {%codeblock%}
 #SQL BOX CONFIG
 
