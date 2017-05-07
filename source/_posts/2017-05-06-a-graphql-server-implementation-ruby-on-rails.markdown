@@ -65,7 +65,7 @@ Here’s a possible JSON response for that query:
 You can install graphql from RubyGems by adding to your application’s Gemfile:
 {%codeblock Gemfile%}
 # Gemfile
-gem "graphql"
+gem 'graphql', '~> 0.9.2'
 {%endcodeblock%}
 Then, run bundle install.<br/><br/>
 Now you can get started with a few GraphQL generators:
@@ -82,7 +82,7 @@ After installing you can see your new schema by:
 {%codeblock%}
 bundle install
 rails server
-Open localhost:3000/graphiql
+open localhost:3000/graphiql
 {%endcodeblock%}
 After this, you can build a GraphQL server by hand or GraphQL generators
 <p>Here  I am building by hand.</p>
@@ -125,7 +125,7 @@ GraphqlRubySampleSchema = GraphQL::Schema.define do
   query Types::QueryType
 end
 {%endcodeblock%}
-This schema is ready to serve GraphQL queries!. play around this query in graphiql.
+This schema is ready to serve GraphQL queries!. play around this query in GraphiQL.
 
 <br/><br/>Here’s an example of a GraphQL query that a client can use to ask a server about the title  of post #1:
 {%codeblock%}
