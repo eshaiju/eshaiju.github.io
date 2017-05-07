@@ -61,11 +61,12 @@ Here’s a possible JSON response for that query:
 {%endcodeblock%}
 <strong>GraphQL server implementation in Ruby On Rails Application</strong>
 
-<p>Here we are assuming, we have an existing ROR application with model Post and fields title and body.</p>
+<p>Here we are assuming, we have an existing ROR application with model Article and fields title and body.</p>
 You can install graphql from RubyGems by adding to your application’s Gemfile:
 {%codeblock Gemfile%}
 # Gemfile
-gem 'graphql', '~> 0.9.2'
+gem "graphql"
+gem 'graphiql-rails', group: :development
 {%endcodeblock%}
 Then, run bundle install.<br/><br/>
 Now you can get started with a few GraphQL generators:
@@ -74,9 +75,8 @@ Now you can get started with a few GraphQL generators:
 This will:
 <ul><li>Set up a folder structure in app/graphql/</li>
 <li>Add schema definition</li>
-<li>Add a Query type definition</li>
+<li>Add a query type definition</li>
 <li>Add a route and controller for executing queries</li>
-<li>add graphiql-rails in gemfile</li></ul>
 
 After installing you can see your new schema by:
 {%codeblock%}
@@ -87,15 +87,13 @@ open localhost:3000/graphiql
 After this, you can build a GraphQL server by hand or GraphQL generators
 <p>Here  I am building by hand.</p>
 
-Define some types:  Add post_type.rb in 'types' folder which will define PostType
-{%codeblock app/graphql/types/post_type.rb%}
-PostType = GraphQL::ObjectType.define do
-  name "Post"
-  description "A blog post"
-  # `!` marks a field as "non-null"
-  field :id, !types.ID
-  field :title, !types.String
-  field :body, !types.String
+Define some types:  Add article_type.rb in 'types' folder which will define ArticleType
+{%codeblock app/graphql/types/article_type.rb%}
+Types::ArticleType = GraphQL::ObjectType.define do
+  name "Article"
+  field :id, types.Int
+  field :title, types.String
+  field :body, types.Int
 end
 {%endcodeblock%}
 Now we need to build schema, which is what we use to query
@@ -105,16 +103,16 @@ module Types
     name "Query"
     description "The query root of this schema"
 
-    field :post do
-      type PostType
+    field :acticle do
+      type ArticleType
       argument :id, !types.ID
-      description "Find a Post by ID"
-      resolve ->(obj, args, ctx) { Post.find_by_id(args["id"]) }
+      description "Find a Article by ID"
+      resolve ->(obj, args, ctx) { Article.find_by_id(args["id"]) }
     end
   end
 end
 {%endcodeblock%}
-This will query post by accepting ID as argument
+This will query article by accepting ID as argument
 
 Then, build a schema with QueryType as the query entry point:
 
@@ -127,10 +125,10 @@ end
 {%endcodeblock%}
 This schema is ready to serve GraphQL queries!. play around this query in GraphiQL.
 
-<br/><br/>Here’s an example of a GraphQL query that a client can use to ask a server about the title  of post #1:
+<br/><br/>Here’s an example of a GraphQL query that a client can use to ask a server about the title  of article #1:
 {%codeblock%}
 query {
-  post(id: 1){
+  acticle(id: 1){
     title
   }
 }
@@ -139,8 +137,8 @@ Here’s a possible JSON response for that query:
 {%codeblock%}
 {
   "data": {
-    "post": {
-      "title": "test"
+    "acticle": {
+      "title": "A GraphQL Server"
     }
   }
 }
@@ -150,7 +148,7 @@ You can execute queries from a query string:
 {%codeblock%}
 query_string = "
 {
-  post(id: 1) {
+  acticle(id: 1) {
     id
     title
   }
@@ -160,12 +158,13 @@ result_hash = GraphqlRubySampleSchema.execute(query_string)
 output:
 # {
 #   "data" => {
-#     "post" => {
+#     "acticle" => {
 #        "id" => 1,
-#        "title" => "test"
+#        "title" => "A GraphQL Server"
 #     }
 #   }
 # }
 {%endcodeblock%}
+You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
