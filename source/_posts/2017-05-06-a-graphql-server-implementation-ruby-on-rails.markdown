@@ -12,7 +12,7 @@ categories:
 
 <div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
-  <p><a href="http://graphql.org/">GraphQL </a>is a query language for APIs developed by the Facebook team. This language gives clients the power to ask for exactly what they need and nothing more makes it easier to evolve APIs over time and enables powerful developer tools. Facebook Open sourced it in 2015.</p>
+  <p><a href="http://graphql.org/">GraphQL </a>is a query language for APIs developed by the Facebook team. This language gives clients the power to ask for exactly what they need and nothing more makes it easier to evolve APIs over time and enables powerful developer tools. Facebook open sourced it in 2015.</p>
   <div class="graphiqlVid">
     <video autoplay="" loop="" playsinline="" style="margin-bottom: 0px;">
       <source src="http://graphql.org/img/graphiql.mp4?x" type="video/mp4">
@@ -89,11 +89,14 @@ After this, you can build a GraphQL server by hand or GraphQL generators
 
 Define some types:  Add article_type.rb in 'types' folder which will define ArticleType
 {%codeblock app/graphql/types/article_type.rb%}
-Types::ArticleType = GraphQL::ObjectType.define do
-  name "Article"
-  field :id, types.Int
-  field :title, types.String
-  field :body, types.Int
+module Types
+  ArticleType = GraphQL::ObjectType.define do
+    name "Article"
+    field :id, types.Int
+    field :title, types.String
+    field :body, types.Int
+    field :comments, types[CommentType]
+  end
 end
 {%endcodeblock%}
 Now we need to build schema, which is what we use to query
