@@ -38,7 +38,7 @@ categories:
 <strong>GraphQL Queries:</strong>
 
 <p>Here’s an example of a GraphQL query that a client can use to ask a server about the name and email of user #1:</p>
-{%codeblock%}
+{%codeblock lang:ruby%}
 {
   user(id: 1) {
     firstName,
@@ -48,7 +48,7 @@ categories:
 }
 {%endcodeblock%}
 Here’s a possible JSON response for that query:
-{%codeblock%}
+{%codeblock lang:ruby%}
 {
   "data": {
     "user": {
@@ -129,7 +129,7 @@ end
 This schema is ready to serve GraphQL queries!. play around this query in GraphiQL.
 
 <br/><br/>Here’s an example of a GraphQL query that a client can use to ask a server about the title  of article #1:
-{%codeblock%}
+{%codeblock lang:ruby%}
 query {
   acticle(id: 1){
     title
@@ -137,7 +137,7 @@ query {
 }
 {%endcodeblock%}
 Here’s a possible JSON response for that query:
-{%codeblock%}
+{%codeblock lang:ruby%}
 {
   "data": {
     "acticle": {
@@ -148,7 +148,7 @@ Here’s a possible JSON response for that query:
 {%endcodeblock%}
 {% img /images/graphql_query.png 790 260  %}
 You can execute queries from a query string:
-{%codeblock%}
+{%codeblock lang:ruby%}
 query_string = "
 {
   acticle(id: 1) {
