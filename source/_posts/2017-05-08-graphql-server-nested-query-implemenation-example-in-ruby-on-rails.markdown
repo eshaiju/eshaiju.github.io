@@ -27,7 +27,7 @@ module Types
     field :user, UserType
   end
 end
-    {%endcodeblock%}
+{%endcodeblock%}
 
     Here we are exposing commented user which is UserType. So we need to define that type also in user_type.rb
     {%codeblock app/graphql/types/user_type.rb%}
@@ -39,7 +39,7 @@ module Types
     field :email, types.String
   end
 end
-    {%endcodeblock%}
+{%endcodeblock%}
 
     Now we need to expose comments inside article model
     {%codeblock app/graphql/types/article_type.rb%}
@@ -52,7 +52,7 @@ module Types
     field :comments, types[CommentType]
   end
 end
-    {%endcodeblock%}
+{%endcodeblock%}
     <p>Here comments are an array of objects so we need to specify CommentType using <strong>types</strong> keyword. We can see in comment_type.rb we are not specifying types for UserType, as it is returning a single object. Since we defined association in, This will fetch all comments of the article by executing article.comments.</p>
 
     Here&rsquo;s an example of a GraphQL query that a client can use to ask a server about the title of the article, corresponding comments and commented user:
@@ -69,7 +69,7 @@ query {
     }
   }
 }
-    {%endcodeblock%}
+{%endcodeblock%}
     Here’s a possible JSON response for that query:
     {%codeblock lang:ruby%}
 {
@@ -95,7 +95,7 @@ query {
     }
   }
 }
-    {%endcodeblock%}
+{%endcodeblock%}
     You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
