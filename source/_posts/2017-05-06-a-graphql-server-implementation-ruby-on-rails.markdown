@@ -146,7 +146,7 @@ Here’s a possible JSON response for that query:
   }
 }
 {%endcodeblock%}
-{% img /images/graphql_query.png 790 260  %}
+{% img /images/graphql_query.png 1200 260  %}
 You can execute queries from a query string:
 {%codeblock lang:ruby%}
 query_string = "

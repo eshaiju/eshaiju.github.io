@@ -3,7 +3,7 @@ layout: post
 title: "ActiveSkin - Flat skin for active admin"
 date: 2015-01-19 09:25:41 +0530
 comments: true
-categories: 
+categories:
 - Ruby On Rails
 - ActiveAdmin
 ---
@@ -55,6 +55,6 @@ $panelHeaderBck: #002744;
 <br/>
 {% img /images/color1.png 390 230  %}
 {% img /images/color3.png 390 230  %}
-{% img /images/color4.png 790 250  %}
+{% img /images/color4.png 1200 250  %}
 	</div>
 </div>

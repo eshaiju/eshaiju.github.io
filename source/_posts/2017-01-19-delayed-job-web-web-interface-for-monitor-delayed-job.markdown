@@ -34,7 +34,7 @@ gem 'sinatra', github: 'sinatra/sinatra'
 
   {%endcodeblock%}
 
-  {% img /images/delayed_job_web.png 790 260  %}
+  {% img /images/delayed_job_web.png 1200 260  %}
   <br/>
   Add the following route to your application for accessing the interface, and retrying failed jobs.
     {%codeblock%}

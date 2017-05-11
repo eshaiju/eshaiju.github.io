@@ -90,8 +90,8 @@ Output Response
   }
 }
 {%endcodeblock%}
-{% img /images/graphql_before.png 790 260  %}
-This will fire user query in for each comment. Total 7 instead of 2 for fetch 2 user. In Rest API we can solve this issue by eager loading users while fetching comments. But GraphQL query fields are designed to be stand-alone functions, and not aware of other functions.
+{% img /images/graphql_before.png 1200 260  %}
+This will fire user query in for each comment. Total 7 instead of 1 for fetch 2 user. In Rest API we can solve this issue by eager loading users while fetching comments. But GraphQL query fields are designed to be stand-alone functions, and not aware of other functions.
 <p>Facebook introduced DataLoader to solve this problem in Javascript projects. Shopify created <a href='https://github.com/Shopify/graphql-batch' >GraphQL::Batch</a> to solve this N+1 problem in ruby.<br />GraphQL::Batch Provides an executor for the graphql gem which allows queries to be batched. This is a flexible toolkit for lazy resolution with GraphQL.</p>
 Installation
 {%codeblock lang:ruby%}
@@ -120,7 +120,7 @@ GraphqlRubySampleSchema = GraphQL::Schema.define do
   use GraphQL::Batch
 end
 {%endcodeblock%}
-In above mentioned example, we need to use above initialized RecordLoader for lazily execute User query
+In our comments api example, we need to use above initialized RecordLoader for lazily execute User query
 {%codeblock app/graphql/types/comment_type.rb%}
 module Types
   CommentType = GraphQL::ObjectType.define do
@@ -136,11 +136,11 @@ module Types
 end
 {%endcodeblock%}
 Here,  <strong>resolve -&gt; (obj, args, ctx) {RecordLoader.for(User).load(obj.user_id) }</strong> will make user fetching lazy loading there by solve N+1 query problem.
-{% img /images/graphql_example.png 790 260  %}
+{% img /images/graphql_example.png 1200 260  %}
 Before:
-{% img /images/graphql_before.png 790 260  %}
+{% img /images/graphql_before.png 1200 260  %}
 After
-{% img /images/graphql_after.png 790 260  %}
+{% img /images/graphql_after.png 1200 260  %}
 <p>More information about GraphQL::Batch is available in <a href='https://github.com/Shopify/graphql-batch' >Gem Documentation</a><br/>
 You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.</p>
   </div>
