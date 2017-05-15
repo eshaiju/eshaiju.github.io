@@ -89,29 +89,25 @@ After this, you can build a GraphQL server by hand or GraphQL generators
 
 Define some types:  Add article_type.rb in 'types' folder which will define ArticleType
 {%codeblock app/graphql/types/article_type.rb%}
-module Types
-  ArticleType = GraphQL::ObjectType.define do
-    name "Article"
-    field :id, types.Int
-    field :title, types.String
-    field :body, types.Int
-    field :comments, types[CommentType]
-  end
+ArticleType = GraphQL::ObjectType.define do
+  name "Article"
+  field :id, types.Int
+  field :title, types.String
+  field :body, types.Int
+  field :comments, types[CommentType]
 end
 {%endcodeblock%}
 Now we need to build schema, which is what we use to query
 {%codeblock app/graphql/types/query_type.rb%}
-module Types
-  QueryType = GraphQL::ObjectType.define do
-    name "Query"
-    description "The query root of this schema"
+QueryType = GraphQL::ObjectType.define do
+  name "Query"
+  description "The query root of this schema"
 
-    field :acticle do
-      type ArticleType
-      argument :id, !types.ID
-      description "Find a Article by ID"
-      resolve ->(obj, args, ctx) { Article.find_by_id(args["id"]) }
-    end
+  field :acticle do
+    type ArticleType
+    argument :id, !types.ID
+    description "Find a Article by ID"
+    resolve ->(obj, args, ctx) { Article.find_by_id(args["id"]) }
   end
 end
 {%endcodeblock%}
@@ -125,6 +121,11 @@ Add following in  graphql_ruby_sample_schema.rb
 GraphqlRubySampleSchema = GraphQL::Schema.define do
   query Types::QueryType
 end
+{%endcodeblock%}
+Since, we created new folders we have to tell Rails to autoload paths. Put below code in application.rb to autoload graphql and types folder like so:
+{%codeblock config/application.rb.rb%}
+config.autoload_paths << Rails.root.join('app/graphql')
+config.autoload_paths << Rails.root.join('app/graphql/types')
 {%endcodeblock%}
 This schema is ready to serve GraphQL queries!. play around this query in GraphiQL.
 

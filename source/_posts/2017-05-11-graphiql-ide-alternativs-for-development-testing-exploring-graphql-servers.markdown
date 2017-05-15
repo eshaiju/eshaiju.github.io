@@ -13,7 +13,10 @@ categories:
   <div dir="ltr" style="text-align: left;" trbidi="on">
     <p><a href='https://github.com/graphql/graphiql'>GraphiQL</a> is a graphical interactive in-browser GraphQL IDE. This is a great tool for testing GraphQL endpoints and also for Exploring documentation about GraphQL Servers. There are some limitations for default GraphiQL tool, It does not provide any option for saving queries like we have in postman and other API clients. It only saves the latest query in local storage. Another issue with GraphiQL is, it not providing any option for pass headers into GraphQL queries. It is very critical for the testing of application which needs to pass auth-token or some other headers. In this post Iam exploring few alternativs.</p>
     <strong>GraphQL IDE</strong>
-    <p><a href='https://github.com/redound/graphql-ide'>GraphQL IDE</a> is n extensive IDE for exploring GraphQL API's. It allows manage projects, import/export, store queries, toggle query history, passing custom headers and setting environment variables for dynamic headers. Currently, it is only available for MacOS. Window / Linux version of this application is under development but can build the binary.</p>
+    <p><a href='https://github.com/redound/graphql-ide'>GraphQL IDE</a> is n extensive IDE for exploring GraphQL API's. It allows manage projects, import/export, store queries, toggle query history, passing custom headers and setting environment variables for dynamic headers. Currently, it is only available for MacOS. Window / Linux version of this application is under development but can build the binary. If you have Homebrew installed on OSX, you can install it by:</p>
+    {%codeblock%}
+    brew cask install graphql-ide
+    {%endcodeblock%}
     Execute queries
     {% img /images/graphql-ide-1.png 1200 260  %}
     Custom headers

@@ -19,41 +19,40 @@ categories:
 
     Now we need to add CommentType.
     {%codeblock app/graphql/types/comment_type.rb%}
-module Types
-  CommentType = GraphQL::ObjectType.define do
-    name "Comment"
-    field :id, types.Int
-    field :comment, types.String
-    field :user, UserType
-  end
+CommentType = GraphQL::ObjectType.define do
+  name "Comment"
+  field :id, types.Int
+  field :comment, types.String
+  field :user, UserType
 end
 {%endcodeblock%}
 
     Here we are exposing commented user which is UserType. So we need to define that type also in user_type.rb
     {%codeblock app/graphql/types/user_type.rb%}
-module Types
-  UserType = GraphQL::ObjectType.define do
-    name "User"
-    field :id, types.Int
-    field :name, types.String
-    field :email, types.String
-  end
+UserType = GraphQL::ObjectType.define do
+  name "User"
+  field :id, types.Int
+  field :name, types.String
+  field :email, types.String
 end
 {%endcodeblock%}
 
     Now we need to expose comments inside article model
     {%codeblock app/graphql/types/article_type.rb%}
-module Types
-  ArticleType = GraphQL::ObjectType.define do
-    name "Article"
-    field :id, types.Int
-    field :title, types.String
-    field :body, types.Int
-    field :comments, types[CommentType]
-  end
+ArticleType = GraphQL::ObjectType.define do
+  name "Article"
+  field :id, types.Int
+  field :title, types.String
+  field :body, types.Int
+  field :comments, types[CommentType]
 end
 {%endcodeblock%}
     <p>Here comments are an array of objects so we need to specify CommentType using <strong>types</strong> keyword. We can see in comment_type.rb we are not specifying types for UserType, as it is returning a single object. Since we defined association in, This will fetch all comments of the article by executing article.comments.</p>
+Put below code in application.rb to autoload graphql and types folder like so:
+{%codeblock config/application.rb.rb%}
+config.autoload_paths << Rails.root.join('app/graphql')
+config.autoload_paths << Rails.root.join('app/graphql/types')
+{%endcodeblock%}
 
     Here&rsquo;s an example of a GraphQL query that a client can use to ask a server about the title of the article, corresponding comments and commented user:
     {%codeblock lang:ruby%}
