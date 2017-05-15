@@ -119,7 +119,7 @@ Add following in  graphql_ruby_sample_schema.rb
 {%codeblock app/graphql/graphql_ruby_sample_schema.rb%}
 # encoding: utf-8
 GraphqlRubySampleSchema = GraphQL::Schema.define do
-  query Types::QueryType
+  query QueryType
 end
 {%endcodeblock%}
 Since, we created new folders we have to tell Rails to autoload paths. Put below code in application.rb to autoload graphql and types folder like so:

@@ -15,7 +15,7 @@ categories:
     <p>One of the main advantages of GraphQL is, we can create queries with a different combination of datasets which will avoid multiple requests to fetch required data, thereby eliminating overheads. In this post, I am discussing how we can create nested datasets in GraphQL.
 
     <br /> <br />
-    In the previous post, we I mentioned about Article model and query to fetch an article. Here I'm going to fetch comments under the article. Assuming we have comments and user model with corresponding associations.</p>
+    In the <a href="http://tech.eshaiju.in/blog/2017/05/06/a-graphql-server-implementation-ruby-on-rails/">previous post</a>, I mentioned about Article model and query to fetch an article. Here I'm going to fetch comments under the article. Assuming we have comments and user model with corresponding associations.</p>
 
     Now we need to add CommentType.
     {%codeblock app/graphql/types/comment_type.rb%}
