@@ -32,8 +32,8 @@ Since we created new folder for mutations, we have to tell Rails to autoload pat
 {%codeblock config/application.rb.rb%}
 config.autoload_paths << Rails.root.join('app/graphql/mutations')
 {%endcodeblock%}
-  <p>Now we need to define specific mutation query. Following are the process to define a mutation<br />- give operation a name <br />- declare its inputs<br />- declare its outputs<br />- declare the mutation procedure in resolve block.<br /> <strong>resolve</strong> should return a hash with a key for each of the `return_field`s</p>
-  In out example, we need to define addComment mutation in mutation folder.
+  <p>Now we need to define specific mutation query. Following are the process to define a mutation<br />- give operation a name <br />- declare its inputs<br />- declare its outputs<br />- declare the mutation procedure in resolve block.<br /> <strong>resolve</strong> should return a hash with a key for each of the <strong>return_fields</strong><</p>
+  In out example, we need to define <strong>AddCommentMutation</strong> in mutations folder.
   {%codeblock app/graphql/mutations/add_comment_mutation.rb.rb%}
 # encoding: utf-8
 AddCommentMutation = GraphQL::Relay::Mutation.define do
