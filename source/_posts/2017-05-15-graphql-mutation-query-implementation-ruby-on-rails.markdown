@@ -32,33 +32,37 @@ Since we created new folder for mutations, we have to tell Rails to autoload pat
 {%codeblock config/application.rb.rb%}
 config.autoload_paths << Rails.root.join('app/graphql/mutations')
 {%endcodeblock%}
-  <p>Now we need to define specific mutation query. Following are the process to define a mutation<br />- give operation a name <br />- declare its inputs<br />- declare its outputs<br />- declare the mutation procedure in resolve block.<br /> <strong>resolve</strong> should return a hash with a key for each of the <strong>return_fields</strong><</p>
-  In out example, we need to define <strong>AddCommentMutation</strong> in mutations folder.
-  {%codeblock app/graphql/mutations/add_comment_mutation.rb.rb%}
+  <p>Now we need to define specific mutation query. Following are the process to define a mutation<br />- give operation a name <br />- declare its inputs<br />- declare its outputs<br />- declare the mutation procedure in resolve block.<br /> <strong>resolve</strong> should return a hash with a key for each of the <strong>return_fields</strong></p>
+  In out example, we need to define <strong>CommentMutations</strong> in mutations folder.
+  {%codeblock app/graphql/mutations/comment_mutations.rb%}
 # encoding: utf-8
-AddCommentMutation = GraphQL::Relay::Mutation.define do
-  name "AddComment"
+module CommentMutations
+  Create = GraphQL::Relay::Mutation.define do
+    name "AddComment"
 
-  input_field :articleId, !types.ID
-  input_field :userId, !types.ID
-  input_field :comment, !types.String
+    # Define input parameters
+    input_field :articleId, !types.ID
+    input_field :userId, !types.ID
+    input_field :comment, !types.String
 
-  return_field :article, ArticleType
-  return_field :errors, types.String
+    # Define return parameters
+    return_field :article, ArticleType
+    return_field :errors, types.String
 
 
-  resolve ->(object, inputs, ctx) {
-    article = Article.find_by_id(inputs[:articleId])
-    return { errors: 'Article not found' } if article.nil?
+    resolve ->(object, inputs, ctx) {
+      article = Article.find_by_id(inputs[:articleId])
+      return { errors: 'Article not found' } if article.nil?
 
-    comments = article.comments
-    new_comment = comments.build(user_id: inputs[:userId], comment: inputs[:comment])
-    if new_comment.save
-      { article: article }
-    else
-      { errors: new_comment.errors.to_a }
-    end
-  }
+      comments = article.comments
+      new_comment = comments.build(user_id: inputs[:userId], comment: inputs[:comment])
+      if new_comment.save
+        { article: article }
+      else
+        { errors: new_comment.errors.to_a }
+      end
+    }
+  end
 end
 {%endcodeblock%}
     Here <strong>input_field</strong> specify the input params we can pass in the query. In <strong>return_field</strong>, we can specify the fields returning after the update. Inside resolve block, we define the business logic. and <strong>resolve</strong> should return a hash with a key for each of the return_fields.<br/><br/>
@@ -67,7 +71,7 @@ end
 MutationType = GraphQL::ObjectType.define do
   name "Mutation"
   # Add the mutation's derived field to the mutation type
-  field :addComment, field: AddCommentMutation.field
+  field :addComment, field: CommentMutations::Create.field
 end
 {%endcodeblock%}
 
@@ -178,6 +182,141 @@ Query Variabbles
 {%endcodeblock%}
 <strong>$comments: AddCommentInput!</strong> will configure the variable <strong>$comments</strong> to take values from <strong>query variables</strong> section. <strong>input: $comments</strong> will pass $comments as input to mutation query.</p>
 {% img /images/mutation.png 1200 260  %}
+
+Lets write another example for updation mutation. If we want to update a comment, we need to write UpdateComment mutation in comment_mutations.rb
+
+{%codeblock app/graphql/mutations/comment_mutations.rb%}
+# encoding: utf-8
+module CommentMutations
+  Create = GraphQL::Relay::Mutation.define do
+    name "AddComment"
+
+    # Define input parameters
+    input_field :articleId, !types.ID
+    input_field :userId, !types.ID
+    input_field :comment, !types.String
+
+    # Define return parameters
+    return_field :article, ArticleType
+    return_field :errors, types.String
+
+
+    resolve ->(object, inputs, ctx) {
+      article = Article.find_by_id(inputs[:articleId])
+      return { errors: 'Article not found' } if article.nil?
+
+      comments = article.comments
+      new_comment = comments.build(user_id: inputs[:userId], comment: inputs[:comment])
+      if new_comment.save
+        { article: article }
+      else
+        { errors: new_comment.errors.to_a }
+      end
+    }
+  end
+
+  Update = GraphQL::Relay::Mutation.define do
+    name "UpdateComment"
+
+    # Define input parameters
+    input_field :id, !types.ID
+    input_field :comment, types.ID
+    input_field :userId, types.ID
+    input_field :articleId, types.ID
+
+    # Define return parameters
+    return_field :comment, CommentType
+    return_field :errors, types.String
+
+
+    resolve ->(object, inputs, ctx) {
+      comment = Comment.find_by_id(inputs[:id])
+      return { errors: 'Comment not found' } if comment.nil?
+
+      valid_inputs = ActiveSupport::HashWithIndifferentAccess.new(inputs.instance_variable_get(:@original_values).select { |k, _| comment.respond_to? "#{k}=".underscore }).except(:id)
+      if comment.update_attributes(valid_inputs)
+        { comment: comment }
+      else
+        { errors: comment.errors.to_a }
+      end
+    }
+  end
+end
+{%endcodeblock%}
+Main defference here is, we need to create <strong>valid_inputs</strong>. This will allow us mass assignment with update attributes with valied fields which we passed.<br/><br/>
+After defining this, we need to add the mutation's derived field to the mutation type.
+{%codeblock app/graphql/mutations/mutation_type.rb%}
+MutationType = GraphQL::ObjectType.define do
+  name "Mutation"
+  # Add the mutation's derived field to the mutation type
+  field :addComment, field: CommentMutations::Create.field
+  field :updateComment, field: CommentMutations::Update.field
+end
+{%endcodeblock%}
+
+Mutation for delete a comment and return post and deleted comment ID
+{%codeblock app/graphql/mutations/comment_mutations.rb%}
+# encoding: utf-8
+module CommentMutations
+  Destroy = GraphQL::Relay::Mutation.define do
+    name 'DestroyComment'
+    description 'Delete a comment and return post and deleted comment ID'
+
+    # Define input parameters
+    input_field :id, !types.ID
+
+    # Define return parameters
+    return_field :deletedId, !types.ID
+    return_field :article, ArticleType
+    return_field :errors, types.String
+
+    resolve ->(_obj, inputs, ctx) {
+      comment = Comment.find_by_id(inputs[:id])
+      return { errors: 'Comment not found' } if comment.nil?
+
+      article = comment.article
+      comment.destroy
+
+      { article: article.reload, deletedId: inputs[:id] }
+    }
+  end
+
+  # Other mutations defined here....
+end
+{%endcodeblock%}
+
+{%codeblock app/graphql/mutations/mutation_type.rb%}
+MutationType = GraphQL::ObjectType.define do
+  name "Mutation"
+  # Add the mutation's derived field to the mutation type
+  field :addComment, field: CommentMutations::Create.field
+  field :updateComment, field: CommentMutations::Update.field
+  field :destroyComment, field: CommentMutations::Destroy.field
+end
+{%endcodeblock%}
+Now we can try this mutation in GraphiQL:
+{%codeblock lang:ruby%}
+mutation destroyComment($comment: DestroyCommentInput!){
+  destroyComment(input: $comment){
+    errors
+    article{
+      id
+      comments{
+        id
+        comment
+      }
+    }
+  }
+}
+
+Query Variabbles
+
+{
+  "comment": {
+    "id": 3
+  }
+}
+{%endcodeblock%}
 You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
