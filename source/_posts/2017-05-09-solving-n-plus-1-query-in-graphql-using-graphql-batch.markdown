@@ -4,9 +4,9 @@ title: "Solving N+1 query in GraphQL using graphql-batch"
 date: 2017-05-09 23:40:03 +0530
 comments: true
 categories:
-- Ruby On Rails
 - GraphQL
 - Ruby
+- Ruby On Rails
 ---
 
 

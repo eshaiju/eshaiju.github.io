@@ -4,9 +4,9 @@ title: "GraphQL -Mutation query implementation - Ruby on Rails"
 date: 2017-05-15 17:37:28 +0530
 comments: true
 categories:
-- Ruby On Rails
 - GraphQL
 - Ruby
+- Ruby On Rails
 ---
 
 
@@ -29,7 +29,7 @@ end
 {%endcodeblock%}
 Like QueryType, MutationType is a root of the schema. Members of MutationType are mutation fields. For GraphQL in general, mutation fields are identical to query fields except that they have side-effects (which mutate application state, eg, update the database).<br/><br/>
 Since we created new folder for mutations, we have to tell Rails to autoload paths. Put below code in application.rb to autoload it.
-{%codeblock config/application.rb.rb%}
+{%codeblock config/application.rb%}
 config.autoload_paths << Rails.root.join('app/graphql/mutations')
 {%endcodeblock%}
   <p>Now we need to define specific mutation query. Following are the process to define a mutation<br />- give operation a name <br />- declare its inputs<br />- declare its outputs<br />- declare the mutation procedure in resolve block.<br /> <strong>resolve</strong> should return a hash with a key for each of the <strong>return_fields</strong></p>

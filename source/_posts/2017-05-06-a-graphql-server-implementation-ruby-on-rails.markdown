@@ -4,9 +4,9 @@ title: "A GraphQL server implementation - Ruby On Rails"
 date: 2017-05-06 14:55:58 +0530
 comments: true
 categories:
-- Ruby On Rails
 - GraphQL
 - Ruby
+- Ruby On Rails
 ---
 
 
@@ -103,7 +103,7 @@ QueryType = GraphQL::ObjectType.define do
   name "Query"
   description "The query root of this schema"
 
-  field :acticle do
+  field :article do
     type ArticleType
     argument :id, !types.ID
     description "Find a Article by ID"
@@ -123,7 +123,7 @@ GraphqlRubySampleSchema = GraphQL::Schema.define do
 end
 {%endcodeblock%}
 Since, we created new folders we have to tell Rails to autoload paths. Put below code in application.rb to autoload graphql and types folder like so:
-{%codeblock config/application.rb.rb%}
+{%codeblock config/application.rb%}
 config.autoload_paths << Rails.root.join('app/graphql')
 config.autoload_paths << Rails.root.join('app/graphql/types')
 {%endcodeblock%}
@@ -132,7 +132,7 @@ This schema is ready to serve GraphQL queries!. play around this query in Graphi
 <br/><br/>Here’s an example of a GraphQL query that a client can use to ask a server about the title  of article #1:
 {%codeblock lang:ruby%}
 query {
-  acticle(id: 1){
+  article(id: 1){
     title
   }
 }
@@ -141,7 +141,7 @@ Here’s a possible JSON response for that query:
 {%codeblock lang:ruby%}
 {
   "data": {
-    "acticle": {
+    "article": {
       "title": "A GraphQL Server"
     }
   }
@@ -152,7 +152,7 @@ You can execute queries from a query string:
 {%codeblock lang:ruby%}
 query_string = "
 {
-  acticle(id: 1) {
+  article(id: 1) {
     id
     title
   }
@@ -162,7 +162,7 @@ result_hash = GraphqlRubySampleSchema.execute(query_string)
 output:
 # {
 #   "data" => {
-#     "acticle" => {
+#     "article" => {
 #        "id" => 1,
 #        "title" => "A GraphQL Server"
 #     }

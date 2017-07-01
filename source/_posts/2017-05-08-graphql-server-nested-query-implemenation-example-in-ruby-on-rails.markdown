@@ -4,9 +4,9 @@ title: "GraphQL Server - Nested query implemenation example in Ruby on Rails"
 date: 2017-05-08 21:28:51 +0530
 comments: true
 categories:
-- Ruby On Rails
 - GraphQL
 - Ruby
+- Ruby On Rails
 ---
 
 
@@ -49,7 +49,7 @@ end
 {%endcodeblock%}
     <p>Here comments are an array of objects so we need to specify CommentType using <strong>types</strong> keyword. We can see in comment_type.rb we are not specifying types for UserType, as it is returning a single object. Since we defined association in, This will fetch all comments of the article by executing article.comments.</p>
 Put below code in application.rb to autoload graphql and types folder like so:
-{%codeblock config/application.rb.rb%}
+{%codeblock config/application.rb%}
 config.autoload_paths << Rails.root.join('app/graphql')
 config.autoload_paths << Rails.root.join('app/graphql/types')
 {%endcodeblock%}
@@ -57,7 +57,7 @@ config.autoload_paths << Rails.root.join('app/graphql/types')
     Here&rsquo;s an example of a GraphQL query that a client can use to ask a server about the title of the article, corresponding comments and commented user:
     {%codeblock lang:ruby%}
 query {
-  acticle(id: 1){
+  article(id: 1){
     title
     comments{
       comment
@@ -73,7 +73,7 @@ query {
     {%codeblock lang:ruby%}
 {
   "data": {
-    "acticle": {
+    "article": {
       "title": "A GraphQL Server",
       "comments": [
         {
