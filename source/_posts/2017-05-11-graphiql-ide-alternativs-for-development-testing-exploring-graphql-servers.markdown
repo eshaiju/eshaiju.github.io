@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "GraphiQL IDE alternativs for Development/Testing/Exploring GraphQL Servers"
+title: "GraphiQL IDE alternatives for Development/Testing/Exploring GraphQL Servers"
 date: 2017-05-11 20:17:26 +0530
 comments: true
 categories:

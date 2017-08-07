@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "GraphQL Server - Nested query implemenation example in Ruby on Rails"
+title: "GraphQL Server - Nested query Implementation example in Ruby on Rails"
 date: 2017-05-08 21:28:51 +0530
 comments: true
 categories:
