@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Spree | Rails Kitchen]]></title>
+  <link href="http://tech.eshaiju.in/blog/categories/spree/atom.xml" rel="self"/>
+  <link href="http://tech.eshaiju.in/"/>
+  <updated>2017-10-15T00:45:37+05:30</updated>
+  <id>http://tech.eshaiju.in/</id>
+  <author>
+    <name><![CDATA[Shaiju E]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Spree - Add Extra Fields to Product Model With Deface and Decorator]]></title>
+    <link href="http://tech.eshaiju.in/blog/2015/01/08/spree-add-extra-fields-to-product-model-with-deface-and-decorator/"/>
+    <updated>2015-01-08T14:13:49+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2015/01/08/spree-add-extra-fields-to-product-model-with-deface-and-decorator</id>
+    <content type="html"><![CDATA[<div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+
+<a href="https://spreecommerce.com">Spree</a> is a fully-featured e-commerce solution that can be easily integrated into a Rails application. If you need to turn a Rails app into a store that sells products then Spree is one of the quickest ways to do this. We can customise all the built-in features in Spree and can also and new features and fields to Spree models.
+<br/>
+<br/>
+In this post, I am discussing adding an extra field for the uploading company logo into products. For customising view of product form we can use <a href ="https://github.com/spree/deface">Deface</a>. To add <strong>has_attached_file</strong> relation to product model we use <strong>decorator</strong>.
+<br/>
+
+First we need to create migration for adding company logo field to <strong>spree_products</strong> table.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class AddCompanyLogoToSpreeProducts &lt; ActiveRecord::Migration
+</span><span class='line'>  def change
+</span><span class='line'>    add_attachment :spree_products, :company_logo
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+To add <strong>has_attached_file</strong> relation to product model, add product decorator to file <strong>app/model/spree/product_decorator.rb</strong>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Spree::Product.class_eval do
+</span><span class='line'>  has_attached_file :company_logo, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+</span><span class='line'>  validates_attachment_content_type :company_logo, :content_type => /\Aimage\/.*\Z/
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+Now we only can add file upload filed to product form using deface. 
+<br/>
+
+Deface is a standalone Rails library that enables you to customize Erb templates without needing to directly edit the underlying view file. Deface allows you to use standard CSS3 style selectors to target any element (including Ruby blocks), and perform an action against all the matching elements
+<br/>
+Add deface code into <strong>app/overrides/company_logo_to_admin_product.rb</strong>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Deface::Override.new(
+</span><span class='line'>    :virtual_path   => "spree/admin/products/_form",
+</span><span class='line'>    :name           => "company_logo_to_admin_product",
+</span><span class='line'>    :insert_bottom  => "[data-hook='admin_product_form_additional_fields']",
+</span><span class='line'>    :text           => "
+</span><span class='line'>            &lt;p>
+</span><span class='line'>                  &lt;%= f.label :company_logo %>
+</span><span class='line'>                  &lt;%= f.file_field :company_logo %>
+</span><span class='line'>            &lt;/p>
+</span><span class='line'>"
+</span><span class='line'>)</span></code></pre></td></tr></table></div></figure></notextile></div>
+Thats it , now we can start uploading company logo to each product
+    </div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

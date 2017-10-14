@@ -1,0 +1,1582 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails Kitchen</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="Apipie-rails is a DSL and Rails engine for documenting your RESTful API. Instead of the traditional use of #comments, Apipie lets you describe the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tech.eshaiju.in/blog/page/4">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Kitchen" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50480030-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-8803494276404199",
+        enable_page_level_ads: true
+      });
+  </script>
+</head>
+
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rails Kitchen</a></h1>
+  
+    <h2>It's a place to write on stuff I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tech.eshaiju.in" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://eshaiju.in">Portfolio</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/09/apipie-rails-rails-api-documentation-tool/">Apipie-rails - Rails API Documentation Tool</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-09T15:07:29+05:30" pubdate data-updated="true">Jan 9<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/01/09/apipie-rails-rails-api-documentation-tool/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/01/09/apipie-rails-rails-api-documentation-tool/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        <a href="https://github.com/Apipie/apipie-rails">Apipie-rails</a> is a DSL and Rails engine for documenting your RESTful API. Instead of the traditional use of <strong>#comments</strong>, Apipie lets you describe the code, through the code. With Apipie you can specify the methods available to your API, describe every possible parameter. Apipie using Ruby syntax so no need to learn yet another syntax. The documentation is available from within your app (by default under the /apipie path.)
+        <br/>
+        <br/>
+        <strong>
+            Getting started
+        </strong>
+    <br/>
+    <br/>
+    Add Apipie to Gemfile
+    
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'apipie-rails'</span></code></pre></td></tr></table></div></figure>
+
+  
+  after bundle install, initialise Apipie
+  
+  
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g apipie:install</span></code></pre></td></tr></table></div></figure>
+
+
+  Now confirgure the basic settings in file config/initializers/apipie.rb
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Apipie.configure do |config|
+</span><span class='line'>  config.app_name                = "DemoApp"
+</span><span class='line'>  config.api_base_url            = "/api/v1"
+</span><span class='line'>  config.doc_base_url            = "/apidoc"
+</span><span class='line'>  # were is your API defined?
+</span><span class='line'>  config.api_controllers_matcher = "#{Rails.root}/app/controllers/api/v1/*.rb"
+</span><span class='line'>  config.app_info = "DemoApp REST API "
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+ 
+
+Now you can start documenting your resources and actions
+<br/>
+<br/>
+<strong>Resource Description:</strong>
+<br/>
+You can describe a resource on the controller level. The description is introduced by calling <strong>resource_description do &#8230; end</strong>.
+<br/>
+
+The following are some of keywords available (all are optional):
+<br/>
+<strong>resource_id</strong> - How the resource will be referenced in Apipie (paths, see command etc.); by default controller_name.downcase is used.
+<br/>
+<strong>name </strong> - Human readable name of resource. By default class.name.humanize is used.
+<br/>
+<strong>short </strong>- Short description of the resource (it&#8217;s shown on both the list of resources, and resource details)
+<br/>
+Example is given below : 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>resource_description do
+</span><span class='line'>    short "API for managing User Profile"
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<img src="/images/API-documentation3.jpg" width="800" height="250" title="" >
+To see more options refer <a href = "https://github.com/Apipie/apipie-rails#dsl-reference">here </a>
+<br/>
+<br>
+<strong>
+    Method Description
+</strong>
+
+<br/>
+This using to describe methods available to your API.
+<br/>
+<strong>api</strong> - Describe how this method is exposed, and provide a short description. The first parameter is HTTP method (one of :GET/:POST/:PUT/:DELETE). The second parameter is the relative URL path which is mapped to this method. The last parameter is the methods short description. 
+<br/>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>api :GET, '/user', "Fetch User Profile"</span></code></pre></td></tr></table></div></figure>
+
+
+<strong>param</strong> - Look at Parameter description section for details.
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>param :user, Hash, :description => "User" do
+</span><span class='line'>  param :name, String, :desc => "Name", :required => true
+</span><span class='line'>  param :email, String, :desc => "Email", :required => false
+</span><span class='line'>  param :gender, String, :desc => "Gender (1: Male, 2: Female)", :required => true
+</span><span class='line'>  param :photo, ActionDispatch::Http::UploadedFile, :desc => "User Image", :required => false
+</span><span class='line'>  param :address, String, :desc => "Address", :required => false
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<strong>formats</strong> - Method level request / response formats.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>formats ['json']</span></code></pre></td></tr></table></div></figure>
+
+<strong>error</strong> - Describe each possible error that can happen while calling this method. HTTP response code and description can be provided.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>error :code => 401, :desc => "Unauthorized"
+</span><span class='line'>error :code => 404, :desc => "Not Found", :meta => {:anything => "you can think of"}</span></code></pre></td></tr></table></div></figure>
+
+
+<strong>description</strong> -Full method description, which will be converted into HTML by the chosen markup language processor.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>description &lt;&lt;-EOS
+</span><span class='line'>  == Books
+</span><span class='line'>  This API is used to fetch all the books.
+</span><span class='line'>EOS</span></code></pre></td></tr></table></div></figure>
+
+
+<strong>example</strong> - Provide an example of the server response; whole communication or response type. It will be formatted as code.
+<br>
+To see more options refer <a href="https://github.com/Apipie/apipie-rails#method-description">here</a>
+
+<br/>
+<br/>
+Example of a user controller with api documentation  is given below
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Api::V1::UsersController &lt; Api::ApiController
+</span><span class='line'>
+</span><span class='line'>  resource_description do
+</span><span class='line'>    short "API for managing User Profile"
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  api :GET, '/user', "Fetch User Profile"
+</span><span class='line'>  description &lt;&lt;-EOS
+</span><span class='line'>    == Fetch User Profile
+</span><span class='line'>     This API is used to fetch the user profile details.
+</span><span class='line'>    === Authentication required
+</span><span class='line'>     Authentication token has to be passed as part of the request. It can be passed as parameter(auth_token) or HTTP header(AUTH-TOKEN). 
+</span><span class='line'>  EOS
+</span><span class='line'>  formats ['json']
+</span><span class='line'>  error :code => 404, :desc => "User Profile not yet created"
+</span><span class='line'>
+</span><span class='line'>  def show
+</span><span class='line'>    if @user.nil?
+</span><span class='line'>      render :status => :not_found, :json => {:message => "User Profile not yet created"}
+</span><span class='line'>    else
+</span><span class='line'>      render :status => :ok, :json => {:user=>@user}
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  api :PUT, '/user', "Update User Profile"
+</span><span class='line'>  description &lt;&lt;-EOS
+</span><span class='line'>    == Update User Profile
+</span><span class='line'>     This API is used to update the user profile details.
+</span><span class='line'>    === Authentication required
+</span><span class='line'>     Authentication token has to be passed as part of the request. It can be passed as parameter(auth_token) or HTTP header(AUTH-TOKEN). 
+</span><span class='line'>  EOS
+</span><span class='line'>  error :code => 406, :desc => "User Profile not yet created"
+</span><span class='line'>  formats ['json']
+</span><span class='line'>  param :user, Hash, :description => "User" do
+</span><span class='line'>    param :name, String, :desc => "Name", :required => true
+</span><span class='line'>    param :email, String, :desc => "Email", :required => false
+</span><span class='line'>    param :gender, String, :desc => "Gender (1: Male, 2: Female)", :required => true
+</span><span class='line'>    param :photo, ActionDispatch::Http::UploadedFile, :desc => "User Image", :required => false
+</span><span class='line'>    param :address, String, :desc => "Address", :required => false
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def user_profile
+</span><span class='line'>    if @user.nil?
+</span><span class='line'>      render :status => :not_acceptable, :json => {:message => "User not exists"}
+</span><span class='line'>    else
+</span><span class='line'>      @user.update_attributes(users_params)
+</span><span class='line'>      @user.save!(:validate=>false)
+</span><span class='line'>      render :status => :ok, :json => {:user =>@user,:message => "User updated"}
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  private
+</span><span class='line'>
+</span><span class='line'>  def users_params
+</span><span class='line'>    params.require(:user).permit(:name, :email, :gender,  :photo,:address)
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<img src="/images/API-documentation.jpg" width="800" height="250" title="" >
+<img src="/images/API-documentation-2.jpg" width="800" height="250" title="" >
+<br/>
+we can add example data in <strong>doc/apipie_examples.yml</strong>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>users#show:
+</span><span class='line'>- verb: :GET
+</span><span class='line'>  path: /api/v1/user
+</span><span class='line'>  query:
+</span><span class='line'>  code: 200
+</span><span class='line'>  show_in_doc: 1
+</span><span class='line'>  recorded: false
+</span><span class='line'>  request_data:
+</span><span class='line'>  response_data:
+</span><span class='line'>    "user":
+</span><span class='line'>        "id": 3
+</span><span class='line'>        "email": "eshaiju@gmail.com"
+</span><span class='line'>        "name": "Shaiju E"
+</span><span class='line'>        "gender": "male"
+</span><span class='line'>        "photo_path": "http://localhost:3000/system/users/photos/000/000/003/medium/10297568_10152483241776742_8973517135655971471_s.jpg?1403523880"
+</span><span class='line'>        "address": ""</span></code></pre></td></tr></table></div></figure>
+
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/08/spree-add-extra-fields-to-product-model-with-deface-and-decorator/">Spree - Add Extra Fields to Product Model With Deface and Decorator</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-08T14:13:49+05:30" pubdate data-updated="true">Jan 8<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/01/08/spree-add-extra-fields-to-product-model-with-deface-and-decorator/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/01/08/spree-add-extra-fields-to-product-model-with-deface-and-decorator/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+
+<a href="https://spreecommerce.com">Spree</a> is a fully-featured e-commerce solution that can be easily integrated into a Rails application. If you need to turn a Rails app into a store that sells products then Spree is one of the quickest ways to do this. We can customise all the built-in features in Spree and can also and new features and fields to Spree models.
+<br/>
+<br/>
+In this post, I am discussing adding an extra field for the uploading company logo into products. For customising view of product form we can use <a href ="https://github.com/spree/deface">Deface</a>. To add <strong>has_attached_file</strong> relation to product model we use <strong>decorator</strong>.
+<br/>
+
+First we need to create migration for adding company logo field to <strong>spree_products</strong> table.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class AddCompanyLogoToSpreeProducts &lt; ActiveRecord::Migration
+</span><span class='line'>  def change
+</span><span class='line'>    add_attachment :spree_products, :company_logo
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+To add <strong>has_attached_file</strong> relation to product model, add product decorator to file <strong>app/model/spree/product_decorator.rb</strong>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Spree::Product.class_eval do
+</span><span class='line'>  has_attached_file :company_logo, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+</span><span class='line'>  validates_attachment_content_type :company_logo, :content_type => /\Aimage\/.*\Z/
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+Now we only can add file upload filed to product form using deface. 
+<br/>
+
+Deface is a standalone Rails library that enables you to customize Erb templates without needing to directly edit the underlying view file. Deface allows you to use standard CSS3 style selectors to target any element (including Ruby blocks), and perform an action against all the matching elements
+<br/>
+Add deface code into <strong>app/overrides/company_logo_to_admin_product.rb</strong>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Deface::Override.new(
+</span><span class='line'>    :virtual_path   => "spree/admin/products/_form",
+</span><span class='line'>    :name           => "company_logo_to_admin_product",
+</span><span class='line'>    :insert_bottom  => "[data-hook='admin_product_form_additional_fields']",
+</span><span class='line'>    :text           => "
+</span><span class='line'>          &lt;p>
+</span><span class='line'>                &lt;%= f.label :company_logo %>
+</span><span class='line'>                &lt;%= f.file_field :company_logo %>
+</span><span class='line'>          &lt;/p>
+</span><span class='line'>"
+</span><span class='line'>)</span></code></pre></td></tr></table></div></figure>
+
+Thats it , now we can start uploading company logo to each product
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/05/multiple-language-site-in-refinery-with-i18n/">Multiple Language Sites in Refinery CMS With I18n</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-05T09:50:40+05:30" pubdate data-updated="true">Jan 5<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/01/05/multiple-language-site-in-refinery-with-i18n/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/01/05/multiple-language-site-in-refinery-with-i18n/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        Refinery CMS is an Rails-based CMS that supports Rails 3.2 and 4.1. We can make Refinary CMS Multilingual with i18n Translations.
+    <br/>
+        
+        For this add the gem to Gemfile
+    <br/>
+
+<figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'refinerycms-i18n'</span></code></pre></td></tr></table></div></figure>
+
+        Run the generator <br/>
+
+<figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g refinery:i18n</span></code></pre></td></tr></table></div></figure>
+
+        Change the language settings
+
+        In Refinery&#8217;s settings find I18n Translation Frontend Locales (Refinery) and add the ISO country name.
+    <br/>
+<strong>config/initializers/refinery/i18n.rb</strong>
+
+<figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Refinery::I18n.configure do |config|
+</span><span class='line'>   config.default_locale = :en
+</span><span class='line'>
+</span><span class='line'>  # config.current_locale = :en
+</span><span class='line'>
+</span><span class='line'>  # config.default_frontend_locale = :en
+</span><span class='line'>
+</span><span class='line'>   config.frontend_locales = [:en,:ar]
+</span><span class='line'>
+</span><span class='line'>   config.locales = {:en=>"English", :ar=>"Arabic"}
+</span><span class='line'>   #, :nl=>"Nederlands", :pt=>"Português", :"pt-BR"=>"Português brasileiro", :da=>"Dansk", :nb=>"Norsk Bokmål", :sl=>"Slovenian", :es=>"Español", :it=>"Italiano", :de=>"Deutsch", :lv=>"Latviski", :ru=>"Русский", :sv=>"Svenska", :pl=>"Polski", :"zh-CN"=>"简体中文", :"zh-TW"=>"繁體中文", :el=>"Ελληνικά", :rs=>"Srpski", :cs=>"Česky", :sk=>"Slovenský", :ja=>"日本語", :bg=>"Български", :hu=>"Hungarian", :uk=>"Українська"}
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+        That&#8217;s it! Visit the Pages tab and you should see flags indicating the page language in the tree. 
+<br/>
+        <img src="/images/1.png" width="600" height="250" title="" >
+        <br/>
+
+        Edit a page and you&#8217;ll see the available languages at the top. Simply select one to add content for that language.
+<br/>
+<img src="/images/2.png" width="600" height="250" title="" >
+        <img src="/images/3.png" width="600" height="250" title="" >
+<br/>
+Now we need to add multi language support for our extensions. For this we need to specify this when we create extension with <strong>&#8211;i18n </strong> attribute.
+
+
+<figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g refinery:engine Service title:string description:text icon:image --i18n title description</span></code></pre></td></tr></table></div></figure>
+
+
+We can add link to toggle between languages in Frontend  web site using following code
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;nav id='locale'>
+</span><span class='line'>    &lt;% ::Refinery::I18n.frontend_locales.each do |locale| %>
+</span><span class='line'>      &lt;%= link_to_if Globalize.locale.to_s != locale.to_s, locale, {:locale => locale} %>
+</span><span class='line'>    &lt;% end %>
+</span><span class='line'>&lt;/nav></span></code></pre></td></tr></table></div></figure>
+
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/03/custom-html5-validation-error-messages-with-civem-dot-js/">Custom HTML5 Validation Error Messages With Civem.js</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-03T21:58:48+05:30" pubdate data-updated="true">Jan 3<span>rd</span>, 2015</time>
+        
+           | <a href="/blog/2015/01/03/custom-html5-validation-error-messages-with-civem-dot-js/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/01/03/custom-html5-validation-error-messages-with-civem-dot-js/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        HTML5 allows us to implement client-side form validation without any JavaScript coding. However, error messages are hard-coded to the browser. In my recent project I faced situation, I have to use custome error message and show error message in both english and arabic. I achived error message customisation with <a href='https://github.com/javanto/civem.js'>Civem.js </a> which let you easily change the message to whatever you wish.
+        <br/>
+        <img src="/images/img-en.jpg" width="350" height="250" title="" >
+        <img src="/images/imgo-ar.jpg" width="333" height="250" title="" >
+        
+        <br/>
+        
+        Following are steps to add custom error messages to our project.
+    <br/>
+        1 - Grab the latest <a href='https://github.com/javanto/civem.js/downloads'>download</a>
+        <br/>
+        2 - Add the <strong>civem.js</strong> script to your page
+        <br/>
+        3 - Start using the custom error message attributes on your <strong>input</strong>, <strong>textarea</strong> and <strong>select</strong> elements
+        <br/>
+        4 - To customise required field error message use <strong>data-errormessage-value-missing</strong> attribute
+        <br/>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;input type="text" required data-errormessage-value-missing="Something's missing" ></span></code></pre></td></tr></table></div></figure>
+
+        5 - To customise filed type mismatch error message, use <strong>data-errormessage-type-mismatch</strong> attribute
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;input type="email" id="one" required data-errormessage-value-missing="Something's missing" data-errormessage-type-mismatch="Invalid!"></span></code></pre></td></tr></table></div></figure>
+
+        6 - For showing pattern missmatch, set custome error message on attribute <strong>data-errormessage-pattern-mismatch</strong>
+<br/>
+        there are some other attributes also, that we can use to set specific error messages 
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>data-errormessage-too-long
+</span><span class='line'>data-errormessage-range-underflow
+</span><span class='line'>data-errormessage-range-overflow
+</span><span class='line'>data-errormessage-step-mismatch
+</span><span class='line'>data-errormessage-custom-error</span></code></pre></td></tr></table></div></figure>
+
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/27/deploying-ruby-on-rails-application-to-cloud-application-platform-openshift/">Deploying Ruby on Rails Application to Cloud Application Platform - Openshift</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-27T14:44:50+05:30" pubdate data-updated="true">Jul 27<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/07/27/deploying-ruby-on-rails-application-to-cloud-application-platform-openshift/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2014/07/27/deploying-ruby-on-rails-application-to-cloud-application-platform-openshift/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-weight: bold;">OpenShift</span> is a Platform as a Service (PaaS) from RedHat. It’s great for deploying web applications as you can setup/scale/manage apps quickly without any hassle, just like Heroku. It is open source and written in Ruby.
+<br/>
+To get started create a free Account. You get 3 small gears (resource container/unit : one small gear is equivalent to 512 MB RAM and 1GB storage) for free. Once you are signed up, install the OpenShift RHC Client Tools by running these commands in a terminal 
+<br/>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install rhc
+</span><span class='line'>rhc setup</span></code></pre></td></tr></table></div></figure>
+
+We can deploy rails application by adding OpenShift as a remote repo. 
+<br/>
+1- Create a new application in oppenshift account, then get the git URL for your new application. This was shown to you when you created your application,through the web console
+<br/>
+2- Add your OpenShift repo as a remote repo
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git remote add openshift &lt;OpenShift repo URL></span></code></pre></td></tr></table></div></figure>
+
+
+3- Configure Database
+<br/>
+Since your database address may change, you will need to access it using an environment variable. A random username and password were also generated for you when your application was created. But you don&#8217;t need to hardcode it into your application, there are environment variables for that too!
+Add this configuration to database.yml file
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>production:
+</span><span class='line'>  adapter: mysql2
+</span><span class='line'>  encoding: utf8
+</span><span class='line'>  database: &lt;%=ENV['OPENSHIFT_APP_NAME']%>
+</span><span class='line'>  pool: 5
+</span><span class='line'>  host: &lt;%=ENV['OPENSHIFT_MYSQL_DB_HOST']%>
+</span><span class='line'>  port: &lt;%=ENV['OPENSHIFT_MYSQL_DB_PORT']%>
+</span><span class='line'>  username: &lt;%=ENV['OPENSHIFT_MYSQL_DB_USERNAME']%>
+</span><span class='line'>  password: &lt;%=ENV['OPENSHIFT_MYSQL_DB_PASSWORD']%>
+</span><span class='line'>  socket: &lt;%=ENV['OPENSHIFT_MYSQL_DB_SOCKET']%></span></code></pre></td></tr></table></div></figure>
+
+
+
+
+4- Now that your app is configured properly, it&#8217;s time to deploy it to OpenShift. To do that, simply run a git push
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git push openshift master</span></code></pre></td></tr></table></div></figure>
+
+
+
+If everything went well, your app should deploy and be accessible. If not, pay attention to the output from the git push, if anything failed, it will tell you there.
+<br/>
+ If your application requires some persistent directory for your data then you can use directory (app-root/data/) you can access this directory in your application using environment variable OPENSHIFT_DATA_DIR
+<br/>
+5- Managing apps:
+<br/>
+To ssh into your server, type:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rhc ssh app-name</span></code></pre></td></tr></table></div></figure>
+
+
+Navigate to App folder:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd app-root/repo</span></code></pre></td></tr></table></div></figure>
+
+
+Migrate Database:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec rake db:migrate RAILS_ENV="production"</span></code></pre></td></tr></table></div></figure>
+
+
+ If you want to associate your own domain name eg. (www.yourdomain.com) with your Openshift rails application URL then you will need to create URL alias as shown below 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rhc alias add railsapp www.yourdomain.com</span></code></pre></td></tr></table></div></figure>
+
+then change cname records in your DNS provider account.
+
+
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/">In Page Editing in &#8216;Active Admin&#8217; - Using Gem &#8216;Best in Place&#8217;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-30T18:20:30+05:30" pubdate data-updated="true">Apr 30<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
+<br/>
+To add Best in Place to our app we first need to add its gem to our application&#8217;s Gemfile and run bundle.
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'best_in_place', github: 'bernat/best_in_place'</span></code></pre></td></tr></table></div></figure>
+
+Require best in place in active_admin.js.coffee and initialise it
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#= require best_in_place
+</span><span class='line'>#= require best_in_place.purr
+</span><span class='line'>
+</span><span class='line'>$(document).ready ->
+</span><span class='line'>  jQuery(".best_in_place").best_in_place()</span></code></pre></td></tr></table></div></figure>
+
+
+To make text field editable in active admin show page 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :name do |project|
+</span><span class='line'> best_in_place project, :name, :type => :input,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+To make select field editable
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status do |project|
+</span><span class='line'>  best_in_place project, :status, :type => :select,:path =>[:admin,project],:collection => Project.statuses.map{|status| [status,status]}
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+Textarea can be make editable using following code
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status_description  do |project|
+</span><span class='line'>  best_in_place project, :status_description, :type => :textarea,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+For Editable Datepicker with formated output use <span style="font-weight: bold;">display_with</span>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row "Planned Start Date" do |project|
+</span><span class='line'>  best_in_place project, :planned_start_date , :type => :date ,:path =>[:admin,project],  :display_with => lambda { |v| v.try(:strftime,'%b %d, %Y') }
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+</div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Nested Forms for Belongs_to Relationship - ActiveAdmin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-16T12:27:00+05:30" pubdate data-updated="true">Mar 16<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/16/nested-forms-for-belongsto-relationship/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2014/03/16/nested-forms-for-belongsto-relationship/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Product&lt;ActiveRecord::Base
+</span><span class='line'> belongs_to :cost, :class_name => 'Currency', foreign_key: 'cost_id'
+</span><span class='line'> accepts_nested_attributes_for :cost
+</span><span class='line'> attr_accessor :cost_id
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Currency &lt; ActiveRecord::Base
+</span><span class='line'> def self.currency_types
+</span><span class='line'>   ['SAR','AED','USD','EUR','INR']
+</span><span class='line'> end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.registerProductdo
+</span><span class='line'> form do |f|
+</span><span class='line'>    f.semantic_errors *f.object.errors.keys
+</span><span class='line'>    f.inputs "Details" do
+</span><span class='line'>      f.input :name
+</span><span class='line'>      f.inputs "cost" do
+</span><span class='line'>         f.semantic_fields_for :cost_attributes  do |j|
+</span><span class='line'>            j.inputs do
+</span><span class='line'>              j.input :currency_type, :as => :select, :collection => Currency.currency_types,:label =>'Cost'
+</span><span class='line'>              j.input :value
+</span><span class='line'>            end
+</span><span class='line'>          end
+</span><span class='line'>        end
+</span><span class='line'>      end
+</span><span class='line'>    end
+</span><span class='line'>    f.actions
+</span><span class='line'> end
+</span><span class='line'>
+</span><span class='line'> controller do
+</span><span class='line'>   def permitted_params
+</span><span class='line'>    params.permit product: [:name,cost_attributes:[:id,:currency_type,:value]]
+</span><span class='line'>   end
+</span><span class='line'> end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+</div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">FullCalendar - Integration With Ruby on Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-05T13:02:00+05:30" pubdate data-updated="true">Mar 5<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/03/05/fullcalendar-integration-with-ruby-on/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2014/03/05/fullcalendar-integration-with-ruby-on/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+
+  FullCalendar is a jQuery plugin that provides a full-sized drag drop calendar like the one below. It uses AJAX to fetch events on-the-fly for each month and is easily configured to use your own feed format (an extension is provided for Google Calendar. It is visually customizable and exposes hooks for user-triggered events (like clicking or dragging an event). It is open source licensed under an MIT license
+  <br/>
+<img border="0" src="http://1.bp.blogspot.com/-qa_L3JuaqW4/UvxSTF0KUgI/AAAAAAAAAUw/7kbq7plSXAU/s1600/calender.png" height="426" width="640" />
+<br/>
+Step 1 : Download the JQuery fullcalendar plugin by <a href="http://arshaw.com/fullcalendar/download/">here</a> and add fullcalender.js and fullcalender.css into javascripts and stylesheets folder.Fullcalendar is also available as a gem for Ruby on Rails which fits well with Asset Pipeline.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'fullcalendar-rails'</span></code></pre></td></tr></table></div></figure>
+Once the gem is installed, include fullcalendar javascript and css assets to your js and css file
+<br/>
+Step 2 : In view page index.html.erb or some other html.erb page add a div with id &#8216;calendar&#8217;
+<br/>
+Then add following code to js file
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$(document).ready(function() {
+</span><span class='line'>   $("#calendar").fullCalendar({
+</span><span class='line'>     header: 
+</span><span class='line'>     left: "prev,next today",
+</span><span class='line'>     center: "title",
+</span><span class='line'>     right: "month,agendaWeek,agendaDay"
+</span><span class='line'>     defaultView: "month",
+</span><span class='line'>     height: 500,
+</span><span class='line'>     slotMinutes: 15,
+</span><span class='line'>     events: "/dashboard/get_events",
+</span><span class='line'>     timeFormat: "h:mm t{ - h:mm t} ",
+</span><span class='line'>     dragOpacity: "0.5"
+</span><span class='line'>  });
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+Now we need to write a method to fetch Json data which we are going to display on calender
+<br/>
+In my example 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class DashboardController &lt; ApplicationController
+</span><span class='line'>  respond_to :json
+</span><span class='line'>  def get_events
+</span><span class='line'>    @task = current_user.tasks
+</span><span class='line'>    events = []
+</span><span class='line'>    @task.each do |task|
+</span><span class='line'>      events &lt;&lt; {:id => task.id, :title => "#{task.taskable.try(:name)} : #{task.task}", :start => "#{task.planned_start_date}",:end => "#{task.planned_end_date}" }
+</span><span class='line'>    end
+</span><span class='line'>    render :text => events.to_json
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DemoApp::Application.routes.draw do
+</span><span class='line'>  resources :dashboard do
+</span><span class='line'>    get :get_events, on: :collection
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+that&#8217;s it, now you can see the calendar in your dashboard
+<br/>
+
+</div></div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">ActiveAdmin- Adding a Filter on Has_one Through Association</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-04T12:34:00+05:30" pubdate data-updated="true">Feb 4<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/02/04/activeadmin-adding-filter-on-hasone/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2014/02/04/activeadmin-adding-filter-on-hasone/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+
+
+
+
+Given Project, Task,  and Activity, I&#8217;ve managed to set up has_one :through relationship filter with the following:
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Project &lt; ActiveRecord::Base
+</span><span class='line'>  has_many :tasks
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Task &lt; ActiveRecord::Base
+</span><span class='line'>  belongs_to :project
+</span><span class='line'>  has_many :activities, :dependent => :destroy
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Activity &lt; ActiveRecord::Base
+</span><span class='line'>  has_many :tasks
+</span><span class='line'>  has_one  :project, through: :task
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.register User do
+</span><span class='line'>  filter :task_project_id, as: :select, collection: Project.all, label: 'Project'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+  </div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-01T16:29:00+05:30" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
+        
+           | <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+
+In one of my recent project, I need to implement an autocomplete in active_admin interface to select one or more users from the user list. I tried googling on this and zeroed in on the library Chosen.Chosen by default supports multiple select, selected state.Chosen is available as a gem for Ruby on Rails which fits well with Asset Pipeline.
+<br/>Include Chosen gem in your Gemfile.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem ‘chosen-rails’</span></code></pre></td></tr></table></div></figure>
+Once the gem is installed, include chosen javascript assets to your js file. 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//= require chosen-jquery</span></code></pre></td></tr></table></div></figure>
+In /app/admin/modelname.rb
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.register Modlename do
+</span><span class='line'>  #Customize creates and edit form
+</span><span class='line'>  form do |f|
+</span><span class='line'>    f.inputs do
+</span><span class='line'>       f.input :name
+</span><span class='line'>       f.input :othermodel, :input_html => { :class => "chosen-input" } # other model with has_many relation ship
+</span><span class='line'>    end
+</span><span class='line'>    f.buttons
+</span><span class='line'>  end   
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+in active_admin.js
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$(document).ready(function(){
+</span><span class='line'>   $(".chosen-input").chosen();
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+if you are using coffee script instead of js then use this 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ->
+</span><span class='line'>  # enable chosen js
+</span><span class='line'>  $('.chosen-input').chosen
+</span><span class='line'>    allow_single_deselect: true
+</span><span class='line'>    no_results_text: 'No results matched'</span></code></pre></td></tr></table></div></figure>
+Then, include Chosen stylesheet assets to your css file.
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>*= require chosen</span></code></pre></td></tr></table></div></figure>
+To include more details check <a href='http://harvesthq.github.io/chosen/'>Here </a>
+<br/>
+Thats it, you will have a nice autocomplte with multiselect . Happy coding…
+<br/><br/>
+</div></div>
+<h2>Comments</h2>
+<div class='comments'>
+<div class='comment'>
+<div class='author'>Lobna Mohamed</div>
+<div class='content'>
+Thanks for the good post, but does not save data to the database<br />I guess it related to permit_params I am trying this <br />permit_params :name, :othermodel_ids<br />but still not working, have you another idea??</div>
+
+
+</div>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/5/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type/">GraphQL Ruby Mutation With Input Object Type</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/">Deccan RubyConf 2017 - First Experience as a Speaker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/05/graphql-security-issues-and-solutions/">GraphQl Security Issues and Solutions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/06/09/dry-graphql-definitions-using-interfaces/">DRY GraphQL Definitions Using Interfaces</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/31/graphql-ruby-error-handling/">GraphQL Ruby Error Handling</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/">GraphQL -Mutation Query Implementation - Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/">GraphiQL IDE Alternatives for Development/Testing/Exploring GraphQL Servers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">Solving N+1 Query in GraphQL Using Graphql-batch</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <!-- Begin MailChimp Signup Form -->
+  <div id="mc_embed_signup">
+   <form action="//eshaiju.us10.list-manage.com/subscribe/post?u=7582b7373d9b93dff66b353bf&amp;id=469e7925c9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+
+      <div class="mc-field-group">
+  <label for="mce-EMAIL">
+    Enter your email to receive updates
+  </label>
+  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@email.com">
+      </div>
+      <div id="mce-responses" class="clear">
+  <div class="response" id="mce-error-response" style="display:none"></div>
+  <div class="response" id="mce-success-response" style="display:none"></div>
+      </div>
+      <div class="clear">
+  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+      </div>
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</section>
+
+<style type="text/css">
+	
+#mce-EMAIL{
+	width: 100%; height: 24px; margin-top: 8px; font-size: 14px;
+}
+
+#mc-embedded-subscribe {
+	  background-color: #5DA423;
+	  border: 1px solid #396516;
+	  width: auto;
+	  background: #2BA6CB;
+	  border: 1px solid #1E728C;
+	  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  color: white;
+	  cursor: pointer;
+	  display: inline-block;
+	  font-size: 14px;
+	  font-weight: bold;
+	  line-height: 1;
+	  margin: 8px 0 0 0;
+	  outline: none;
+	  padding: 10px 20px 11px;
+	  position: relative;
+	  text-align: center;
+	  text-decoration: none;
+	  -webkit-transition: background-color 0.15s ease-in-out;
+	  -moz-transition: background-color 0.15s ease-in-out;
+	  -o-transition: background-color 0.15s ease-in-out;
+	  transition: background-color 0.15s ease-in-out;
+    }
+</style>
+<section class="even">
+	<h1>
+	  <a href="https://github.com/eshaiju"><img src="/images/github_zpse87fc53d.jpg" width="40" height="40"></a>
+	  &nbsp;
+	  <a href="https://twitter.com/eshaiju"><img src="/images/twitter_zps447bd274.jpg" width="40" height="40"></a>
+	</h1>
+</section>
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eshaijugithubio';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480030-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

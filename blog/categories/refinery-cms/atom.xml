@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Refinery CMS | Rails Kitchen]]></title>
+  <link href="http://tech.eshaiju.in/blog/categories/refinery-cms/atom.xml" rel="self"/>
+  <link href="http://tech.eshaiju.in/"/>
+  <updated>2017-10-15T00:45:37+05:30</updated>
+  <id>http://tech.eshaiju.in/</id>
+  <author>
+    <name><![CDATA[Shaiju E]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Multiple Language Sites in Refinery CMS With I18n]]></title>
+    <link href="http://tech.eshaiju.in/blog/2015/01/05/multiple-language-site-in-refinery-with-i18n/"/>
+    <updated>2015-01-05T09:50:40+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2015/01/05/multiple-language-site-in-refinery-with-i18n</id>
+    <content type="html"><![CDATA[<div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        Refinery CMS is an Rails-based CMS that supports Rails 3.2 and 4.1. We can make Refinary CMS Multilingual with i18n Translations.
+    <br/>
+        
+        For this add the gem to Gemfile
+    <br/>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'refinerycms-i18n'</span></code></pre></td></tr></table></div></figure></notextile></div>
+        Run the generator <br/>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g refinery:i18n</span></code></pre></td></tr></table></div></figure></notextile></div>
+        Change the language settings
+
+        In Refinery's settings find I18n Translation Frontend Locales (Refinery) and add the ISO country name.
+    <br/>
+<strong>config/initializers/refinery/i18n.rb</strong>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Refinery::I18n.configure do |config|
+</span><span class='line'>   config.default_locale = :en
+</span><span class='line'>
+</span><span class='line'>  # config.current_locale = :en
+</span><span class='line'>
+</span><span class='line'>  # config.default_frontend_locale = :en
+</span><span class='line'>
+</span><span class='line'>   config.frontend_locales = [:en,:ar]
+</span><span class='line'>
+</span><span class='line'>   config.locales = {:en=>"English", :ar=>"Arabic"}
+</span><span class='line'>   #, :nl=>"Nederlands", :pt=>"Português", :"pt-BR"=>"Português brasileiro", :da=>"Dansk", :nb=>"Norsk Bokmål", :sl=>"Slovenian", :es=>"Español", :it=>"Italiano", :de=>"Deutsch", :lv=>"Latviski", :ru=>"Русский", :sv=>"Svenska", :pl=>"Polski", :"zh-CN"=>"简体中文", :"zh-TW"=>"繁體中文", :el=>"Ελληνικά", :rs=>"Srpski", :cs=>"Česky", :sk=>"Slovenský", :ja=>"日本語", :bg=>"Български", :hu=>"Hungarian", :uk=>"Українська"}
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+        That's it! Visit the Pages tab and you should see flags indicating the page language in the tree. 
+<br/>
+        <img src="/images/1.png" width="600" height="250" title="" >
+        <br/>
+
+        Edit a page and you'll see the available languages at the top. Simply select one to add content for that language.
+<br/>
+<img src="/images/2.png" width="600" height="250" title="" >
+        <img src="/images/3.png" width="600" height="250" title="" >
+<br/>
+Now we need to add multi language support for our extensions. For this we need to specify this when we create extension with <strong>--i18n </strong> attribute.
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>ruby </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g refinery:engine Service title:string description:text icon:image --i18n title description</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+We can add link to toggle between languages in Frontend  web site using following code
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;nav id='locale'>
+</span><span class='line'>      &lt;% ::Refinery::I18n.frontend_locales.each do |locale| %>
+</span><span class='line'>        &lt;%= link_to_if Globalize.locale.to_s != locale.to_s, locale, {:locale => locale} %>
+</span><span class='line'>      &lt;% end %>
+</span><span class='line'>&lt;/nav></span></code></pre></td></tr></table></div></figure></notextile></div>
+    </div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

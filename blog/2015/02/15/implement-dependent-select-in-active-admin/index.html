@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Implement Dependent Select in Active Admin - Rails Kitchen</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="One of my prevois project, I needed to populate product catalogs in second select box depends on the product selected in first select box in active &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Kitchen" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50480030-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-8803494276404199",
+        enable_page_level_ads: true
+      });
+  </script>
+</head>
+
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rails Kitchen</a></h1>
+  
+    <h2>It's a place to write on stuff I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tech.eshaiju.in" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://eshaiju.in">Portfolio</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Implement Dependent Select in Active Admin</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-15T14:53:50+05:30" pubdate data-updated="true">Feb 15<span>th</span>, 2015</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+    One of my prevois project, I needed to populate product catalogs in second select box depends on the product selected in first select box in active admin input form. I implemented this by refering one of the example by <a href="https://github.com/abhidsm">@abidsm</a> in his github <a href="https://github.com/abhidsm/dependent-select">repo</a>. 
+<br/>
+<br/>
+<strong>Implementation</strong>
+<br/>
+<br/>
+First we need to add <a href="https://raw.githubusercontent.com/abhidsm/dependent-select/master/dependent_select.js">dependent_select.js</a> file.
+<br/>
+
+Now we need to add logic to <stong>catalogs_product.rb</stong> in admin folder.
+
+<figure class='code'><figcaption><span>catalogs_product.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActiveAdmin</span><span class="o">.</span><span class="n">register</span> <span class="no">CatalogsProduct</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">form</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">inputs</span> <span class="s2">&quot;Details&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:product</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:select</span><span class="p">,</span> <span class="ss">:collection</span> <span class="o">=&gt;</span> <span class="no">Product</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">product</span><span class="o">|</span> <span class="o">[</span><span class="n">product</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:catalog</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:select</span><span class="p">,</span> <span class="ss">:input_html</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s1">&#39;data-option-dependent&#39;</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="s1">&#39;data-option-url&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;/products/:catalogs_product_product_id/catalogs&#39;</span><span class="p">,</span> <span class="s1">&#39;data-option-observed&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;catalogs_product_product_id&#39;</span><span class="p">},</span> <span class="ss">:collection</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">product</span> <span class="p">?</span> <span class="n">resource</span><span class="o">.</span><span class="n">product</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">catalogs</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">catalog</span><span class="o">|</span> <span class="o">[</span><span class="n">catalog</span><span class="o">.</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">catalog</span><span class="o">.</span><span class="n">id</span><span class="o">]</span><span class="p">}</span> <span class="p">:</span> <span class="o">[]</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">actions</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Here <strong>&#8216;data-option-dependent&#8217; => true</strong> will bind depentent select js to catalog input field.
+<br/><br/>
+<strong>&#8216;data-option-observed&#8217; => &#8216;catalogs_product_product_id&#8217;</strong> specify that, the catalog field is depending on input in product field. <strong>catalogs_product_product_id</strong> is the id of the product field in this form. 
+<br/><br/>
+Now we need to specify the json method which will populate catalogs data depends on the product is selected in parent input select. 
+<br/>
+<strong>&#8216;data-option-url&#8217; => &#8216;/products/:catalogs_product_product_id/catalogs&#8217;</strong>
+<br/><br/>
+Now we need to add index method with json output in catelogs controller.
+
+<figure class='code'><figcaption><span>catalogs_controller.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">CatalogsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="n">respond_to</span> <span class="ss">:json</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:product_id</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:product_id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@catalogs</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">catalogs</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="vi">@catalogs</span> <span class="o">=</span> <span class="no">Catalog</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="vi">@catalogs</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">catalog</span><span class="o">|</span> <span class="p">{</span><span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">catalog</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">catalog</span><span class="o">.</span><span class="n">attr_name</span><span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>routes.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">DependentSelect</span><span class="p">:</span><span class="ss">:Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;pages#main&#39;</span>
+</span><span class='line'>  <span class="n">resources</span> <span class="ss">:products</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">resources</span> <span class="ss">:catalogs</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+That&#8217;s it now you can see catalog select box will be repopulated when we select a product in product select box. This can be implemented in any of formastic input forms.
+    </div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Shaiju E</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-15T14:53:50+05:30" pubdate data-updated="true">Feb 15<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/activeadmin/'>ActiveAdmin</a>, <a class='category' href='/blog/categories/ruby-on-rails/'>Ruby On Rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin/" data-via="" data-counturl="http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/08/ruby-on-rails-applications-security-vulnerability-checking-tool-brakeman/" title="Previous Post: Ruby on Rails applications security vulnerability checking tool - Brakeman">&laquo; Ruby on Rails applications security vulnerability checking tool - Brakeman</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/02/18/rspec-run-specific-set-of-tests-using-tag-option/" title="Next Post: Rspec Run specific set of tests using --tag option">Rspec Run specific set of tests using --tag option &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type/">GraphQL Ruby Mutation With Input Object Type</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/">Deccan RubyConf 2017 - First Experience as a Speaker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/05/graphql-security-issues-and-solutions/">GraphQl Security Issues and Solutions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/06/09/dry-graphql-definitions-using-interfaces/">DRY GraphQL Definitions Using Interfaces</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/31/graphql-ruby-error-handling/">GraphQL Ruby Error Handling</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/">GraphQL -Mutation Query Implementation - Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/">GraphiQL IDE Alternatives for Development/Testing/Exploring GraphQL Servers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">Solving N+1 Query in GraphQL Using Graphql-batch</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <!-- Begin MailChimp Signup Form -->
+  <div id="mc_embed_signup">
+   <form action="//eshaiju.us10.list-manage.com/subscribe/post?u=7582b7373d9b93dff66b353bf&amp;id=469e7925c9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+
+      <div class="mc-field-group">
+  <label for="mce-EMAIL">
+    Enter your email to receive updates
+  </label>
+  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@email.com">
+      </div>
+      <div id="mce-responses" class="clear">
+  <div class="response" id="mce-error-response" style="display:none"></div>
+  <div class="response" id="mce-success-response" style="display:none"></div>
+      </div>
+      <div class="clear">
+  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+      </div>
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</section>
+
+<style type="text/css">
+	
+#mce-EMAIL{
+	width: 100%; height: 24px; margin-top: 8px; font-size: 14px;
+}
+
+#mc-embedded-subscribe {
+	  background-color: #5DA423;
+	  border: 1px solid #396516;
+	  width: auto;
+	  background: #2BA6CB;
+	  border: 1px solid #1E728C;
+	  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  color: white;
+	  cursor: pointer;
+	  display: inline-block;
+	  font-size: 14px;
+	  font-weight: bold;
+	  line-height: 1;
+	  margin: 8px 0 0 0;
+	  outline: none;
+	  padding: 10px 20px 11px;
+	  position: relative;
+	  text-align: center;
+	  text-decoration: none;
+	  -webkit-transition: background-color 0.15s ease-in-out;
+	  -moz-transition: background-color 0.15s ease-in-out;
+	  -o-transition: background-color 0.15s ease-in-out;
+	  transition: background-color 0.15s ease-in-out;
+    }
+</style>
+<section class="even">
+	<h1>
+	  <a href="https://github.com/eshaiju"><img src="/images/github_zpse87fc53d.jpg" width="40" height="40"></a>
+	  &nbsp;
+	  <a href="https://twitter.com/eshaiju"><img src="/images/twitter_zps447bd274.jpg" width="40" height="40"></a>
+	</h1>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eshaijugithubio';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin/';
+        var disqus_url = 'http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480030-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Openshift | Rails Kitchen]]></title>
+  <link href="http://tech.eshaiju.in/blog/categories/openshift/atom.xml" rel="self"/>
+  <link href="http://tech.eshaiju.in/"/>
+  <updated>2017-10-15T00:45:37+05:30</updated>
+  <id>http://tech.eshaiju.in/</id>
+  <author>
+    <name><![CDATA[Shaiju E]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying Ruby on Rails Application to Cloud Application Platform - Openshift]]></title>
+    <link href="http://tech.eshaiju.in/blog/2014/07/27/deploying-ruby-on-rails-application-to-cloud-application-platform-openshift/"/>
+    <updated>2014-07-27T14:44:50+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2014/07/27/deploying-ruby-on-rails-application-to-cloud-application-platform-openshift</id>
+    <content type="html"><![CDATA[<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-weight: bold;">OpenShift</span> is a Platform as a Service (PaaS) from RedHat. It’s great for deploying web applications as you can setup/scale/manage apps quickly without any hassle, just like Heroku. It is open source and written in Ruby.
+<br/>
+To get started create a free Account. You get 3 small gears (resource container/unit : one small gear is equivalent to 512 MB RAM and 1GB storage) for free. Once you are signed up, install the OpenShift RHC Client Tools by running these commands in a terminal 
+<br/>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install rhc
+</span><span class='line'>rhc setup</span></code></pre></td></tr></table></div></figure></notextile></div>
+We can deploy rails application by adding OpenShift as a remote repo. 
+<br/>
+1- Create a new application in oppenshift account, then get the git URL for your new application. This was shown to you when you created your application,through the web console
+<br/>
+2- Add your OpenShift repo as a remote repo
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git remote add openshift &lt;OpenShift repo URL></span></code></pre></td></tr></table></div></figure></notextile></div>
+
+3- Configure Database
+<br/>
+Since your database address may change, you will need to access it using an environment variable. A random username and password were also generated for you when your application was created. But you don't need to hardcode it into your application, there are environment variables for that too!
+Add this configuration to database.yml file
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>production:
+</span><span class='line'>  adapter: mysql2
+</span><span class='line'>  encoding: utf8
+</span><span class='line'>  database: &lt;%=ENV['OPENSHIFT_APP_NAME']%>
+</span><span class='line'>  pool: 5
+</span><span class='line'>  host: &lt;%=ENV['OPENSHIFT_MYSQL_DB_HOST']%>
+</span><span class='line'>  port: &lt;%=ENV['OPENSHIFT_MYSQL_DB_PORT']%>
+</span><span class='line'>  username: &lt;%=ENV['OPENSHIFT_MYSQL_DB_USERNAME']%>
+</span><span class='line'>  password: &lt;%=ENV['OPENSHIFT_MYSQL_DB_PASSWORD']%>
+</span><span class='line'>  socket: &lt;%=ENV['OPENSHIFT_MYSQL_DB_SOCKET']%></span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+
+4- Now that your app is configured properly, it's time to deploy it to OpenShift. To do that, simply run a git push
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git push openshift master</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+If everything went well, your app should deploy and be accessible. If not, pay attention to the output from the git push, if anything failed, it will tell you there.
+<br/>
+ If your application requires some persistent directory for your data then you can use directory (app-root/data/) you can access this directory in your application using environment variable OPENSHIFT_DATA_DIR
+<br/>
+5- Managing apps:
+<br/>
+To ssh into your server, type:
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rhc ssh app-name</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+Navigate to App folder:
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd app-root/repo</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+Migrate Database:
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec rake db:migrate RAILS_ENV="production"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+ If you want to associate your own domain name eg. (www.yourdomain.com) with your Openshift rails application URL then you will need to create URL alias as shown below 
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rhc alias add railsapp www.yourdomain.com</span></code></pre></td></tr></table></div></figure></notextile></div>
+then change cname records in your DNS provider account.
+
+
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rspec | Rails Kitchen]]></title>
+  <link href="http://tech.eshaiju.in/blog/categories/rspec/atom.xml" rel="self"/>
+  <link href="http://tech.eshaiju.in/"/>
+  <updated>2017-10-15T00:45:37+05:30</updated>
+  <id>http://tech.eshaiju.in/</id>
+  <author>
+    <name><![CDATA[Shaiju E]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rspec Run Specific Set of Tests Using --tag Option]]></title>
+    <link href="http://tech.eshaiju.in/blog/2015/02/18/rspec-run-specific-set-of-tests-using-tag-option/"/>
+    <updated>2015-02-18T00:04:23+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2015/02/18/rspec-run-specific-set-of-tests-using-tag-option</id>
+    <content type="html"><![CDATA[<div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+In my current project I wanted to avoid running a few set of slow tests every time. Tagging feature in rspec allow us to filter the examples to be run by tag. <br/><br/>
+
+We can use the --tag (or -t) option to filter the examples by tags. The tag can be a simple name or a name:value pair. In the first case,
+examples with :name => true will be filtered. In the second case, examples with :name => value will be filtered, where value is always a string.
+<br/><br/>
+Tags can also be used to exclude examples by adding a ~ before the tag. For example ~tag will exclude all examples marked with :tag => true and 
+~tag:value will exclude all examples marked with :tag => value.
+<br/><br/>
+Given example show how to add tags to spec examples,
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>describe "group with tagged specs" do
+</span><span class='line'>  it "example I'm working now", :focus => true do; end
+</span><span class='line'>  it "special example with string", :type => 'special' do; end
+</span><span class='line'>  it "special example with symbol", :type => :special do; end
+</span><span class='line'>  it "slow example", :skip => true do; end
+</span><span class='line'>  it "ordinary example", :speed => 'slow' do; end
+</span><span class='line'>  it "untagged example" do; end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+To run only examples with a simple tag, for examlple to run tests with a  tag focus
+<br/>
+run "<strong>rspec spec/ --tag focus</strong>"
+<br/>
+   Then the output should contain all the tests with tag :focus=>true
+<br/>
+To exclude examples with a name:value tag
+<br/>
+ run "<strong>rspec spec/ --tag ~speed:slow</strong>"
+ <br/>
+  Then the tests with tag speed:slow" will not be run.
+
+<br/><br/>
+Detailed documenation is given <a href="http://www.relishapp.com/rspec/rspec-core/v/2-4/docs/command-line/tag-option">here</a>
+<br/><br/>
+Thats it, Happy Testing....
+    </div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

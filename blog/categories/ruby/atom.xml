@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | Rails Kitchen]]></title>
+  <link href="http://tech.eshaiju.in/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://tech.eshaiju.in/"/>
+  <updated>2017-10-15T00:45:37+05:30</updated>
+  <id>http://tech.eshaiju.in/</id>
+  <author>
+    <name><![CDATA[Shaiju E]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[GraphQL Ruby Mutation With Input Object Type]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type/"/>
+    <updated>2017-10-14T23:52:38+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field so for saving an object we need to instantiate article object by assigning each and every input params which is very difficult if out object has larger fields.</p>
+
+  <p>Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># encoding: utf-8</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">ArticleMutations</span>
+</span><span class='line'>  <span class="no">Create</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Mutation</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;AddArticle&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:title</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:body</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Define return parameters</span>
+</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:article</span><span class="p">,</span> <span class="no">ArticleType</span>
+</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">resolve</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">object</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ctx</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:title</span><span class="o">]</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:body</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>        <span class="p">{</span> <span class="ss">article</span><span class="p">:</span> <span class="n">article</span> <span class="p">}</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">to_a</span> <span class="p">}</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mutation</span> <span class="n">addArticle</span><span class="p">{</span>
+</span><span class='line'>  <span class="n">addArticle</span><span class="p">(</span><span class="ss">input</span><span class="p">:</span> <span class="p">{</span> <span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;GraphQL mutation&quot;</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot; This article is about graphql mutation using  InputObjectType&quot;</span> <span class="p">})</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">article</span><span class="p">{</span>
+</span><span class='line'>      <span class="nb">id</span>
+</span><span class='line'>      <span class="n">title</span>
+</span><span class='line'>      <span class="n">body</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+For saving this we need to instantiate article object by assigning each and every input params like this.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:title</span><span class="o">]</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:body</span><span class="o">]</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+This way is very become ugly if our object contain lots fields. We can define and utilize mutation input params in the better way using InputObjectType. If we can specify article object as input_field instead of each field we can save object like below.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">inputs</span><span class="o">[</span><span class="ss">:article</span><span class="o">].</span><span class="n">to_h</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+which is maintanable and easy to read.
+<br/>
+Lets see how we can achive this.
+<br/>
+<p>The first step is to define InputObjectType and declare that input object type as input_field. Here we are going to create InputObjectType in another folder inside our graphql folder for maintainability.</p>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/input_objects/article_input_object_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ArticleInputObjectType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:InputObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s1">&#39;ArticleInput&#39;</span>
+</span><span class='line'>  <span class="n">input_field</span> <span class="ss">:title</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">input_field</span> <span class="ss">:body</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+Since we created new folder for input_objects, we have to tell Rails to autoload paths. place below code in application.rb to autoload it.
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/application.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">autoload_paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;app/graphql/input_objects&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+Now we can declare <strong>ArticleInputObjectType</strong> as input_field inside our mutation and use declared input_field inside our mutation resolver to save the article. So final mutation definition will look like this.
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># encoding: utf-8</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">ArticleMutations</span>
+</span><span class='line'>  <span class="no">Create</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Mutation</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;AddArticle&#39;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Define input parameters</span>
+</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:article</span><span class="p">,</span> <span class="o">!</span><span class="no">ArticleInputObjectType</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Define return parameters</span>
+</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:article</span><span class="p">,</span> <span class="no">ArticleType</span>
+</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">resolve</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">object</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ctx</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">inputs</span><span class="o">[</span><span class="ss">:article</span><span class="o">].</span><span class="n">to_h</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>        <span class="p">{</span> <span class="ss">article</span><span class="p">:</span> <span class="n">article</span> <span class="p">}</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">to_a</span> <span class="p">}</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+That's it, we are done, now we can save new article using addArticle mutation.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mutation</span> <span class="n">addArticle</span><span class="p">{</span>
+</span><span class='line'>  <span class="n">addArticle</span><span class="p">(</span><span class="ss">input</span><span class="p">:</span> <span class="p">{</span> <span class="ss">article</span><span class="p">:</span> <span class="p">{</span> <span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;GraphQL mutation&quot;</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="s2">&quot; This article is about graphql mutation using  InputObjectType&quot;</span> <span class="p">}</span> <span class="p">})</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">article</span><span class="p">{</span>
+</span><span class='line'>      <span class="nb">id</span>
+</span><span class='line'>      <span class="n">title</span>
+</span><span class='line'>      <span class="n">body</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<img src="/images/graphql-mutation.png" width="1200" height="260" title="" >
+
+  </div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Deccan RubyConf 2017 - First Experience as a Speaker]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/"/>
+    <updated>2017-08-23T22:02:27+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+<img src="/images/decaan2.jpg" width="250" height="220">
+<img src="/images/deccan3.jpg" width="225" height="200">
+<img src="/images/deccan1.jpg" width="250" height="200">
+  <p><a href='http://www.deccanrubyconf.org/'>Deccan RubyConference</a> is a Single-Track Conference happening at Pune every year. Deccan RubyConf 2017 took place 12th Aug. 2017 at Sheraton Grand Pune. The conference covered areas like Ruby Language, Framework, and Tools by well-known speakers and also few first-time speakers from Ruby community.</p>
+
+ I got a chance to attend This year edition as speaker. My topic was <strong><a href='http://slides.com/shaijunonu/graphql-8'>Give REST a rest, use GraphQL for your next Ruby API</a></strong>. In my 25 minutes session, I talked about why should we use GraphQL and also about its implementation in Ruby. After conference session few people from different companies approached me and asked about GraphQL which was really a confidence booster for me as a speaker. Few people shared the issues they faced in GraphQL which given me new ideas and thought process.
+<img src="/images/conftalk1.jpg" width="800" height="260" title="Shaiju E" >
+<br/>
+<p>
+The conference started with the keynote by <strong><a href='https://twitter.com/timriley'>Tim Riley</a></strong>. Tim is from Australian and partner at Australian design agency Icelab. He talked about next generation Ruby web apps with dry-rb. Next talk was about leveraging the hidden powers of a database to make Rails, the swiss army knife of web development, manipulate and present data faster by <strong><a href='https://twitter.com/coderhs'>Harisankar</a></strong>, founder of Red Panthers. <strong><a href='https://twitter.com/_tachyons'>Aboobacker MK</a></strong> from Red Panthers talked about Garbage collector in Ruby and some practical tips to improve Ruby performance.</p>
+<img src="/images/tim.jpg" width="250" height="250" title="Tim Riley" >
+<img src="/images/hari.jpg" width="250" height="200" title="Harisankar" >
+<img src="/images/aboobacker.jpg" width="250" height="250" title="Aboobacker MK" >
+
+<p>
+After my session, <strong><a href='https://twitter.com/_kanuahs'>Shaunak Pagnis</a></strong> from Amura talked about the Active record and beyond.  After Lunch <strong><a href='https://twitter.com/citizen428'>Michael Kohl</a></strong> from Austria, currently, serves as CTO of Lockstap Labs talked about writing maintainable Rails applications. The sixth session was a panel discussion with the panels including <strong><a href='https://twitter.com/AjeyGore'>Ajey Gore</a></strong> - Group CTO of Go-Jek, <strong><a href='https://twitter.com/vipulnsward'>Vipul</a></strong> - Director BigBinary, Tim Riley, Michael Kohl, <strong><a href='https://twitter.com/gautamrege'>Gautam Rege</a></strong> -Director Josh Software discussed their experience of building a start-up and hiring strategies.
+</p>
+<img src="/images/shaunak.jpg" width="250" height="200" title="Shaunak Pagnis" >
+<img src="/images/Kohl.jpg" width="250" height="200" title="Michael Kohl" >
+<img src="/images/panel.jpg" width="250" height="200">
+<p>
+Followed by Panel Discussion, there were 9 flash talks which included 5 speakers from Kerala, talked about different ruby topics from beginner level to advanced level.  After flash talks, <strong><a href='https://twitter.com/Mistcrafter'>Douglas Vaz</a></strong> talked about HTTP/2 World. Conference session ended with Keynote by Ajey Gore. He talked about testing principles and why testing is important.</p>
+<img src="/images/ft1.jpg" width="250" height="200">
+<img src="/images/ft2.jpg" width="250" height="200">
+<img src="/images/ft3.jpg" width="250" height="200">
+<img src="/images/ft4.jpg" width="250" height="200">
+<img src="/images/ft5.jpg" width="250" height="200">
+<img src="/images/ft6.jpg" width="250" height="200">
+<img src="/images/ft7.jpg" width="250" height="200">
+<img src="/images/ft8.jpg" width="250" height="200">
+<img src="/images/ft9.jpg" width="250" height="200">
+<img src="/images/vaz.jpg" width="250" height="200" title="Douglas Vaz" >
+<img src="/images/ajay.jpg" width="250" height="200" title="Ajay Gore" >
+<p>
+After sessions, there were Open hours which gave opportunity meet and interact with different kind of people. For me, it was a great learning experience both listening to people share their contributions and ideas which really inspired me to code better and learn better.</p>
+All the photos from the conference is available <a href='https://photos.google.com/share/AF1QipP3Iw5g6YH6MRQnK_kkpXsfRrrJ0J_3VgNX89mifOJp54b6DxJSkOL0BTJAZ9C5yA?key=YjAyR0pGZ3hoZUh1SExPNXJxUk1OV1hhQkx6bjdB'>here</a>.
+  </div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[GraphQl Security Issues and Solutions]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/08/05/graphql-security-issues-and-solutions/"/>
+    <updated>2017-08-05T12:49:42+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/08/05/graphql-security-issues-and-solutions</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+    <p>One of the main highlights of GraphQl is declarative fetching, the client can define the shape of the data he needed and GraphQL server will provide data in the same shape. But an evil client can exploit this advantage to make deeper nesting and complex queries and can do DDoS attack.<p>
+    Example for a deeper nesting query:
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">query</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">articles</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">title</span>
+</span><span class='line'>    <span class="n">body</span>
+</span><span class='line'>    <span class="n">comments</span><span class="p">{</span>
+</span><span class='line'>      <span class="n">comment</span>
+</span><span class='line'>      <span class="n">user</span><span class="p">{</span>
+</span><span class='line'>        <span class="n">comments</span><span class="p">{</span>
+</span><span class='line'>          <span class="n">user</span><span class="p">{</span>
+</span><span class='line'>            <span class="n">comments</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>              <span class="n">comment</span>
+</span><span class='line'>              <span class="n">user</span><span class="p">{</span>
+</span><span class='line'>                <span class="n">comments</span><span class="p">{</span>
+</span><span class='line'>                  <span class="n">comment</span>
+</span><span class='line'>                  <span class="n">user</span><span class="p">{</span>
+</span><span class='line'>                    <span class="n">comments</span><span class="p">{</span>
+</span><span class='line'>                      <span class="n">comment</span>
+</span><span class='line'>                      <span class="n">user</span><span class="p">{</span>
+</span><span class='line'>                        <span class="nb">name</span>
+</span><span class='line'>                      <span class="p">}</span>
+</span><span class='line'>                    <span class="p">}</span>
+</span><span class='line'>                  <span class="p">}</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+GraphQL provide three confirations to avoid this issue. <br/><br/>
+
+<strong>Timeout:</strong>
+We can avoid queries utilizing server more than specified time by setting a timeout. If a query takes more time for execute, then after time out GraphQL will return the result of query up to that time and simply reject nonexcecuted part of the query.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/graphql_ruby_sample_schema.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">GraphqlRubySampleSchema</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">query</span> <span class="no">QueryType</span>
+</span><span class='line'>  <span class="n">mutation</span> <span class="no">MutationType</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">GraphqlRubySampleSchema</span><span class="o">.</span><span class="n">middleware</span> <span class="o">&lt;&lt;</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">::</span><span class="no">TimeoutMiddleware</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">max_seconds</span><span class="p">:</span> <span class="mi">10</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">err</span><span class="p">,</span> <span class="n">query</span><span class="o">|</span>
+</span><span class='line'>  <span class="no">Rails</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;GraphQL Timeout: </span><span class="si">#{</span><span class="n">query</span><span class="o">.</span><span class="n">query_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<img src="/images/graphql-timeout.png" width="1200" height="260" title="" >
+<img src="/images/graphql-timeout-1.png" width="1200" height="260" title="" >
+
+<strong>Maximum Depth:</strong> Another solution for prevent deeply-nested queries is setting <strong>max_deplth</strong>. If our query depth is greater than max_depth we set, the server will simply reject full query and return an error message.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/graphql_ruby_sample_schema.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">GraphqlRubySampleSchema</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">query</span> <span class="no">QueryType</span>
+</span><span class='line'>  <span class="n">mutation</span> <span class="no">MutationType</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">max_depth</span> <span class="mi">12</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<img src="/images/graphql-maxdepth.png" width="1200" height="260" title="" >
+<strong>Query Complexity:</strong> We can prevent complex queries by setting <strong>max_complexity</strong> in GraphQL schema. Each field in our type system has a complexity number so if our query complexity exceeds max_complexity, the server will reject query just like in the case of max_depth.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/graphql_ruby_sample_schema.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">GraphqlRubySampleSchema</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">query</span> <span class="no">QueryType</span>
+</span><span class='line'>  <span class="n">mutation</span> <span class="no">MutationType</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">max_depth</span> <span class="mi">12</span>
+</span><span class='line'>  <span class="n">max_complexity</span> <span class="mi">100</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<img src="/images/graphql-maxcomplexity2.png" width="1200" height="260" title="" >
+<img src="/images/graphql-maxcomplexity1.png" width="1200" height="260" title="" >
+<p>By default complexity of field is 1, but we can configure constant complexity for fields in type system and also can set complexity dynamically by passing conditions </p>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Constant complexity:</span>
+</span><span class='line'><span class="n">field</span> <span class="ss">:comments</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="no">CommentType</span><span class="o">]</span><span class="p">,</span> <span class="ss">complexity</span><span class="p">:</span> <span class="mi">10</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Dynamic complexity:</span>
+</span><span class='line'><span class="n">field</span> <span class="ss">:top_comments</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="no">CommentType</span><span class="o">]</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">argument</span> <span class="ss">:limit</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span> <span class="n">default_value</span><span class="p">:</span> <span class="mi">5</span>
+</span><span class='line'>  <span class="n">complexity</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">child_complexity</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">ctx</span><span class="o">[</span><span class="ss">:current_user</span><span class="o">].</span><span class="n">admin?</span>
+</span><span class='line'>      <span class="c1"># no limit for admin users</span>
+</span><span class='line'>      <span class="mi">0</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="c1"># `child_complexity` is the value for selections</span>
+</span><span class='line'>      <span class="c1"># which were made on the items of this list.</span>
+</span><span class='line'>      <span class="c1">#</span>
+</span><span class='line'>      <span class="c1"># We don&#39;t know how many items will be fetched because</span>
+</span><span class='line'>      <span class="c1"># we haven&#39;t run the query yet, but we can estimate by</span>
+</span><span class='line'>      <span class="c1"># using the `limit` argument which we defined above.</span>
+</span><span class='line'>      <span class="n">args</span><span class="o">[</span><span class="ss">:limit</span><span class="o">]</span> <span class="o">*</span> <span class="n">child_complexity</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
+  </div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DRY GraphQL Definitions Using Interfaces]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/06/09/dry-graphql-definitions-using-interfaces/"/>
+    <updated>2017-06-09T11:10:47+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/06/09/dry-graphql-definitions-using-interfaces</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+  <p>We can make GraphQL Types and mutations DRY using interfaces. An Interface is an abstract type that contains a collection of types which implement some of the same fields. We can avoid specifying the same set of fields in different GraphQL Types and mutations by defining an interface and using in sharing Types and mutations.</p>
+<p>Interfaces can have fields, defined with a field, just like a GraphQL object type. Objects which implement this field inherit field definitions from the interface. An object type can override the inherited definition by redefining that field.</p>
+<p>For example, active record time stamps are common fields in Rails models. So we can avoid declaring these fields in all object types by declaring an interface <strong>ActiveRecordTimestamp</strong> with these fields and using it our object types.</p>
+We can define ActiveRecordTimestamp like this.
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/interfaces/active_record_timestamp.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActiveRecordTimestamp</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:InterfaceType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s1">&#39;ActiveRecordTimestamp&#39;</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:createdAt</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="ss">property</span><span class="p">:</span> <span class="ss">:created_at</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:updatedAt</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="ss">property</span><span class="p">:</span> <span class="ss">:updated_at</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+Since we created a new folder for interfaces, we have to tell Rails to autoload paths. Place below code in application.rb to autoload it.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/application.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">autoload_paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;app/graphql/interfaces&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+Now we can add defined interfaces in our object Type using <strong>interfaces</strong> keyword.
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/types/article_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ArticleType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Article&quot;</span>
+</span><span class='line'>  <span class="n">interfaces</span> <span class="o">[</span><span class="no">ActiveRecordTimestamp</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:id</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Int</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:title</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:body</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:comments</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="no">CommentType</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+Example for including multiple interfaces in Ruby object type.
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/types/comment_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">CommentType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Comment&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># multiple interfaces included using comma.</span>
+</span><span class='line'>  <span class="n">interfaces</span> <span class="o">[</span><span class="no">ActiveRecordTimestamp</span><span class="p">,</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Node</span><span class="o">.</span><span class="n">interface</span><span class="o">]</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:id</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Int</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:comment</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:user</span><span class="p">,</span> <span class="no">UserType</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+Now, this active record time stamp will be available in both above-mentioned object types.
+
+<p>We can use return_interfaces to define and reuse return types in different mutation definitions. The result of the resolve block will be passed to the field definitions in the interfaces, and both interface-specific and mutation-specific fields will be available to clients.</p>
+
+For example, we can define a interface which will define notification of a mutation.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/interfaces/mutation_result.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">MutationResult</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:InterfaceType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;MutationResult&quot;</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:success</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">Boolean</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:notice</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="no">ValidationError</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># encoding: utf-8</span>
+</span><span class='line'><span class="no">CreateArticle</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Mutation</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="n">return_field</span> <span class="ss">:title</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">return_field</span> <span class="ss">:body</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">return_interfaces</span> <span class="o">[</span><span class="no">MutationResult</span><span class="o">]</span><span class="p">,</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># clientMutationId will also be available automatically</span>
+</span><span class='line'>  <span class="n">resolve</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">input</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">article</span><span class="p">,</span> <span class="n">notice</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">create_with_input</span><span class="p">(</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="ss">success</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">persisted?</span>
+</span><span class='line'>      <span class="ss">notice</span><span class="p">:</span> <span class="n">notice</span>
+</span><span class='line'>      <span class="ss">title</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">title</span>
+</span><span class='line'>      <span class="ss">errors</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">errors</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+   </div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[GraphQL Ruby Error Handling]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/05/31/graphql-ruby-error-handling/"/>
+    <updated>2017-05-31T23:07:58+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/05/31/graphql-ruby-error-handling</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+    <p>GraphQL endpoints, we can expose errors as part of our schema. We should check <strong>errors</strong> fields to see if any errors in result data. For example if we query a field which is not existing in type system, we will get a error response. This type of errors is not supposed to be displayed to end users. It helps with debugging, error tracking etc.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;errors&quot;</span><span class="p">:</span> <span class="o">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Field &#39;user&#39; doesn&#39;t exist on type &#39;Article&#39;&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;locations&quot;</span><span class="p">:</span> <span class="o">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;column&quot;</span><span class="p">:</span> <span class="mi">5</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="o">]</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;fields&quot;</span><span class="p">:</span> <span class="o">[</span>
+</span><span class='line'>        <span class="s2">&quot;query&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;user&quot;</span>
+</span><span class='line'>      <span class="o">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="o">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+If a field's resolve function returns an ExecutionError, the error will be inserted into the response's <strong>errors</strong> key and the field will resolve to nil. It is often required to perform additional validation of the input parameters passed to GraphQL mutations, and provide user-friendly error messages in case validation fails or mutation cannot be completed successfully.
+<br/>
+For example, we could add errors to ArticleType:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/types/article_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ArticleType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Article&quot;</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:title</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="c1"># ...</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="n">types</span><span class="o">.</span><span class="n">String</span><span class="o">]</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">resolve</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span> <span class="n">obj</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">full_messages</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+Then, when clients create a article, they should check the errors field to see if it was successful:
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mutation</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">createArticle</span><span class="p">(</span><span class="ss">article</span><span class="p">:</span> <span class="p">{</span><span class="ss">title</span><span class="p">:</span> <span class="s2">&quot;GraphQL is Nice&quot;</span><span class="p">})</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">id</span>
+</span><span class='line'>    <span class="n">title</span>
+</span><span class='line'>    <span class="n">errors</span> <span class="c1"># in case the save failed</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+If errors are present (and id is null), the client knows that the operation was unsuccessful, and they can discover reason. If some part of our resolve function would raise an error, we can rescue it and add to the <strong>errors</strong> key by returning a GraphQL:: ExecutionError
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">resolve</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">article_params</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="s2">&quot;article&quot;</span><span class="o">].</span><span class="n">to_h</span>
+</span><span class='line'>  <span class="k">begin</span>
+</span><span class='line'>    <span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="n">post_params</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># on success, return the article:</span>
+</span><span class='line'>    <span class="n">article</span>
+</span><span class='line'>  <span class="k">rescue</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:RecordInvalid</span> <span class="o">=&gt;</span> <span class="n">err</span>
+</span><span class='line'>    <span class="c1"># on error, return an error:</span>
+</span><span class='line'>    <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ExecutionError</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Invalid input for Article: </span><span class="si">#{</span><span class="n">article</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">full_messages</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+If we don't want to <strong>begin ... rescue ... end</strong> in every field, we can wrap resolve functions in error handling.<br/> For example, we could make an object that wraps another resolver:
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/resolvers/rescue_form.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># Wrap field resolver `resolve_func` with a handler for `error_superclass`.</span>
+</span><span class='line'><span class="c1"># `RescueFrom` instances are valid field resolvers too.</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">RescueFrom</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">error_superclass</span><span class="p">,</span> <span class="n">resolve_func</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@error_superclass</span> <span class="o">=</span> <span class="n">error_superclass</span>
+</span><span class='line'>    <span class="vi">@resolve_func</span> <span class="o">=</span> <span class="n">resolve_func</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@resolve_func</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">rescue</span> <span class="vi">@error_superclass</span> <span class="o">=&gt;</span> <span class="n">err</span>
+</span><span class='line'>    <span class="c1"># Your error handling logic here:</span>
+</span><span class='line'>    <span class="c1"># - return an instance of `GraphQL::ExecutionError`</span>
+</span><span class='line'>    <span class="c1"># - or, return nil:</span>
+</span><span class='line'>    <span class="kp">nil</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+apply it to fields on an opt-in basis:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">field</span> <span class="ss">:create_article</span><span class="p">,</span> <span class="no">ArticleType</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># Wrap the resolve function with `RescueFrom.new(err_class, ...)`</span>
+</span><span class='line'>  <span class="n">resolve</span> <span class="no">RescueFrom</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:RecordInvalid</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="p">})</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<br/>
+Reference: <a href='http://graphql-ruby.org/'>GraphQL Ruby website</a>
+  </div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

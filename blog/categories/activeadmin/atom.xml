@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ActiveAdmin | Rails Kitchen]]></title>
+  <link href="http://tech.eshaiju.in/blog/categories/activeadmin/atom.xml" rel="self"/>
+  <link href="http://tech.eshaiju.in/"/>
+  <updated>2017-10-15T00:45:37+05:30</updated>
+  <id>http://tech.eshaiju.in/</id>
+  <author>
+    <name><![CDATA[Shaiju E]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Implement Dependent Select in Active Admin]]></title>
+    <link href="http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin/"/>
+    <updated>2015-02-15T14:53:50+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin</id>
+    <content type="html"><![CDATA[<div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+    One of my prevois project, I needed to populate product catalogs in second select box depends on the product selected in first select box in active admin input form. I implemented this by refering one of the example by <a href="https://github.com/abhidsm">@abidsm</a> in his github <a href="https://github.com/abhidsm/dependent-select">repo</a>. 
+<br/>
+<br/>
+<strong>Implementation</strong>
+<br/>
+<br/>
+First we need to add <a href="https://raw.githubusercontent.com/abhidsm/dependent-select/master/dependent_select.js">dependent_select.js</a> file.
+<br/>
+
+Now we need to add logic to <stong>catalogs_product.rb</stong> in admin folder.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>catalogs_product.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActiveAdmin</span><span class="o">.</span><span class="n">register</span> <span class="no">CatalogsProduct</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">form</span> <span class="k">do</span> <span class="o">|</span><span class="n">f</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">inputs</span> <span class="s2">&quot;Details&quot;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:product</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:select</span><span class="p">,</span> <span class="ss">:collection</span> <span class="o">=&gt;</span> <span class="no">Product</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">product</span><span class="o">|</span> <span class="o">[</span><span class="n">product</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">product</span><span class="o">.</span><span class="n">id</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">f</span><span class="o">.</span><span class="n">input</span> <span class="ss">:catalog</span><span class="p">,</span> <span class="ss">:as</span> <span class="o">=&gt;</span> <span class="ss">:select</span><span class="p">,</span> <span class="ss">:input_html</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s1">&#39;data-option-dependent&#39;</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">,</span> <span class="s1">&#39;data-option-url&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;/products/:catalogs_product_product_id/catalogs&#39;</span><span class="p">,</span> <span class="s1">&#39;data-option-observed&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;catalogs_product_product_id&#39;</span><span class="p">},</span> <span class="ss">:collection</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">product</span> <span class="p">?</span> <span class="n">resource</span><span class="o">.</span><span class="n">product</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">catalogs</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">catalog</span><span class="o">|</span> <span class="o">[</span><span class="n">catalog</span><span class="o">.</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">catalog</span><span class="o">.</span><span class="n">id</span><span class="o">]</span><span class="p">}</span> <span class="p">:</span> <span class="o">[]</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">actions</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+Here <strong>'data-option-dependent' => true</strong> will bind depentent select js to catalog input field.
+<br/><br/>
+<strong>'data-option-observed' => 'catalogs_product_product_id'</strong> specify that, the catalog field is depending on input in product field. <strong>catalogs_product_product_id</strong> is the id of the product field in this form. 
+<br/><br/>
+Now we need to specify the json method which will populate catalogs data depends on the product is selected in parent input select. 
+<br/>
+<strong>'data-option-url' => '/products/:catalogs_product_product_id/catalogs'</strong>
+<br/><br/>
+Now we need to add index method with json output in catelogs controller.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>catalogs_controller.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">CatalogsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="n">respond_to</span> <span class="ss">:json</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">index</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">params</span><span class="o">[</span><span class="ss">:product_id</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">product</span> <span class="o">=</span> <span class="no">Product</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:product_id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>      <span class="vi">@catalogs</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">catalogs</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="vi">@catalogs</span> <span class="o">=</span> <span class="no">Catalog</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">render</span> <span class="ss">:json</span> <span class="o">=&gt;</span> <span class="vi">@catalogs</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span><span class="o">|</span><span class="n">catalog</span><span class="o">|</span> <span class="p">{</span><span class="ss">:id</span> <span class="o">=&gt;</span> <span class="n">catalog</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="n">catalog</span><span class="o">.</span><span class="n">attr_name</span><span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>routes.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">DependentSelect</span><span class="p">:</span><span class="ss">:Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">root</span> <span class="ss">:to</span> <span class="o">=&gt;</span> <span class="s1">&#39;pages#main&#39;</span>
+</span><span class='line'>  <span class="n">resources</span> <span class="ss">:products</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">resources</span> <span class="ss">:catalogs</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+That's it now you can see catalog select box will be repopulated when we select a product in product select box. This can be implemented in any of formastic input forms.
+    </div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ActiveSkin - Flat Skin for Active Admin]]></title>
+    <link href="http://tech.eshaiju.in/blog/2015/01/19/activeskin-flat-skin-for-active-admin/"/>
+    <updated>2015-01-19T09:25:41+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2015/01/19/activeskin-flat-skin-for-active-admin</id>
+    <content type="html"><![CDATA[<div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        <a href="https://github.com/activeadmin/activeadmin">Active Admin</a> is a Ruby on Rails plugin for generating administration style interfaces. It abstracts common business application patterns to make it simple for developers to implement beautiful and elegant interfaces with very little effort.
+        <br/>
+        <br/>
+        Default interface of active admin:
+        <img src="/images/aa.png" width="800" height="250" title="" >
+        <br/>
+        We can customize the default style of active admin by over riding css values and and sass variables.
+<a href="https://github.com/rstgroup/active_skin">ActiveSkin</a> is a flat skin for active admin. We can even change basic colors of the theme by changing values of some variables.
+<br/>
+<br/>
+<img src="/images/active-skin-edit.png" width="390" height="230" title="" >
+<img src="/images/active-skin-menu.png" width="390" height="230">
+<strong>Installation</strong>
+<br/>
+Having active admin installed add the following line to your application's Gemfile:
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'active_skin'</span></code></pre></td></tr></table></div></figure></notextile></div>
+Now we need to include active skin css to our project.
+<br/>
+Add following code to <strong>active_admin.css.scss</strong><br/>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import "active_admin/mixins";
+</span><span class='line'>@import "active_admin/base";
+</span><span class='line'>...
+</span><span class='line'>@import "active_skin";
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure></notextile></div>
+Change logo by setting the $skinLogo variable above active_skin import line in active_admin.css.scss.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$skinLogo: url("admin_logo.png") no-repeat 0 0;</span></code></pre></td></tr></table></div></figure></notextile></div>
+You can even change basic colors of the theme by placing some other variables:
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$skinActiveColor: #001cee;
+</span><span class='line'>$skinHeaderBck: #002744;
+</span><span class='line'>$panelHeaderBck: #002744;
+</span><span class='line'>
+</span><span class='line'>@import "active_skin";</span></code></pre></td></tr></table></div></figure></notextile></div>
+<strong>Color examples</strong>
+
+<br/>
+<img src="/images/color1.png" width="390" height="230" title="" >
+<img src="/images/color3.png" width="390" height="230" title="" >
+<img src="/images/color4.png" width="1200" height="250" title="" >
+    </div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[In Page Editing in 'Active Admin' - Using Gem 'Best in Place']]></title>
+    <link href="http://tech.eshaiju.in/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/"/>
+    <updated>2014-04-30T18:20:30+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place</id>
+    <content type="html"><![CDATA[<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+<span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
+<br/>
+To add Best in Place to our app we first need to add its gem to our application's Gemfile and run bundle.
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'best_in_place', github: 'bernat/best_in_place'</span></code></pre></td></tr></table></div></figure></notextile></div>
+Require best in place in active_admin.js.coffee and initialise it
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#= require best_in_place
+</span><span class='line'>#= require best_in_place.purr
+</span><span class='line'>
+</span><span class='line'>$(document).ready ->
+</span><span class='line'>  jQuery(".best_in_place").best_in_place()</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+To make text field editable in active admin show page 
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :name do |project|
+</span><span class='line'> best_in_place project, :name, :type => :input,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+To make select field editable
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status do |project|
+</span><span class='line'>  best_in_place project, :status, :type => :select,:path =>[:admin,project],:collection => Project.statuses.map{|status| [status,status]}
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+Textarea can be make editable using following code
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row :status_description  do |project|
+</span><span class='line'>  best_in_place project, :status_description, :type => :textarea,:path =>[:admin,project]
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+For Editable Datepicker with formated output use <span style="font-weight: bold;">display_with</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>row "Planned Start Date" do |project|
+</span><span class='line'>  best_in_place project, :planned_start_date , :type => :date ,:path =>[:admin,project],  :display_with => lambda { |v| v.try(:strftime,'%b %d, %Y') }
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+</div>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Nested Forms for Belongs_to Relationship - ActiveAdmin]]></title>
+    <link href="http://tech.eshaiju.in/blog/2014/03/16/nested-forms-for-belongsto-relationship/"/>
+    <updated>2014-03-16T12:27:00+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2014/03/16/nested-forms-for-belongsto-relationship</id>
+    <content type="html"><![CDATA[<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Product&lt;ActiveRecord::Base
+</span><span class='line'> belongs_to :cost, :class_name => 'Currency', foreign_key: 'cost_id'
+</span><span class='line'> accepts_nested_attributes_for :cost
+</span><span class='line'> attr_accessor :cost_id
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Currency &lt; ActiveRecord::Base
+</span><span class='line'> def self.currency_types
+</span><span class='line'>   ['SAR','AED','USD','EUR','INR']
+</span><span class='line'> end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.registerProductdo
+</span><span class='line'> form do |f|
+</span><span class='line'>    f.semantic_errors *f.object.errors.keys
+</span><span class='line'>    f.inputs "Details" do
+</span><span class='line'>      f.input :name
+</span><span class='line'>      f.inputs "cost" do
+</span><span class='line'>         f.semantic_fields_for :cost_attributes  do |j|
+</span><span class='line'>            j.inputs do
+</span><span class='line'>              j.input :currency_type, :as => :select, :collection => Currency.currency_types,:label =>'Cost'
+</span><span class='line'>              j.input :value
+</span><span class='line'>            end
+</span><span class='line'>          end
+</span><span class='line'>        end
+</span><span class='line'>      end
+</span><span class='line'>    end
+</span><span class='line'>    f.actions
+</span><span class='line'> end
+</span><span class='line'>
+</span><span class='line'> controller do
+</span><span class='line'>   def permitted_params
+</span><span class='line'>    params.permit product: [:name,cost_attributes:[:id,:currency_type,:value]]
+</span><span class='line'>   end
+</span><span class='line'> end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+</div></div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[FullCalendar - Integration With Ruby on Rails]]></title>
+    <link href="http://tech.eshaiju.in/blog/2014/03/05/fullcalendar-integration-with-ruby-on/"/>
+    <updated>2014-03-05T13:02:00+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2014/03/05/fullcalendar-integration-with-ruby-on</id>
+    <content type="html"><![CDATA[<div class='post'>
+<div dir="ltr" style="text-align: left;" trbidi="on">
+
+  FullCalendar is a jQuery plugin that provides a full-sized drag drop calendar like the one below. It uses AJAX to fetch events on-the-fly for each month and is easily configured to use your own feed format (an extension is provided for Google Calendar. It is visually customizable and exposes hooks for user-triggered events (like clicking or dragging an event). It is open source licensed under an MIT license
+  <br/>
+<img border="0" src="http://1.bp.blogspot.com/-qa_L3JuaqW4/UvxSTF0KUgI/AAAAAAAAAUw/7kbq7plSXAU/s1600/calender.png" height="426" width="640" />
+<br/>
+Step 1 : Download the JQuery fullcalendar plugin by <a href="http://arshaw.com/fullcalendar/download/">here</a> and add fullcalender.js and fullcalender.css into javascripts and stylesheets folder.Fullcalendar is also available as a gem for Ruby on Rails which fits well with Asset Pipeline.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'fullcalendar-rails'</span></code></pre></td></tr></table></div></figure></notextile></div>
+Once the gem is installed, include fullcalendar javascript and css assets to your js and css file
+<br/>
+Step 2 : In view page index.html.erb or some other html.erb page add a div with id 'calendar'
+<br/>
+Then add following code to js file
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$(document).ready(function() {
+</span><span class='line'>   $("#calendar").fullCalendar({
+</span><span class='line'>     header: 
+</span><span class='line'>     left: "prev,next today",
+</span><span class='line'>     center: "title",
+</span><span class='line'>     right: "month,agendaWeek,agendaDay"
+</span><span class='line'>     defaultView: "month",
+</span><span class='line'>     height: 500,
+</span><span class='line'>     slotMinutes: 15,
+</span><span class='line'>     events: "/dashboard/get_events",
+</span><span class='line'>     timeFormat: "h:mm t{ - h:mm t} ",
+</span><span class='line'>     dragOpacity: "0.5"
+</span><span class='line'>  });
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure></notextile></div>
+Now we need to write a method to fetch Json data which we are going to display on calender
+<br/>
+In my example 
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class DashboardController &lt; ApplicationController
+</span><span class='line'>  respond_to :json
+</span><span class='line'>  def get_events
+</span><span class='line'>    @task = current_user.tasks
+</span><span class='line'>    events = []
+</span><span class='line'>    @task.each do |task|
+</span><span class='line'>      events &lt;&lt; {:id => task.id, :title => "#{task.taskable.try(:name)} : #{task.task}", :start => "#{task.planned_start_date}",:end => "#{task.planned_end_date}" }
+</span><span class='line'>    end
+</span><span class='line'>    render :text => events.to_json
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DemoApp::Application.routes.draw do
+</span><span class='line'>  resources :dashboard do
+</span><span class='line'>    get :get_events, on: :collection
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+that's it, now you can see the calendar in your dashboard
+<br/>
+
+</div></div>
+
+]]></content>
+  </entry>
+  
+</feed>

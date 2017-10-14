@@ -1,0 +1,1256 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails Kitchen</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="delayed_job_web is a gem which will provide the Resque inspired interface for delayed_job. This gem will provide a nice interface for monitor all &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tech.eshaiju.in/blog/page/2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Kitchen" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50480030-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-8803494276404199",
+        enable_page_level_ads: true
+      });
+  </script>
+</head>
+
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rails Kitchen</a></h1>
+  
+    <h2>It's a place to write on stuff I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tech.eshaiju.in" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://eshaiju.in">Portfolio</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/01/19/delayed-job-web-web-interface-for-monitor-delayed-job/">Delayed_job_web - a Resque Inspired Interface for Delayed_job</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-01-19T10:34:55+05:30" pubdate data-updated="true">Jan 19<span>th</span>, 2017</time>
+        
+           | <a href="/blog/2017/01/19/delayed-job-web-web-interface-for-monitor-delayed-job/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2017/01/19/delayed-job-web-web-interface-for-monitor-delayed-job/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+  <a href="https://github.com/ejschmitt/delayed_job_web">delayed_job_web</a> is a gem which will provide the <a href="https://github.com/resque/resque">Resque</a> inspired interface for delayed_job. This gem will provide a nice interface for monitor all activities in delayed jobs instead of searching it in the database directly.
+  <br/>
+   <strong>Some features: </strong>
+  <br/>
+  <ul style="padding-left: 5%;">
+    <li>Easily view jobs enqueued, working, pending, and failed.</li>
+    <li>Queue any single job. or all pending jobs, to run immediately.</li>
+    <li>Remove a failed job, or easily remove all failed jobs.</li>
+    <li>Watch delayed_job operation with live ajax polling.</li>
+    <li>Filter delayed_jobs by queue name.</li>
+  </ul>
+  <strong>Quick Start For Rails 5 Applications:</strong>
+  <br/><br/>
+  Add the dependency to your Gemfile and bundle it.
+
+  
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'delayed_job_web'
+</span><span class='line'>
+</span><span class='line'># For dependency resolution of 'delayed_job_web' gem
+</span><span class='line'># More info - https://github.com/ejschmitt/delayed_job_web/issues/84
+</span><span class='line'>gem 'rack-protection', github: 'sinatra/sinatra'
+</span><span class='line'>gem 'sinatra', github: 'sinatra/sinatra'</span></code></pre></td></tr></table></div></figure>
+
+
+  <img src="/images/delayed_job_web.png" width="1200" height="260" title="" >
+  <br/>
+  Add the following route to your application for accessing the interface, and retrying failed jobs.
+    
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>get '/delayed_job' => DelayedJobWeb, :anchor => false
+</span><span class='line'>put '/delayed_job' => DelayedJobWeb, :anchor => false
+</span><span class='line'>post '/delayed_job' => DelayedJobWeb, :anchor => false</span></code></pre></td></tr></table></div></figure>
+
+
+You can authenticate web interface by adding something like this,
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>authenticate :user, ->(u) { u.super_admin? } do
+</span><span class='line'>  get '/delayed_job' => DelayedJobWeb, :anchor => false
+</span><span class='line'>  put '/delayed_job' => DelayedJobWeb, :anchor => false
+</span><span class='line'>  post '/delayed_job' => DelayedJobWeb, :anchor => false
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+now web interface will be available only for super admin login.
+  </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/02/25/profile-api-endpoints-using-rack-mini-profiler/">Profile API Endpoints Using Rack-mini-profiler</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-25T13:54:28+05:30" pubdate data-updated="true">Feb 25<span>th</span>, 2016</time>
+        
+           | <a href="/blog/2016/02/25/profile-api-endpoints-using-rack-mini-profiler/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2016/02/25/profile-api-endpoints-using-rack-mini-profiler/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        <a href='https://github.com/MiniProfiler/rack-mini-profiler'>rack-mini-profiler</a> is a great tool for fine tuning our Ruby on Rails application. This gem will show all information about the queries in the web page we are loading. By checking this list, we can understand which part of our code takes the longest time and optimize that part of code.
+        <br/>
+      <br/>
+      <img src="/images/rack-mini-profiler.jpg" width="650" height="230" title="" >
+      <br/>
+      <br/>
+        This is very useful to inspect the performance of HTML pages, but it does not provide any default ways to review the performance of API endpoints. After some searching, I found out that, by default, the rack-mini-profiler gem collects the previous JSON call and will show all previous requests in the next loading HTML page. Using this feature we can achieve profiling API endpoints.
+        <br/>
+        <br/>
+
+        Following are the steps that I did to profile API request.
+        <br/>
+        <br/>
+        1- Make an API request using Postman or another client.
+        <br/>
+        2- Reload an HTML page, I loaded 404.html page by hitting URL http://localhost:3000/404.html
+        <br/>
+        3- This web page will show all profile information of previous API call.
+
+        <br/>
+        <br/>
+        <img src="/images/api-rack-mini-profiler.png" width="650" height="230" title="" >
+        <br/>
+        <br/>
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/02/16/slide-active-record-basics/">slide-Active Record Basics</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-16T10:02:47+05:30" pubdate data-updated="true">Feb 16<span>th</span>, 2016</time>
+        
+           | <a href="/blog/2016/02/16/slide-active-record-basics/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2016/02/16/slide-active-record-basics/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        In my current company <strong>Ruby Software Pvt.Ltd</strong>, I gave a session on Active Record Basics to New joiners. The primary goal of this session to give an introduction to active record basics and make them do basic CRUD operation using AR. 
+
+    <br/>
+        The slides of the session is available below..
+        <br/><br/>
+        <iframe src="//slides.com/shaijunonu/deck/embed" width="95%" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <br/><br/>
+
+        Hope you enjoyed my slides.
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/02/15/rails-5-belongs-to-associations-default-to-required-true/">Rails 5 &#8216;Belongs_to&#8217; Associations Default to Required True</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-15T17:46:29+05:30" pubdate data-updated="true">Feb 15<span>th</span>, 2016</time>
+        
+           | <a href="/blog/2016/02/15/rails-5-belongs-to-associations-default-to-required-true/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2016/02/15/rails-5-belongs-to-associations-default-to-required-true/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+    5.0.0.beta2 version is released. One of the changes I noticed is <strong>belongs_to</strong> associations by default required is true, that means if you create an object by setting foreign key to be nil it will throw a <strong>must exist</strong> validation error. This change will have some impact if you are migrating an existing rails 4 application in to rails 5 and foreign key is not mandatory in your application.
+    <br/>
+  For example, if your User model has city_id as forign key, then if you create user without adding city_id then rails 5 will throw validation error.
+  
+<figure class='code'><figcaption><span>user.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:city</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+   
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2.3.0 :003 > user = User.create(name:'Shaiju')
+</span><span class='line'>   (0.3ms)  BEGIN
+</span><span class='line'>   (0.2ms)  ROLLBACK
+</span><span class='line'> => #&lt;User id: nil, name: "Shaiju", city_id: nil, created_at: nil, updated_at: nil> 
+</span><span class='line'>2.3.0 :004 > user.errors
+</span><span class='line'> => #&lt;ActiveModel::Errors:0xa8d9a00 @base=#&lt;User id: nil, name: "Shaiju", city_id: nil, created_at: nil, updated_at: nil>, @messages={:city=>["must exist"]}, @details={:city=>[{:error=>:blank}]}></span></code></pre></td></tr></table></div></figure>
+
+  If we want to turn of this behavior we can use <strong>:optional => true </strong>. When set to true, the association will not have its presence validated.
+
+  
+<figure class='code'><figcaption><span>user.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ApplicationRecord</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:city</span><span class="p">,</span><span class="ss">optional</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2.3.0 :001 > user = User.create(name:'Shaiju')
+</span><span class='line'>   (0.3ms)  BEGIN
+</span><span class='line'>  SQL (25.2ms)  INSERT INTO `users` (`name`, `created_at`, `updated_at`) VALUES ('Shaiju', '2016-02-15 12:25:55', '2016-02-15 12:25:55')
+</span><span class='line'>   (81.6ms)  COMMIT
+</span><span class='line'> => #&lt;User id: 1, name: "Shaiju", city_id: nil, created_at: "2016-02-15 12:25:55", updated_at: "2016-02-15 12:25:55"></span></code></pre></td></tr></table></div></figure>
+
+ You can turn off this in entire application by setting Rails.application. config.active_record.belongs_to_required_by_default = false in <strong>config/initializers/active_record_belongs_to_required_by_default.rb</strong> file.
+ 
+<figure class='code'><figcaption><span>config/initializers/active_record_belongs_to_required_by_default.rb </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'> <span class="c1"># Be sure to restart your server when you modify this file.</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Require `belongs_to` associations by default. This is a new Rails 5.0</span>
+</span><span class='line'><span class="c1"># default, so it is introduced as a configuration option to ensure that apps</span>
+</span><span class='line'><span class="c1"># made on earlier versions of Rails are not affected when upgrading.</span>
+</span><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">active_record</span><span class="o">.</span><span class="n">belongs_to_required_by_default</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/02/15/apipi-dumping-examples-in-to-apipie-examples-file/">APIPI Dumping Examples Into Apipie_examples File</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-15T16:50:00+05:30" pubdate data-updated="true">Feb 15<span>th</span>, 2016</time>
+        
+           | <a href="/blog/2016/02/15/apipi-dumping-examples-in-to-apipie-examples-file/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2016/02/15/apipi-dumping-examples-in-to-apipie-examples-file/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+    <a href='https://github.com/Apipie/apipie-rails'>Apipie-rails</a> is a DSL and Rails engine for documenting your RESTful API. In older versions of apipi-rails we can dump all our exapmles in to <strong>apipie_examples.yml</strong> file. From apipie-rails 0.2.0 onwards format of storing examples changed from YAML to JSON: the default location is at <strong>doc/apipie_examples.json</strong>.
+    <br/><br/>
+    Example:
+    
+<figure class='code'><figcaption><span>doc/apipie_examples.json</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;channels#index&quot;</span><span class="p">:[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nt">&quot;verb&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v1/channels&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;query&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;show_in_doc&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;recorded&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;request_data&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;response_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nt">&quot;channels&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Channel 1&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;thumb_image_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/uploads/channel/thumb_image/1/channel1.png&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;language_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tamil&quot;</span>
+</span><span class='line'>            <span class="p">},</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Channel 3&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;thumb_image_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/uploads/channel/thumb_image/3/channel3.png&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;language_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tamil&quot;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>          <span class="nt">&quot;top_channels&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Channel 2&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;thumb_image_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/uploads/channel/thumb_image/2/channel2.png&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;language_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tamil&quot;</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>          <span class="nt">&quot;channels_count&quot;</span><span class="p">:</span> <span class="mi">2</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}],</span>
+</span><span class='line'>    <span class="nt">&quot;channels#show&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>        <span class="nt">&quot;verb&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/api/v1/channels/:id&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;query&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;show_in_doc&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;recorded&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;request_data&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;response_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;suraj comedy&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;language_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Malayalam&quot;</span>
+</span><span class='line'>          <span class="p">},</span>
+</span><span class='line'>          <span class="nt">&quot;videos&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Suraj Latest Comedy&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Malayalam Comedy Stage Show :&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;video_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.youtube.com/watch?v=tGawZvf_UMA&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;view_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2016-02-15T09:43:14.000Z&quot;</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;thumb_image_path&quot;</span><span class="p">:</span> <span class="s2">&quot;/uploads/video/thumb_image/4/080.jpg&quot;</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>          <span class="p">],</span>
+</span><span class='line'>          <span class="nt">&quot;top_videos&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>              <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>              <span class="nt">&quot;video&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Suraj-Shaji Latest Comedy&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Malayalam Comedy Stage Show : Pashanam Shaji Speaking pashanam shaji mazhavil manorama,Flowers tv Comedy Super Nite&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;video_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.youtube.com/watch?v=tGawZvf_UMQ&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;view_count&quot;</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2016-02-15T07:48:22.000Z&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="nt">&quot;thumb_image_path&quot;</span><span class="p">:</span> <span class="err">nil</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>          <span class="p">]</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">}]</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span></code></pre></td></tr></table></div></figure>
+
+    <img src="/images/channel_index.png" width="650" height="230" title="" >
+    <br/>
+    If you want to upgrade existing document in to newer version then The migration should be as easy as running:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake apipie:convert_examples</span></code></pre></td></tr></table></div></figure>
+
+This rake task will convert existing data from yml format in to json formatand store in doc/apipie_examples.json.
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/02/08/camaleon-cms-new-ruby-on-rails-cms-framework/">Camaleon CMS - Wordpress Alternative Built in Ruby on Rails 4</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-08T18:01:20+05:30" pubdate data-updated="true">Feb 8<span>th</span>, 2016</time>
+        
+           | <a href="/blog/2016/02/08/camaleon-cms-new-ruby-on-rails-cms-framework/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2016/02/08/camaleon-cms-new-ruby-on-rails-cms-framework/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+    <a href="http://camaleon.tuzitio.com/">Camaleon CMS</a> is a free and Open source Content Management System developed on Ruby on Rails 4 which was released 6 months back. This CMS is an alternative to wordpress for Ruby on Rails developers to manage advanced contents easily. Within 6 months of release, this project has <b>713</b> stars , <b>114</b> forks in github and  also have <b>16</b> contributors. 
+     <img src="/images/camaleon-cms.png" width="650" height="230" title="" >
+  <br/><br/>
+    Let’s have a look at its features.
+    <br/>
+    <strong>Plugins</strong>:<br/>
+This CMS is coming with a collection of plugins by default and we can simply enable it in our site using admin pannel. They have a <a href="http://camaleon.tuzitio.com/store/plugins">plugin store</a> which currently contains 14 plugins including Analytics, Ecommerce, Contact form, Post reorder and a few others.
+<br/>
+<strong>Security</strong>:<br/>
+
+Camaleon CMS protects your content from common attacks, such as Remote code execution, SQL injections, Advanced sessions security, Cross Site Scripting, Control of abusive requests, Cross-Site Request Forgery.
+<br/>
+<strong>Nice Design and UX</strong>:<br/>
+Camaleon CMS looks pretty good and modern, comparing to other CMS options available in Ruby on Rails. Camaleon CMS permit you to adapt the CMS to all your needs and not you adapt to the CMS. that is you can create your custom architecture with all attributes that you need for each kind of content.
+<br/>
+<strong>Site Speed</strong>:<br/>
+Camaleon CMS include a lot of cache strategies to optimize the site access velocity. Cache contents, Cache queries, Manifests (compress and join asset files), Customize your content visualization for Desktop, Mobile and Tablet are some of the strategies used in Camaleon CMS.
+<br/><br/>
+<strong>Installing Camaleon CMS</strong>
+<br/>
+You can install Camaleon-CMS with the following steps. 
+<br/>
+Create your rails project :
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails new my_project</span></code></pre></td></tr></table></div></figure>
+
+Add the gem in your Gemfile :
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem ‘camaleon_cms’</span></code></pre></td></tr></table></div></figure>
+
+Install the gem :
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+Install the CMS (This will copy some basic templates and plugins in your project) :
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails generate camaleon_cms:install</span></code></pre></td></tr></table></div></figure>
+
+Install required Gems for CMS and basic plugins
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+Create database structure
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake db:migrate</span></code></pre></td></tr></table></div></figure>
+
+Start your server
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails server # start your server</span></code></pre></td></tr></table></div></figure>
+
+Open a browser and navigate to <a href='http://localhost:3000'>http://localhost:3000</a> to see the initial setup page.
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/28/create-rails-application-from-edge-version-rails-5-0-beta/">Create Rails Application From Edge Version &#8211; 5.0.0.beta1.1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-01-28T10:34:32+05:30" pubdate data-updated="true">Jan 28<span>th</span>, 2016</time>
+        
+           | <a href="/blog/2016/01/28/create-rails-application-from-edge-version-rails-5-0-beta/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2016/01/28/create-rails-application-from-edge-version-rails-5-0-beta/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        <b>5.0.0.beta1.1</b> version is released which has some exciting stuffs like Action Cable, API mode, new Rails commands. To test all these new items we need to setup rails application from Edge Version. There are different ways to setup a rails project using Edge version. In this post I am explaining how I setup a project in Rails 5.0.0.beta.
+    <br/>
+        First We need to create an application folder with the name of the application and add a Gemfile.
+        
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mkdir app_name
+</span><span class='line'>cd app_name
+</span><span class='line'>touch Gemfile</span></code></pre></td></tr></table></div></figure>
+
+        and add the following into the Gemfile
+        
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source 'https://rubygems.org'
+</span><span class='line'>ruby '2.2.3'
+</span><span class='line'>
+</span><span class='line'>gem 'rails', :github => 'rails/rails'
+</span><span class='line'>gem 'arel', :github => 'rails/arel'
+</span><span class='line'>gem 'rack', :github =>  'rack/rack'</span></code></pre></td></tr></table></div></figure>
+
+Rails 5 requires Ruby 2.2.2 or greater.
+Setup the Ruby Environment to Ruby 2.2 or greater then do the bundle install 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rvm use 2.2.3
+</span><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+Generate Rails application using the following code
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle exec rails new . --force --dev</span></code></pre></td></tr></table></div></figure>
+
+The &#8211;force flag will allow Rails to overwrite our Gemfile, and the &#8211;dev flag tells Rails to point to the edge version of Rails that we just bundled.
+<br/>
+That&#8217;s it, now we will have a brand new Rails application with Edge Version.
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/09/travis-ci-integration-step-by-step-tutorial/">Travis Ci Integration - Step by Step Tutorial</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-08-09T21:00:06+05:30" pubdate data-updated="true">Aug 9<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/08/09/travis-ci-integration-step-by-step-tutorial/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/08/09/travis-ci-integration-step-by-step-tutorial/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+    <a href="https://travis-ci.org/">Travis-CI</a> is an open source, free and hosted continuous integration service that could build and run the unit tests for you, on every commit to a GitHub repository. It supports projects in a multitude of languages. The service allows you to configure steps that would be run before, after and during the build and test process, with just one YAMLfile (named .travis.yml) in the root of your repo. Apart from running the many unit tests in the project and letting you know how your latest check-in affected the health of the project, the Travis-CI service could also do custom build tasks like a post-build deployment. Testing your open source project is free. To integrate Travis Ci in a private project we have to purchase suitable <a href="https://travis-ci.com/plans">plan </a>.
+  <br/>
+    Features created to help projects and teams
+    <ul>
+        <li>Watch your tests as they run</li>
+        <li>Keep your config with your code</li>
+        <li>Slack, HipChat, Emails and more</li>
+        <li>A clean VM for every build</li>
+        <li>Run your tests in parallel</li>
+        <li>Linux and Mac (and iOS) supported</li>
+        <li>Great API and command line tool</li>
+  </ul>
+  <strong>To get started with Travis CI: </strong>
+  <br/>
+  <ol>
+      <li>
+        Sign into Travis CI with your GitHub account, accepting the GitHub access permissions confirmation.
+        </li>
+        <li>
+            Once you’re signed in, and Travis synchronized your repositories from GitHub, go to your profile page and enable Travis CI builds for your repository.  (Note: You can only enable Travis CI builds for repositories you have admin access to.)</li>
+            <img src="/images/Travis-CI-1.png" width="690" height="230" title="" >
+        <li>
+            Add .travis.yml to your project’s root folder
+        </li>
+        <li> 
+            Add settings to .travis.yml 
+        </li>
+        
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>language: ruby
+</span><span class='line'>rvm:
+</span><span class='line'>  - "2.2.0"
+</span><span class='line'>env:
+</span><span class='line'>  - DB=mysql
+</span><span class='line'>script: 
+</span><span class='line'>  - RAILS_ENV=test bundle exec rake db:migrate --trace
+</span><span class='line'>  - bundle exec rake db:test:prepare
+</span><span class='line'>  - bundle exec rspec spec/
+</span><span class='line'>before_script:
+</span><span class='line'>  - mysql -e 'create database myapp_test'
+</span><span class='line'>bundler_args: --binstubs=./bundler_stubs</span></code></pre></td></tr></table></div></figure>
+
+        <li>
+            Setup Database
+MySQL on Travis CI is started on boot, binds to 127.0.0.1 and requires authentication. You can connect using the username “travis” or “root” and a blank password. Note that the “travis” user does not have full MySQL privileges that the “root” user does.</li>
+        config/database.yml example for Ruby projects using ActiveRecord:
+    
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>test:
+</span><span class='line'>    adapter: mysql2
+</span><span class='line'>    database: myapp_test
+</span><span class='line'>    username: travis
+</span><span class='line'>    encoding: utf8</span></code></pre></td></tr></table></div></figure>
+
+    <li>
+    Commit this to GitHub
+(Note: Travis only runs a build on the commits you push after adding the repository to Travis.)
+    </li>
+    <li>
+        Wait for Travis CI to run a build on your repository, check the build status. (Travis CI sends you an email when build fails)
+    </li>
+    <img src="/images/travis-ci-2.png" width="390" height="230" title="" >
+<img src="/images/travis-ci-3.png" width="325" height="230">
+  </ol>
+  Example of Travis Ci builds can be seen <a href="https://travis-ci.org/eshaiju/demo_app_with_travis_ci">here.</a>
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/24/slide-playing-with-active-record-migrations/">Slide - Playing With Active Record Migrations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-24T11:58:13+05:30" pubdate data-updated="true">Jul 24<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/07/24/slide-playing-with-active-record-migrations/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/07/24/slide-playing-with-active-record-migrations/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        My Third session to the new joinies in <strong>Ruby Software Pvt.Ltd.</strong> is on Active Record Migrations.
+        <br/>
+        The slides of my session is available below ..
+        <br/><br/>
+        <iframe src="//slides.com/shaijunonu/playing_with_active_record_migrations/embed" width="95%" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <br/><br/>
+        Hope you enjoyed my slides.
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/10/slide-an-introduction-to-active-record-associations/">Slide - an Introduction to Active Record Associations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-10T12:35:59+05:30" pubdate data-updated="true">Jul 10<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/07/10/slide-an-introduction-to-active-record-associations/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/07/10/slide-an-introduction-to-active-record-associations/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        My second session to the new joinies in <strong>Ruby Software Pvt.Ltd.</strong> is on Active Record Associations. The primary goal of this session is to introduce the basic concepts of Active Record Associations.
+        <br/>
+        The slides of my session is available below ..
+        <br/><br/>
+        <iframe src="//slides.com/shaijunonu/active_record_association_basics/embed" width="95%" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            <br/><br/>
+        Hope you enjoyed my slides.
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type/">GraphQL Ruby Mutation With Input Object Type</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/">Deccan RubyConf 2017 - First Experience as a Speaker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/05/graphql-security-issues-and-solutions/">GraphQl Security Issues and Solutions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/06/09/dry-graphql-definitions-using-interfaces/">DRY GraphQL Definitions Using Interfaces</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/31/graphql-ruby-error-handling/">GraphQL Ruby Error Handling</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/">GraphQL -Mutation Query Implementation - Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/">GraphiQL IDE Alternatives for Development/Testing/Exploring GraphQL Servers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">Solving N+1 Query in GraphQL Using Graphql-batch</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <!-- Begin MailChimp Signup Form -->
+  <div id="mc_embed_signup">
+   <form action="//eshaiju.us10.list-manage.com/subscribe/post?u=7582b7373d9b93dff66b353bf&amp;id=469e7925c9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+
+      <div class="mc-field-group">
+  <label for="mce-EMAIL">
+    Enter your email to receive updates
+  </label>
+  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@email.com">
+      </div>
+      <div id="mce-responses" class="clear">
+  <div class="response" id="mce-error-response" style="display:none"></div>
+  <div class="response" id="mce-success-response" style="display:none"></div>
+      </div>
+      <div class="clear">
+  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+      </div>
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</section>
+
+<style type="text/css">
+	
+#mce-EMAIL{
+	width: 100%; height: 24px; margin-top: 8px; font-size: 14px;
+}
+
+#mc-embedded-subscribe {
+	  background-color: #5DA423;
+	  border: 1px solid #396516;
+	  width: auto;
+	  background: #2BA6CB;
+	  border: 1px solid #1E728C;
+	  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  color: white;
+	  cursor: pointer;
+	  display: inline-block;
+	  font-size: 14px;
+	  font-weight: bold;
+	  line-height: 1;
+	  margin: 8px 0 0 0;
+	  outline: none;
+	  padding: 10px 20px 11px;
+	  position: relative;
+	  text-align: center;
+	  text-decoration: none;
+	  -webkit-transition: background-color 0.15s ease-in-out;
+	  -moz-transition: background-color 0.15s ease-in-out;
+	  -o-transition: background-color 0.15s ease-in-out;
+	  transition: background-color 0.15s ease-in-out;
+    }
+</style>
+<section class="even">
+	<h1>
+	  <a href="https://github.com/eshaiju"><img src="/images/github_zpse87fc53d.jpg" width="40" height="40"></a>
+	  &nbsp;
+	  <a href="https://twitter.com/eshaiju"><img src="/images/twitter_zps447bd274.jpg" width="40" height="40"></a>
+	</h1>
+</section>
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eshaijugithubio';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480030-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

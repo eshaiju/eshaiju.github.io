@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Conference | Rails Kitchen]]></title>
+  <link href="http://tech.eshaiju.in/blog/categories/conference/atom.xml" rel="self"/>
+  <link href="http://tech.eshaiju.in/"/>
+  <updated>2017-10-15T00:45:37+05:30</updated>
+  <id>http://tech.eshaiju.in/</id>
+  <author>
+    <name><![CDATA[Shaiju E]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Deccan RubyConf 2017 - First Experience as a Speaker]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/"/>
+    <updated>2017-08-23T22:02:27+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+<img src="/images/decaan2.jpg" width="250" height="220">
+<img src="/images/deccan3.jpg" width="225" height="200">
+<img src="/images/deccan1.jpg" width="250" height="200">
+  <p><a href='http://www.deccanrubyconf.org/'>Deccan RubyConference</a> is a Single-Track Conference happening at Pune every year. Deccan RubyConf 2017 took place 12th Aug. 2017 at Sheraton Grand Pune. The conference covered areas like Ruby Language, Framework, and Tools by well-known speakers and also few first-time speakers from Ruby community.</p>
+
+ I got a chance to attend This year edition as speaker. My topic was <strong><a href='http://slides.com/shaijunonu/graphql-8'>Give REST a rest, use GraphQL for your next Ruby API</a></strong>. In my 25 minutes session, I talked about why should we use GraphQL and also about its implementation in Ruby. After conference session few people from different companies approached me and asked about GraphQL which was really a confidence booster for me as a speaker. Few people shared the issues they faced in GraphQL which given me new ideas and thought process.
+<img src="/images/conftalk1.jpg" width="800" height="260" title="Shaiju E" >
+<br/>
+<p>
+The conference started with the keynote by <strong><a href='https://twitter.com/timriley'>Tim Riley</a></strong>. Tim is from Australian and partner at Australian design agency Icelab. He talked about next generation Ruby web apps with dry-rb. Next talk was about leveraging the hidden powers of a database to make Rails, the swiss army knife of web development, manipulate and present data faster by <strong><a href='https://twitter.com/coderhs'>Harisankar</a></strong>, founder of Red Panthers. <strong><a href='https://twitter.com/_tachyons'>Aboobacker MK</a></strong> from Red Panthers talked about Garbage collector in Ruby and some practical tips to improve Ruby performance.</p>
+<img src="/images/tim.jpg" width="250" height="250" title="Tim Riley" >
+<img src="/images/hari.jpg" width="250" height="200" title="Harisankar" >
+<img src="/images/aboobacker.jpg" width="250" height="250" title="Aboobacker MK" >
+
+<p>
+After my session, <strong><a href='https://twitter.com/_kanuahs'>Shaunak Pagnis</a></strong> from Amura talked about the Active record and beyond.  After Lunch <strong><a href='https://twitter.com/citizen428'>Michael Kohl</a></strong> from Austria, currently, serves as CTO of Lockstap Labs talked about writing maintainable Rails applications. The sixth session was a panel discussion with the panels including <strong><a href='https://twitter.com/AjeyGore'>Ajey Gore</a></strong> - Group CTO of Go-Jek, <strong><a href='https://twitter.com/vipulnsward'>Vipul</a></strong> - Director BigBinary, Tim Riley, Michael Kohl, <strong><a href='https://twitter.com/gautamrege'>Gautam Rege</a></strong> -Director Josh Software discussed their experience of building a start-up and hiring strategies.
+</p>
+<img src="/images/shaunak.jpg" width="250" height="200" title="Shaunak Pagnis" >
+<img src="/images/Kohl.jpg" width="250" height="200" title="Michael Kohl" >
+<img src="/images/panel.jpg" width="250" height="200">
+<p>
+Followed by Panel Discussion, there were 9 flash talks which included 5 speakers from Kerala, talked about different ruby topics from beginner level to advanced level.  After flash talks, <strong><a href='https://twitter.com/Mistcrafter'>Douglas Vaz</a></strong> talked about HTTP/2 World. Conference session ended with Keynote by Ajey Gore. He talked about testing principles and why testing is important.</p>
+<img src="/images/ft1.jpg" width="250" height="200">
+<img src="/images/ft2.jpg" width="250" height="200">
+<img src="/images/ft3.jpg" width="250" height="200">
+<img src="/images/ft4.jpg" width="250" height="200">
+<img src="/images/ft5.jpg" width="250" height="200">
+<img src="/images/ft6.jpg" width="250" height="200">
+<img src="/images/ft7.jpg" width="250" height="200">
+<img src="/images/ft8.jpg" width="250" height="200">
+<img src="/images/ft9.jpg" width="250" height="200">
+<img src="/images/vaz.jpg" width="250" height="200" title="Douglas Vaz" >
+<img src="/images/ajay.jpg" width="250" height="200" title="Ajay Gore" >
+<p>
+After sessions, there were Open hours which gave opportunity meet and interact with different kind of people. For me, it was a great learning experience both listening to people share their contributions and ideas which really inspired me to code better and learn better.</p>
+All the photos from the conference is available <a href='https://photos.google.com/share/AF1QipP3Iw5g6YH6MRQnK_kkpXsfRrrJ0J_3VgNX89mifOJp54b6DxJSkOL0BTJAZ9C5yA?key=YjAyR0pGZ3hoZUh1SExPNXJxUk1OV1hhQkx6bjdB'>here</a>.
+  </div>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

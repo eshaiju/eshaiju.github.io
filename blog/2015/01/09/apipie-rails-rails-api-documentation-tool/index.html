@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Apipie-rails - Rails API Documentation Tool - Rails Kitchen</title>
+  <meta name="author" content="Shaiju E">
+
+  
+  <meta name="description" content="Apipie-rails is a DSL and Rails engine for documenting your RESTful API. Instead of the traditional use of #comments, Apipie lets you describe the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tech.eshaiju.in/blog/2015/01/09/apipie-rails-rails-api-documentation-tool">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Rails Kitchen" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-50480030-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-8803494276404199",
+        enable_page_level_ads: true
+      });
+  </script>
+</head>
+
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rails Kitchen</a></h1>
+  
+    <h2>It's a place to write on stuff I learned recently.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tech.eshaiju.in" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://eshaiju.in">Portfolio</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Apipie-rails - Rails API Documentation Tool</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-09T15:07:29+05:30" pubdate data-updated="true">Jan 9<span>th</span>, 2015</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        <a href="https://github.com/Apipie/apipie-rails">Apipie-rails</a> is a DSL and Rails engine for documenting your RESTful API. Instead of the traditional use of <strong>#comments</strong>, Apipie lets you describe the code, through the code. With Apipie you can specify the methods available to your API, describe every possible parameter. Apipie using Ruby syntax so no need to learn yet another syntax. The documentation is available from within your app (by default under the /apipie path.)
+        <br/>
+        <br/>
+        <strong>
+            Getting started
+        </strong>
+    <br/>
+    <br/>
+    Add Apipie to Gemfile
+    
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'apipie-rails'</span></code></pre></td></tr></table></div></figure>
+
+  
+  after bundle install, initialise Apipie
+  
+  
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g apipie:install</span></code></pre></td></tr></table></div></figure>
+
+
+  Now confirgure the basic settings in file config/initializers/apipie.rb
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Apipie.configure do |config|
+</span><span class='line'>  config.app_name                = "DemoApp"
+</span><span class='line'>  config.api_base_url            = "/api/v1"
+</span><span class='line'>  config.doc_base_url            = "/apidoc"
+</span><span class='line'>  # were is your API defined?
+</span><span class='line'>  config.api_controllers_matcher = "#{Rails.root}/app/controllers/api/v1/*.rb"
+</span><span class='line'>  config.app_info = "DemoApp REST API "
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+ 
+
+Now you can start documenting your resources and actions
+<br/>
+<br/>
+<strong>Resource Description:</strong>
+<br/>
+You can describe a resource on the controller level. The description is introduced by calling <strong>resource_description do &#8230; end</strong>.
+<br/>
+
+The following are some of keywords available (all are optional):
+<br/>
+<strong>resource_id</strong> - How the resource will be referenced in Apipie (paths, see command etc.); by default controller_name.downcase is used.
+<br/>
+<strong>name </strong> - Human readable name of resource. By default class.name.humanize is used.
+<br/>
+<strong>short </strong>- Short description of the resource (it&#8217;s shown on both the list of resources, and resource details)
+<br/>
+Example is given below : 
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>resource_description do
+</span><span class='line'>    short "API for managing User Profile"
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<img src="/images/API-documentation3.jpg" width="800" height="250" title="" >
+To see more options refer <a href = "https://github.com/Apipie/apipie-rails#dsl-reference">here </a>
+<br/>
+<br>
+<strong>
+    Method Description
+</strong>
+
+<br/>
+This using to describe methods available to your API.
+<br/>
+<strong>api</strong> - Describe how this method is exposed, and provide a short description. The first parameter is HTTP method (one of :GET/:POST/:PUT/:DELETE). The second parameter is the relative URL path which is mapped to this method. The last parameter is the methods short description. 
+<br/>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>api :GET, '/user', "Fetch User Profile"</span></code></pre></td></tr></table></div></figure>
+
+
+<strong>param</strong> - Look at Parameter description section for details.
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>param :user, Hash, :description => "User" do
+</span><span class='line'>  param :name, String, :desc => "Name", :required => true
+</span><span class='line'>  param :email, String, :desc => "Email", :required => false
+</span><span class='line'>  param :gender, String, :desc => "Gender (1: Male, 2: Female)", :required => true
+</span><span class='line'>  param :photo, ActionDispatch::Http::UploadedFile, :desc => "User Image", :required => false
+</span><span class='line'>  param :address, String, :desc => "Address", :required => false
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<strong>formats</strong> - Method level request / response formats.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>formats ['json']</span></code></pre></td></tr></table></div></figure>
+
+<strong>error</strong> - Describe each possible error that can happen while calling this method. HTTP response code and description can be provided.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>error :code => 401, :desc => "Unauthorized"
+</span><span class='line'>error :code => 404, :desc => "Not Found", :meta => {:anything => "you can think of"}</span></code></pre></td></tr></table></div></figure>
+
+
+<strong>description</strong> -Full method description, which will be converted into HTML by the chosen markup language processor.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>description &lt;&lt;-EOS
+</span><span class='line'>  == Books
+</span><span class='line'>  This API is used to fetch all the books.
+</span><span class='line'>EOS</span></code></pre></td></tr></table></div></figure>
+
+
+<strong>example</strong> - Provide an example of the server response; whole communication or response type. It will be formatted as code.
+<br>
+To see more options refer <a href="https://github.com/Apipie/apipie-rails#method-description">here</a>
+
+<br/>
+<br/>
+Example of a user controller with api documentation  is given below
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Api::V1::UsersController &lt; Api::ApiController
+</span><span class='line'>
+</span><span class='line'>  resource_description do
+</span><span class='line'>    short "API for managing User Profile"
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  api :GET, '/user', "Fetch User Profile"
+</span><span class='line'>  description &lt;&lt;-EOS
+</span><span class='line'>    == Fetch User Profile
+</span><span class='line'>     This API is used to fetch the user profile details.
+</span><span class='line'>    === Authentication required
+</span><span class='line'>     Authentication token has to be passed as part of the request. It can be passed as parameter(auth_token) or HTTP header(AUTH-TOKEN). 
+</span><span class='line'>  EOS
+</span><span class='line'>  formats ['json']
+</span><span class='line'>  error :code => 404, :desc => "User Profile not yet created"
+</span><span class='line'>
+</span><span class='line'>  def show
+</span><span class='line'>    if @user.nil?
+</span><span class='line'>      render :status => :not_found, :json => {:message => "User Profile not yet created"}
+</span><span class='line'>    else
+</span><span class='line'>      render :status => :ok, :json => {:user=>@user}
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  api :PUT, '/user', "Update User Profile"
+</span><span class='line'>  description &lt;&lt;-EOS
+</span><span class='line'>    == Update User Profile
+</span><span class='line'>     This API is used to update the user profile details.
+</span><span class='line'>    === Authentication required
+</span><span class='line'>     Authentication token has to be passed as part of the request. It can be passed as parameter(auth_token) or HTTP header(AUTH-TOKEN). 
+</span><span class='line'>  EOS
+</span><span class='line'>  error :code => 406, :desc => "User Profile not yet created"
+</span><span class='line'>  formats ['json']
+</span><span class='line'>  param :user, Hash, :description => "User" do
+</span><span class='line'>    param :name, String, :desc => "Name", :required => true
+</span><span class='line'>    param :email, String, :desc => "Email", :required => false
+</span><span class='line'>    param :gender, String, :desc => "Gender (1: Male, 2: Female)", :required => true
+</span><span class='line'>    param :photo, ActionDispatch::Http::UploadedFile, :desc => "User Image", :required => false
+</span><span class='line'>    param :address, String, :desc => "Address", :required => false
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def user_profile
+</span><span class='line'>    if @user.nil?
+</span><span class='line'>      render :status => :not_acceptable, :json => {:message => "User not exists"}
+</span><span class='line'>    else
+</span><span class='line'>      @user.update_attributes(users_params)
+</span><span class='line'>      @user.save!(:validate=>false)
+</span><span class='line'>      render :status => :ok, :json => {:user =>@user,:message => "User updated"}
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  private
+</span><span class='line'>
+</span><span class='line'>  def users_params
+</span><span class='line'>    params.require(:user).permit(:name, :email, :gender,  :photo,:address)
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<img src="/images/API-documentation.jpg" width="800" height="250" title="" >
+<img src="/images/API-documentation-2.jpg" width="800" height="250" title="" >
+<br/>
+we can add example data in <strong>doc/apipie_examples.yml</strong>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>users#show:
+</span><span class='line'>- verb: :GET
+</span><span class='line'>  path: /api/v1/user
+</span><span class='line'>  query:
+</span><span class='line'>  code: 200
+</span><span class='line'>  show_in_doc: 1
+</span><span class='line'>  recorded: false
+</span><span class='line'>  request_data:
+</span><span class='line'>  response_data:
+</span><span class='line'>    "user":
+</span><span class='line'>        "id": 3
+</span><span class='line'>        "email": "eshaiju@gmail.com"
+</span><span class='line'>        "name": "Shaiju E"
+</span><span class='line'>        "gender": "male"
+</span><span class='line'>        "photo_path": "http://localhost:3000/system/users/photos/000/000/003/medium/10297568_10152483241776742_8973517135655971471_s.jpg?1403523880"
+</span><span class='line'>        "address": ""</span></code></pre></td></tr></table></div></figure>
+
+    </div>
+</div>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Shaiju E</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-09T15:07:29+05:30" pubdate data-updated="true">Jan 9<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ruby-on-rails/'>Ruby On Rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tech.eshaiju.in/blog/2015/01/09/apipie-rails-rails-api-documentation-tool/" data-via="" data-counturl="http://tech.eshaiju.in/blog/2015/01/09/apipie-rails-rails-api-documentation-tool/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/01/08/spree-add-extra-fields-to-product-model-with-deface-and-decorator/" title="Previous Post: Spree - Add extra fields to product model with deface and decorator">&laquo; Spree - Add extra fields to product model with deface and decorator</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/01/13/password-policy-implemenation-with-devise-and-devise-security-extension/" title="Next Post: Password policy implementation with Devise and Devise Security Extension">Password policy implementation with Devise and Devise Security Extension &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type/">GraphQL Ruby Mutation With Input Object Type</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/">Deccan RubyConf 2017 - First Experience as a Speaker</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/05/graphql-security-issues-and-solutions/">GraphQl Security Issues and Solutions</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/06/09/dry-graphql-definitions-using-interfaces/">DRY GraphQL Definitions Using Interfaces</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/31/graphql-ruby-error-handling/">GraphQL Ruby Error Handling</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/">GraphQL -Mutation Query Implementation - Ruby on Rails</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/">GraphiQL IDE Alternatives for Development/Testing/Exploring GraphQL Servers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">Solving N+1 Query in GraphQL Using Graphql-batch</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Subscribe</h1>
+  <!-- Begin MailChimp Signup Form -->
+  <div id="mc_embed_signup">
+   <form action="//eshaiju.us10.list-manage.com/subscribe/post?u=7582b7373d9b93dff66b353bf&amp;id=469e7925c9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+
+      <div class="mc-field-group">
+  <label for="mce-EMAIL">
+    Enter your email to receive updates
+  </label>
+  <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="you@email.com">
+      </div>
+      <div id="mce-responses" class="clear">
+  <div class="response" id="mce-error-response" style="display:none"></div>
+  <div class="response" id="mce-success-response" style="display:none"></div>
+      </div>
+      <div class="clear">
+  <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+      </div>
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</section>
+
+<style type="text/css">
+	
+#mce-EMAIL{
+	width: 100%; height: 24px; margin-top: 8px; font-size: 14px;
+}
+
+#mc-embedded-subscribe {
+	  background-color: #5DA423;
+	  border: 1px solid #396516;
+	  width: auto;
+	  background: #2BA6CB;
+	  border: 1px solid #1E728C;
+	  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+	  color: white;
+	  cursor: pointer;
+	  display: inline-block;
+	  font-size: 14px;
+	  font-weight: bold;
+	  line-height: 1;
+	  margin: 8px 0 0 0;
+	  outline: none;
+	  padding: 10px 20px 11px;
+	  position: relative;
+	  text-align: center;
+	  text-decoration: none;
+	  -webkit-transition: background-color 0.15s ease-in-out;
+	  -moz-transition: background-color 0.15s ease-in-out;
+	  -o-transition: background-color 0.15s ease-in-out;
+	  transition: background-color 0.15s ease-in-out;
+    }
+</style>
+<section class="even">
+	<h1>
+	  <a href="https://github.com/eshaiju"><img src="/images/github_zpse87fc53d.jpg" width="40" height="40"></a>
+	  &nbsp;
+	  <a href="https://twitter.com/eshaiju"><img src="/images/twitter_zps447bd274.jpg" width="40" height="40"></a>
+	</h1>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Shaiju E -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'eshaijugithubio';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tech.eshaiju.in/blog/2015/01/09/apipie-rails-rails-api-documentation-tool/';
+        var disqus_url = 'http://tech.eshaiju.in/blog/2015/01/09/apipie-rails-rails-api-documentation-tool/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480030-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
