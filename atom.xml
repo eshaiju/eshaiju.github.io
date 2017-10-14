@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Kitchen]]></title>
   <link href="http://tech.eshaiju.in/atom.xml" rel="self"/>
   <link href="http://tech.eshaiju.in/"/>
-  <updated>2017-10-15T01:16:21+05:30</updated>
+  <updated>2017-10-15T01:17:35+05:30</updated>
   <id>http://tech.eshaiju.in/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -20,7 +20,7 @@
     <id>http://tech.eshaiju.in/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type</id>
     <content type="html"><![CDATA[<div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
-  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field. This method will do the job but it has some issues.</p>
+  <p>In the previous blog post about <a href='http://tech.eshaiju.in/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field. This method will do the job but it has some issues.</p>
   Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.
 
 <figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
