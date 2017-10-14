@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Kitchen]]></title>
   <link href="http://tech.eshaiju.in/atom.xml" rel="self"/>
   <link href="http://tech.eshaiju.in/"/>
-  <updated>2017-10-15T01:18:43+05:30</updated>
+  <updated>2017-10-15T01:25:30+05:30</updated>
   <id>http://tech.eshaiju.in/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -217,7 +217,7 @@ That&#8217;s it, we are done, now we can save new article using addArticle mutat
 </span></code></pre></td></tr></table></div></figure>
 
 <img src="http://tech.eshaiju.in/images/graphql-mutation.png" width="1200" height="260" title="" >
-
+You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
 
