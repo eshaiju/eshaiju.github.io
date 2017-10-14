@@ -11,9 +11,8 @@ categories:
 
 <div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
-  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field so for saving an object we need to instantiate article object by assigning each and every input params which is very difficult if out object has larger fields.</p>
-
-  <p>Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.</p>
+  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field. This method will do the job but it has some issues.</p>
+  Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.
 {%codeblock app/graphql/mutations/article_mutations.rb%}
 # encoding: utf-8
 module ArticleMutations
@@ -57,15 +56,15 @@ For saving this we need to instantiate article object by assigning each and ever
 {%codeblock app/graphql/mutations/article_mutations.rb%}
 article = Article.new(title: inputs[:title], body: inputs[:body])
 {%endcodeblock%}
-This way is very become ugly if our object contain lots fields. We can define and utilize mutation input params in the better way using InputObjectType. If we can specify article object as input_field instead of each field we can save object like below.
+This method become ugly if our object contain lots fields.
+We can define and utilize mutation input params in the better way using <strong>InputObjectType</strong>. If we can specify article object as input_field instead of each field we can save object like below.
 {%codeblock app/graphql/mutations/article_mutations.rb%}
 article = Article.new(inputs[:article].to_h)
 {%endcodeblock%}
 which is maintanable and easy to read.
-<br/>
 Lets see how we can achive this.
 <br/>
-<p>The first step is to define InputObjectType and declare that input object type as input_field. Here we are going to create InputObjectType in another folder inside our graphql folder for maintainability.</p>
+The first step is to define InputObjectType and declare that input object type as input_field. Here we are going to create InputObjectType in another folder inside our graphql folder for maintainability.
 
 {%codeblock app/graphql/input_objects/article_input_object_type.rb%}
 ArticleInputObjectType = GraphQL::InputObjectType.define do
@@ -74,7 +73,7 @@ ArticleInputObjectType = GraphQL::InputObjectType.define do
   input_field :body, !types.String
 end
 {%endcodeblock%}
-Since we created new folder for input_objects, we have to tell Rails to autoload paths. place below code in application.rb to autoload it.
+Since we created new folder for <strong>input_objects</strong>, we have to tell Rails to autoload paths. place below code in <strong>application.rb</strong> to autoload it.
 
 {%codeblock config/application.rb%}
 config.autoload_paths << Rails.root.join('app/graphql/input_objects')
