@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby on Rails | Rails Kitchen]]></title>
   <link href="http://tech.eshaiju.in/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://tech.eshaiju.in/"/>
-  <updated>2017-10-15T00:45:37+05:30</updated>
+  <updated>2017-10-15T01:14:57+05:30</updated>
   <id>http://tech.eshaiju.in/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -20,9 +20,8 @@
     <id>http://tech.eshaiju.in/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type</id>
     <content type="html"><![CDATA[<div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
-  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field so for saving an object we need to instantiate article object by assigning each and every input params which is very difficult if out object has larger fields.</p>
-
-  <p>Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.</p>
+  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field. This method will do the job but it has some issues.</p>
+  Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -99,16 +98,16 @@ For saving this we need to instantiate article object by assigning each and ever
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:title</span><span class="o">]</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:body</span><span class="o">]</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-This way is very become ugly if our object contain lots fields. We can define and utilize mutation input params in the better way using InputObjectType. If we can specify article object as input_field instead of each field we can save object like below.
+This method become ugly if our object contain lots fields.
+We can define and utilize mutation input params in the better way using <strong>InputObjectType</strong>. If we can specify article object as input_field instead of each field we can save object like below.
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">inputs</span><span class="o">[</span><span class="ss">:article</span><span class="o">].</span><span class="n">to_h</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 which is maintanable and easy to read.
-<br/>
 Lets see how we can achive this.
 <br/>
-<p>The first step is to define InputObjectType and declare that input object type as input_field. Here we are going to create InputObjectType in another folder inside our graphql folder for maintainability.</p>
+The first step is to define InputObjectType and declare that input object type as input_field. Here we are going to create InputObjectType in another folder inside our graphql folder for maintainability.
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/input_objects/article_input_object_type.rb</span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -122,7 +121,7 @@ Lets see how we can achive this.
 </span><span class='line'>  <span class="n">input_field</span> <span class="ss">:body</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-Since we created new folder for input_objects, we have to tell Rails to autoload paths. place below code in application.rb to autoload it.
+Since we created new folder for <strong>input_objects</strong>, we have to tell Rails to autoload paths. place below code in <strong>application.rb</strong> to autoload it.
 
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/application.rb</span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

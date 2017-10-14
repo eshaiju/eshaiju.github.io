@@ -9,7 +9,7 @@
   <meta name="author" content="Shaiju E">
 
   
-  <meta name="description" content="In the previous blog post about GraphQl mutation, we specified each field in input as input_field so for saving an object we need to instantiate &hellip;">
+  <meta name="description" content="In the previous blog post about GraphQl mutation, we specified each field in input as input_field. This method will do the job but it has some &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -122,9 +122,8 @@
 
   <div class="entry-content"><div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
-  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field so for saving an object we need to instantiate article object by assigning each and every input params which is very difficult if out object has larger fields.</p>
-
-  <p>Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.</p>
+  <p>In the previous blog post about <a href='http://localhost:4000/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field. This method will do the job but it has some issues.</p>
+  Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.
 
 <figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -207,7 +206,8 @@ For saving this we need to instantiate article object by assigning each and ever
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">title</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:title</span><span class="o">]</span><span class="p">,</span> <span class="ss">body</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:body</span><span class="o">]</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-This way is very become ugly if our object contain lots fields. We can define and utilize mutation input params in the better way using InputObjectType. If we can specify article object as input_field instead of each field we can save object like below.
+This method become ugly if our object contain lots fields.
+We can define and utilize mutation input params in the better way using <strong>InputObjectType</strong>. If we can specify article object as input_field instead of each field we can save object like below.
 
 <figure class='code'><figcaption><span>app/graphql/mutations/article_mutations.rb</span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -215,10 +215,9 @@ This way is very become ugly if our object contain lots fields. We can define an
 </span></code></pre></td></tr></table></div></figure>
 
 which is maintanable and easy to read.
-<br/>
 Lets see how we can achive this.
 <br/>
-<p>The first step is to define InputObjectType and declare that input object type as input_field. Here we are going to create InputObjectType in another folder inside our graphql folder for maintainability.</p>
+The first step is to define InputObjectType and declare that input object type as input_field. Here we are going to create InputObjectType in another folder inside our graphql folder for maintainability.
 
 
 <figure class='code'><figcaption><span>app/graphql/input_objects/article_input_object_type.rb</span></figcaption>
@@ -234,7 +233,7 @@ Lets see how we can achive this.
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-Since we created new folder for input_objects, we have to tell Rails to autoload paths. place below code in application.rb to autoload it.
+Since we created new folder for <strong>input_objects</strong>, we have to tell Rails to autoload paths. place below code in <strong>application.rb</strong> to autoload it.
 
 
 <figure class='code'><figcaption><span>config/application.rb</span></figcaption>
