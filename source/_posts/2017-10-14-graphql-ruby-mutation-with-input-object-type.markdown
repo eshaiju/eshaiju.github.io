@@ -120,6 +120,6 @@ mutation addArticle{
 }
 {%endcodeblock%}
 {% img /images/graphql-mutation.png 1200 260  %}
-
+You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
