@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Kitchen]]></title>
   <link href="http://tech.eshaiju.in/atom.xml" rel="self"/>
   <link href="http://tech.eshaiju.in/"/>
-  <updated>2017-10-16T12:07:26+05:30</updated>
+  <updated>2017-10-16T20:03:23+05:30</updated>
   <id>http://tech.eshaiju.in/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -314,6 +314,31 @@ That&#8217;s it, we are done, now we can save new article using addArticle mutat
 </span></code></pre></td></tr></table></div></figure>
 
 <img src="http://tech.eshaiju.in/images/graphql-mutation.png" width="1200" height="260" title="" >
+If we want to map camel case arguments into DB fields which are in snake case, we can use <strong>as</strong> keyword.
+
+<figure class='code'><figcaption><span>app/graphql/input_objects/comment_input_object_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">CommentInputObjectType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:InputObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s1">&#39;CommentInput&#39;</span>
+</span><span class='line'>  <span class="n">input_field</span> <span class="ss">:articleId</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:article_id</span>
+</span><span class='line'>  <span class="n">input_field</span> <span class="ss">:userId</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="ss">as</span><span class="p">:</span> <span class="ss">:user_id</span>
+</span><span class='line'>  <span class="n">input_field</span> <span class="ss">:comment</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+This will convert our input params in snake case so that we can assign this to the object without manually converting into snake case.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">inputs</span><span class="o">[</span><span class="ss">:comment</span><span class="o">].</span><span class="n">to_h</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="p">{</span><span class="s2">&quot;article_id&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;user_id&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="o">=&gt;</span><span class="s2">&quot;New comment&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
