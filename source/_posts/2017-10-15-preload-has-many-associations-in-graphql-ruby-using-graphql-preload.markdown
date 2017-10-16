@@ -19,7 +19,7 @@ Add this line to your application's Gemfile:
 {%codeblock Gemfile%}
 gem 'graphql-preload'
 {%endcodeblock%}
-Add enable_preloading to the schema file to be able to use this functionality.
+Add <strong>enable_preloading</strong> to the schema file to be able to use this functionality.
 
 {%codeblock app/graphql/graphql_ruby_sample_schema.rb%}
 GraphqlRubySampleSchema = GraphQL::Schema.define do
