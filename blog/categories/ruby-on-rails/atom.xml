@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby on Rails | Rails Kitchen]]></title>
   <link href="http://tech.eshaiju.in/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://tech.eshaiju.in/"/>
-  <updated>2017-10-15T01:25:30+05:30</updated>
+  <updated>2017-10-16T12:07:26+05:30</updated>
   <id>http://tech.eshaiju.in/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Preload Has_many Associations in Graphql-ruby Using Graphql-preload]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/10/15/preload-has-many-associations-in-graphql-ruby-using-graphql-preload/"/>
+    <updated>2017-10-15T17:11:06+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/10/15/preload-has-many-associations-in-graphql-ruby-using-graphql-preload</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+<p>In the previous post about <a href='http://tech.eshaiju.in/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/'>solving N+1 query in graphQL using graphql-batch</a>, we discussed batching queries using the <strong> graphql-batch</strong> gem. This works great for belongs_to relationships, but it is not useful for preloading has_many associations. For example, if you wanted the comments for each article, it would again produce N+1 queries. Luckily I found a gem <a href='https://github.com/ConsultingMD/graphql-preload'> graphql-preload</a> that solves this problem. The graphql-preload gem is created based on a <a href='https://gist.github.com/theorygeek/a1a59a2bf9c59e4b3706ac68d12c8434'>gist</a> by @theorygeek. This gem depends on the graphql-batch gem. so we need to keep graphql-batch settings in the schema for graphql-preload work. detailed explanation about graphql batch is given <a href='http://tech.eshaiju.in/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch'>here</a>.
+</p>
+<strong>Installation</strong>
+<br/><br/>
+Add this line to your application's Gemfile:
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'graphql-preload'</span></code></pre></td></tr></table></div></figure></notextile></div>
+Add <strong>enable_preloading</strong> to the schema file to be able to use this functionality.
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/graphql_ruby_sample_schema.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">GraphqlRubySampleSchema</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">query</span> <span class="no">QueryType</span>
+</span><span class='line'>  <span class="n">mutation</span> <span class="no">MutationType</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">use</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Batch</span>
+</span><span class='line'>  <span class="n">enable_preloading</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+Now, for the comments field, for example, we could write it like this:
+
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/types/article_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ArticleType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Article&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:comments</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="no">CommentType</span><span class="o">]</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">preload</span> <span class="ss">:comments</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+We can now throw a query like this at our API without the server with N+1 query problem for has_many association also.
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">query</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">articles</span><span class="p">{</span>
+</span><span class='line'>    <span class="nb">id</span>
+</span><span class='line'>    <span class="n">title</span>
+</span><span class='line'>    <span class="n">body</span>
+</span><span class='line'>    <span class="n">comments</span><span class="p">{</span>
+</span><span class='line'>      <span class="n">comment</span>
+</span><span class='line'>      <span class="n">user</span><span class="p">{</span>
+</span><span class='line'>        <span class="nb">name</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+Before preload
+<img src="/images/before_preload.png" width="1200" height="260">
+After preload
+<img src="/images/after_preload.png" width="1200" height="260">
+  </div>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[GraphQL Ruby Mutation With Input Object Type]]></title>
@@ -694,575 +783,6 @@ apply it to fields on an opt-in basis:
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <br/>
 Reference: <a href='http://graphql-ruby.org/'>GraphQL Ruby website</a>
-  </div>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[GraphQL -Mutation Query Implementation - Ruby on Rails]]></title>
-    <link href="http://tech.eshaiju.in/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/"/>
-    <updated>2017-05-15T17:37:28+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails</id>
-    <content type="html"><![CDATA[<div class='post'>
-  <div dir="ltr" style="text-align: left;" trbidi="on">
-    <p><strong>Mutation</strong> is a special type of query used to change data in the database like Creating, Editing or Deleting Records from a table or Store. These are the equivalent to the POST, PUT, PATCH and DELETE in HTTP/REST speak. Defining mutations is very similar to defining queries. The only difference is how you implement the logic inside the mutation. In mutation, we can control and specify the output data that API need to return after mutation procedure.</p>
-    <p>In this article, I am Adding a mutation query to add comments to an article which we discussed in <a href="http://tech.eshaiju.in/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">previous example</a>.</p>
-    To add mutations to your GraphQL schema, first we need to define a mutation type in mutations folder
-    <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/mutation_type.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">MutationType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Mutation&quot;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-Now we need to pass it into the schema
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/graphql_ruby_sample_schema.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">GraphqlRubySampleSchema</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">query</span> <span class="no">QueryType</span>
-</span><span class='line'>  <span class="n">mutation</span> <span class="no">MutationType</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-Like QueryType, MutationType is a root of the schema. Members of MutationType are mutation fields. For GraphQL in general, mutation fields are identical to query fields except that they have side-effects (which mutate application state, eg, update the database).<br/><br/>
-Since we created new folder for mutations, we have to tell Rails to autoload paths. Put below code in application.rb to autoload it.
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>config/application.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">autoload_paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;app/graphql/mutations&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-  <p>Now we need to define specific mutation query. Following are the process to define a mutation<br />- give operation a name <br />- declare its inputs<br />- declare its outputs<br />- declare the mutation procedure in resolve block.<br /> <strong>resolve</strong> should return a hash with a key for each of the <strong>return_fields</strong></p>
-  In out example, we need to define <strong>CommentMutations</strong> in mutations folder.
-  <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/comment_mutations.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># encoding: utf-8</span>
-</span><span class='line'><span class="k">module</span> <span class="nn">CommentMutations</span>
-</span><span class='line'>  <span class="no">Create</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Mutation</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s2">&quot;AddComment&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define input parameters</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:articleId</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:userId</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:comment</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define return parameters</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:article</span><span class="p">,</span> <span class="no">ArticleType</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">resolve</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">inputs</span><span class="o">[</span><span class="ss">:articleId</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="s1">&#39;Article not found&#39;</span> <span class="p">}</span> <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">comments</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">comments</span>
-</span><span class='line'>      <span class="n">new_comment</span> <span class="o">=</span> <span class="n">comments</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:userId</span><span class="o">]</span><span class="p">,</span> <span class="ss">comment</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:comment</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">new_comment</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>        <span class="p">{</span> <span class="ss">article</span><span class="p">:</span> <span class="n">article</span> <span class="p">}</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="n">new_comment</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">to_a</span> <span class="p">}</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-    Here <strong>input_field</strong> specify the input params we can pass in the query. In <strong>return_field</strong>, we can specify the fields returning after the update. Inside resolve block, we define the business logic. and <strong>resolve</strong> should return a hash with a key for each of the return_fields.<br/><br/>
-    After defining this, we need to add the mutation's derived field to the mutation type.
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/mutation_type.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">MutationType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Mutation&quot;</span>
-</span><span class='line'>  <span class="c1"># Add the mutation&#39;s derived field to the mutation type</span>
-</span><span class='line'>  <span class="n">field</span> <span class="ss">:addComment</span><span class="p">,</span> <span class="ss">field</span><span class="p">:</span> <span class="ss">CommentMutations</span><span class="p">:</span><span class="ss">:Create</span><span class="o">.</span><span class="n">field</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-Now we can try this mutation in GraphiQL:
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mutation</span> <span class="n">addComment</span><span class="p">{</span>
-</span><span class='line'>  <span class="n">addComment</span><span class="p">(</span><span class="ss">input</span><span class="p">:</span> <span class="p">{</span> <span class="ss">comment</span><span class="p">:</span> <span class="s2">&quot;New comment&quot;</span><span class="p">,</span> <span class="ss">articleId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">userId</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="n">article</span><span class="p">{</span>
-</span><span class='line'>      <span class="nb">id</span>
-</span><span class='line'>      <span class="n">comments</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">comment</span>
-</span><span class='line'>        <span class="n">user</span><span class="p">{</span>
-</span><span class='line'>          <span class="nb">name</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-Here’s a possible JSON response for that query:
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s2">&quot;addComment&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>      <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>        <span class="s2">&quot;comments&quot;</span><span class="p">:</span> <span class="o">[</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Good article&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaiju E&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Keep going&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaiju E&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Another Comment&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;David&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;New Comment&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaiju E&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Another Comment from User 2&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;David&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Another Comment from User 1&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaiju E&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;TEST&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaiju E&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">},</span>
-</span><span class='line'>          <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;New comment&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaiju E&quot;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>          <span class="p">}</span>
-</span><span class='line'>        <span class="o">]</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-We can call the same query by passing inputs using variables
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mutation</span> <span class="n">addComment</span><span class="p">(</span><span class="vg">$comments</span><span class="p">:</span> <span class="no">AddCommentInput</span><span class="o">!</span><span class="p">){</span>
-</span><span class='line'>  <span class="n">addComment</span><span class="p">(</span><span class="ss">input</span><span class="p">:</span> <span class="vg">$comments</span><span class="p">){</span>
-</span><span class='line'>    <span class="n">article</span><span class="p">{</span>
-</span><span class='line'>      <span class="nb">id</span>
-</span><span class='line'>      <span class="n">comments</span><span class="p">{</span>
-</span><span class='line'>        <span class="n">comment</span>
-</span><span class='line'>        <span class="n">user</span><span class="p">{</span>
-</span><span class='line'>          <span class="nb">name</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Query</span> <span class="no">Variabbles</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="s2">&quot;comments&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;New comment1&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;articleId&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>    <span class="s2">&quot;userId&quot;</span><span class="p">:</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<strong>$comments: AddCommentInput!</strong> will configure the variable <strong>$comments</strong> to take values from <strong>query variables</strong> section. <strong>input: $comments</strong> will pass $comments as input to mutation query.</p>
-<img src="/images/mutation.png" width="1200" height="260" title="" >
-
-Lets write another example for updation mutation. If we want to update a comment, we need to write UpdateComment mutation in comment_mutations.rb
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/comment_mutations.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># encoding: utf-8</span>
-</span><span class='line'><span class="k">module</span> <span class="nn">CommentMutations</span>
-</span><span class='line'>  <span class="no">Create</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Mutation</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s2">&quot;AddComment&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define input parameters</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:articleId</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:userId</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:comment</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">String</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define return parameters</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:article</span><span class="p">,</span> <span class="no">ArticleType</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">resolve</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">article</span> <span class="o">=</span> <span class="no">Article</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">inputs</span><span class="o">[</span><span class="ss">:articleId</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="s1">&#39;Article not found&#39;</span> <span class="p">}</span> <span class="k">if</span> <span class="n">article</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">comments</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">comments</span>
-</span><span class='line'>      <span class="n">new_comment</span> <span class="o">=</span> <span class="n">comments</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:userId</span><span class="o">]</span><span class="p">,</span> <span class="ss">comment</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:comment</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">new_comment</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>        <span class="p">{</span> <span class="ss">article</span><span class="p">:</span> <span class="n">article</span> <span class="p">}</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="n">new_comment</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">to_a</span> <span class="p">}</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="no">Update</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Mutation</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s2">&quot;UpdateComment&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define input parameters</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:id</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:comment</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:userId</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:articleId</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define return parameters</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:comment</span><span class="p">,</span> <span class="no">CommentType</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">resolve</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">comment</span> <span class="o">=</span> <span class="no">Comment</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">inputs</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="s1">&#39;Comment not found&#39;</span> <span class="p">}</span> <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">valid_inputs</span> <span class="o">=</span> <span class="ss">ActiveSupport</span><span class="p">:</span><span class="ss">:HashWithIndifferentAccess</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">instance_variable_get</span><span class="p">(</span><span class="ss">:@original_values</span><span class="p">)</span><span class="o">.</span><span class="n">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span> <span class="n">comment</span><span class="o">.</span><span class="n">respond_to?</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2">=&quot;</span><span class="o">.</span><span class="n">underscore</span> <span class="p">})</span><span class="o">.</span><span class="n">except</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">update_attributes</span><span class="p">(</span><span class="n">valid_inputs</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">{</span> <span class="ss">comment</span><span class="p">:</span> <span class="n">comment</span> <span class="p">}</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="n">comment</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">to_a</span> <span class="p">}</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-Main defference here is, we need to create <strong>valid_inputs</strong>. This will allow us mass assignment with update attributes with valied fields which we passed.<br/><br/>
-After defining this, we need to add the mutation's derived field to the mutation type.
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/mutation_type.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">MutationType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Mutation&quot;</span>
-</span><span class='line'>  <span class="c1"># Add the mutation&#39;s derived field to the mutation type</span>
-</span><span class='line'>  <span class="n">field</span> <span class="ss">:addComment</span><span class="p">,</span> <span class="ss">field</span><span class="p">:</span> <span class="ss">CommentMutations</span><span class="p">:</span><span class="ss">:Create</span><span class="o">.</span><span class="n">field</span>
-</span><span class='line'>  <span class="n">field</span> <span class="ss">:updateComment</span><span class="p">,</span> <span class="ss">field</span><span class="p">:</span> <span class="ss">CommentMutations</span><span class="p">:</span><span class="ss">:Update</span><span class="o">.</span><span class="n">field</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-Mutation for delete a comment and return post and deleted comment ID
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/comment_mutations.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># encoding: utf-8</span>
-</span><span class='line'><span class="k">module</span> <span class="nn">CommentMutations</span>
-</span><span class='line'>  <span class="no">Destroy</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Relay</span><span class="o">::</span><span class="no">Mutation</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>    <span class="nb">name</span> <span class="s1">&#39;DestroyComment&#39;</span>
-</span><span class='line'>    <span class="n">description</span> <span class="s1">&#39;Delete a comment and return post and deleted comment ID&#39;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define input parameters</span>
-</span><span class='line'>    <span class="n">input_field</span> <span class="ss">:id</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Define return parameters</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:deletedId</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:article</span><span class="p">,</span> <span class="no">ArticleType</span>
-</span><span class='line'>    <span class="n">return_field</span> <span class="ss">:errors</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">resolve</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">_obj</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">comment</span> <span class="o">=</span> <span class="no">Comment</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">inputs</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="p">{</span> <span class="ss">errors</span><span class="p">:</span> <span class="s1">&#39;Comment not found&#39;</span> <span class="p">}</span> <span class="k">if</span> <span class="n">comment</span><span class="o">.</span><span class="n">nil?</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="n">article</span> <span class="o">=</span> <span class="n">comment</span><span class="o">.</span><span class="n">article</span>
-</span><span class='line'>      <span class="n">comment</span><span class="o">.</span><span class="n">destroy</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="p">{</span> <span class="ss">article</span><span class="p">:</span> <span class="n">article</span><span class="o">.</span><span class="n">reload</span><span class="p">,</span> <span class="ss">deletedId</span><span class="p">:</span> <span class="n">inputs</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span> <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># Other mutations defined here....</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/graphql/mutations/mutation_type.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">MutationType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
-</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Mutation&quot;</span>
-</span><span class='line'>  <span class="c1"># Add the mutation&#39;s derived field to the mutation type</span>
-</span><span class='line'>  <span class="n">field</span> <span class="ss">:addComment</span><span class="p">,</span> <span class="ss">field</span><span class="p">:</span> <span class="ss">CommentMutations</span><span class="p">:</span><span class="ss">:Create</span><span class="o">.</span><span class="n">field</span>
-</span><span class='line'>  <span class="n">field</span> <span class="ss">:updateComment</span><span class="p">,</span> <span class="ss">field</span><span class="p">:</span> <span class="ss">CommentMutations</span><span class="p">:</span><span class="ss">:Update</span><span class="o">.</span><span class="n">field</span>
-</span><span class='line'>  <span class="n">field</span> <span class="ss">:destroyComment</span><span class="p">,</span> <span class="ss">field</span><span class="p">:</span> <span class="ss">CommentMutations</span><span class="p">:</span><span class="ss">:Destroy</span><span class="o">.</span><span class="n">field</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-Now we can try this mutation in GraphiQL:
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">mutation</span> <span class="n">destroyComment</span><span class="p">(</span><span class="vg">$comment</span><span class="p">:</span> <span class="no">DestroyCommentInput</span><span class="o">!</span><span class="p">){</span>
-</span><span class='line'>  <span class="n">destroyComment</span><span class="p">(</span><span class="ss">input</span><span class="p">:</span> <span class="vg">$comment</span><span class="p">){</span>
-</span><span class='line'>    <span class="n">errors</span>
-</span><span class='line'>    <span class="n">article</span><span class="p">{</span>
-</span><span class='line'>      <span class="nb">id</span>
-</span><span class='line'>      <span class="n">comments</span><span class="p">{</span>
-</span><span class='line'>        <span class="nb">id</span>
-</span><span class='line'>        <span class="n">comment</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Query</span> <span class="no">Variabbles</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">3</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
 

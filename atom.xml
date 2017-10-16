@@ -4,7 +4,7 @@
   <title><![CDATA[Rails Kitchen]]></title>
   <link href="http://tech.eshaiju.in/atom.xml" rel="self"/>
   <link href="http://tech.eshaiju.in/"/>
-  <updated>2017-10-15T01:25:30+05:30</updated>
+  <updated>2017-10-16T12:07:26+05:30</updated>
   <id>http://tech.eshaiju.in/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
@@ -12,6 +12,103 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Preload Has_many Associations in Graphql-ruby Using Graphql-preload]]></title>
+    <link href="http://tech.eshaiju.in/blog/2017/10/15/preload-has-many-associations-in-graphql-ruby-using-graphql-preload/"/>
+    <updated>2017-10-15T17:11:06+05:30</updated>
+    <id>http://tech.eshaiju.in/blog/2017/10/15/preload-has-many-associations-in-graphql-ruby-using-graphql-preload</id>
+    <content type="html"><![CDATA[<div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+<p>In the previous post about <a href='http://tech.eshaiju.in/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/'>solving N+1 query in graphQL using graphql-batch</a>, we discussed batching queries using the <strong> graphql-batch</strong> gem. This works great for belongs_to relationships, but it is not useful for preloading has_many associations. For example, if you wanted the comments for each article, it would again produce N+1 queries. Luckily I found a gem <a href='https://github.com/ConsultingMD/graphql-preload'> graphql-preload</a> that solves this problem. The graphql-preload gem is created based on a <a href='https://gist.github.com/theorygeek/a1a59a2bf9c59e4b3706ac68d12c8434'>gist</a> by @theorygeek. This gem depends on the graphql-batch gem. so we need to keep graphql-batch settings in the schema for graphql-preload work. detailed explanation about graphql batch is given <a href='http://tech.eshaiju.in/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch'>here</a>.
+</p>
+<strong>Installation</strong>
+<br/><br/>
+Add this line to your application&#8217;s Gemfile:
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'graphql-preload'</span></code></pre></td></tr></table></div></figure>
+
+Add <strong>enable_preloading</strong> to the schema file to be able to use this functionality.
+
+
+<figure class='code'><figcaption><span>app/graphql/graphql_ruby_sample_schema.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">GraphqlRubySampleSchema</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">query</span> <span class="no">QueryType</span>
+</span><span class='line'>  <span class="n">mutation</span> <span class="no">MutationType</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">use</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Batch</span>
+</span><span class='line'>  <span class="n">enable_preloading</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Now, for the comments field, for example, we could write it like this:
+
+
+<figure class='code'><figcaption><span>app/graphql/types/article_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ArticleType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Article&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:comments</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="no">CommentType</span><span class="o">]</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">preload</span> <span class="ss">:comments</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+We can now throw a query like this at our API without the server with N+1 query problem for has_many association also.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">query</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">articles</span><span class="p">{</span>
+</span><span class='line'>    <span class="nb">id</span>
+</span><span class='line'>    <span class="n">title</span>
+</span><span class='line'>    <span class="n">body</span>
+</span><span class='line'>    <span class="n">comments</span><span class="p">{</span>
+</span><span class='line'>      <span class="n">comment</span>
+</span><span class='line'>      <span class="n">user</span><span class="p">{</span>
+</span><span class='line'>        <span class="nb">name</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Before preload
+<img src="http://tech.eshaiju.in/images/before_preload.png" width="1200" height="260">
+After preload
+<img src="http://tech.eshaiju.in/images/after_preload.png" width="1200" height="260">
+  </div>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[GraphQL Ruby Mutation With Input Object Type]]></title>
@@ -2758,26 +2855,6 @@ MySQL on Travis CI is started on boot, binds to 127.0.0.1 and requires authentic
         The slides of my session is available below ..
         <br/><br/>
         <iframe src="//slides.com/shaijunonu/playing_with_active_record_migrations/embed" width="95%" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-            <br/><br/>
-        Hope you enjoyed my slides.
-    </div>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Slide - an Introduction to Active Record Associations]]></title>
-    <link href="http://tech.eshaiju.in/blog/2015/07/10/slide-an-introduction-to-active-record-associations/"/>
-    <updated>2015-07-10T12:35:59+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2015/07/10/slide-an-introduction-to-active-record-associations</id>
-    <content type="html"><![CDATA[<div class='post'>
-    <div dir="ltr" style="text-align: left;" trbidi="on">
-        My second session to the new joinies in <strong>Ruby Software Pvt.Ltd.</strong> is on Active Record Associations. The primary goal of this session is to introduce the basic concepts of Active Record Associations.
-        <br/>
-        The slides of my session is available below ..
-        <br/><br/>
-        <iframe src="//slides.com/shaijunonu/active_record_association_basics/embed" width="95%" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             <br/><br/>
         Hope you enjoyed my slides.
     </div>

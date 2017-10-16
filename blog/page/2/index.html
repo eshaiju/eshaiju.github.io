@@ -9,7 +9,7 @@
   <meta name="author" content="Shaiju E">
 
   
-  <meta name="description" content="delayed_job_web is a gem which will provide the Resque inspired interface for delayed_job. This gem will provide a nice interface for monitor all &hellip;">
+  <meta name="description" content="GraphQL is a query language for APIs developed by the Facebook team. This language gives clients the power to ask for exactly what they need and &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -88,6 +88,300 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/05/06/a-graphql-server-implementation-ruby-on-rails/">A GraphQL Server Implementation - Ruby on Rails</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2017-05-06T14:55:58+05:30" pubdate data-updated="true">May 6<span>th</span>, 2017</time>
+        
+           | <a href="/blog/2017/05/06/a-graphql-server-implementation-ruby-on-rails/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2017/05/06/a-graphql-server-implementation-ruby-on-rails/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+  <div dir="ltr" style="text-align: left;" trbidi="on">
+  <p><a href="http://graphql.org/">GraphQL </a>is a query language for APIs developed by the Facebook team. This language gives clients the power to ask for exactly what they need and nothing more makes it easier to evolve APIs over time and enables powerful developer tools. Facebook open sourced it in 2015.</p>
+  <div class="graphiqlVid">
+    <video autoplay="" loop="" playsinline="" style="margin-bottom: 0px;">
+      <source src="http://graphql.org/img/graphiql.mp4?x" type="video/mp4">
+    </video><small>video courtesy: <a href="http://graphql.org/">graphql.org</a></small>
+  </div>
+<br/>
+<p>A GraphQL request can be either <strong>a query</strong> (read operation) or <strong>a mutation </strong>(write operation). For both cases, the request is a simple string that a GraphQL service can interpret, execute, and resolve with data in a specified format.</p>
+
+<strong>Main features of GraphQL are:</strong> <br/><br/>
+
+<strong>Retrieve only the data your client needs in a single request - No over-fetching:</strong> <br/>
+<p>Send a GraphQL query to your API with the fields you want to fetch and get only that set of fields in return. Apps using GraphQL are fast and stable because they control the data they get, not the server.</p>
+
+<strong>Get many resources in a single round-trip:</strong>
+<p>We can create queries with a different combination of datasets which will avoid multiple requests to fetch required data, thereby eliminating overheads.</p>
+
+<strong>Describe what’s possible with a type system:</strong>
+<p>GraphQL APIs have a single endpoint and it organizes API with requesting types and fields.</p>
+
+<strong>Evolve your API without versions - maintainability:</strong>
+<p>Add new fields and types to your GraphQL API without impacting existing queries. Aging fields can be deprecated and hidden from tools. By using a single evolving version, GraphQL APIs give apps continuous access to new features and encourage cleaner, more maintainable server code.</p>
+
+<strong>GraphQL Queries:</strong>
+
+<p>Here’s an example of a GraphQL query that a client can use to ask a server about the name and email of user #1:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">user</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">firstName</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">lastName</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">email</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Here’s a possible JSON response for that query:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;firstName&quot;</span><span class="p">:</span> <span class="s2">&quot;Shaiju&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;lastName&quot;</span><span class="p">:</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;eshaiju@gmail.com&quot;</span>
+</span><span class='line'>     <span class="p">}</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<strong>GraphQL server implementation in Ruby On Rails Application</strong>
+
+<p>Here we are assuming, we have an existing ROR application with model Article and fields title and body.</p>
+You can install graphql from RubyGems by adding to your application’s Gemfile:
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Gemfile
+</span><span class='line'>gem "graphql"
+</span><span class='line'>gem 'graphiql-rails', group: :development</span></code></pre></td></tr></table></div></figure>
+
+Then, run bundle install.<br/><br/>
+Now you can get started with a few GraphQL generators:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g graphql:install</span></code></pre></td></tr></table></div></figure>
+
+
+This will:
+<ul><li>Set up a folder structure in app/graphql/</li>
+<li>Add schema definition</li>
+<li>Add a query type definition</li>
+<li>Add a route and controller for executing queries</li>
+
+After installing you can see your new schema by:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bundle install
+</span><span class='line'>rails server
+</span><span class='line'>open localhost:3000/graphiql</span></code></pre></td></tr></table></div></figure>
+
+After this, you can build a GraphQL server by hand or GraphQL generators
+<p>Here  I am building by hand.</p>
+
+Define some types:  Add article_type.rb in &#8216;types&#8217; folder which will define ArticleType
+
+<figure class='code'><figcaption><span>app/graphql/types/article_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ArticleType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Article&quot;</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:id</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Int</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:title</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:body</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">String</span>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:comments</span><span class="p">,</span> <span class="n">types</span><span class="o">[</span><span class="no">CommentType</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Now we need to build schema, which is what we use to query
+
+<figure class='code'><figcaption><span>app/graphql/types/query_type.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">QueryType</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:ObjectType</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="s2">&quot;Query&quot;</span>
+</span><span class='line'>  <span class="n">description</span> <span class="s2">&quot;The query root of this schema&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">field</span> <span class="ss">:article</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">type</span> <span class="no">ArticleType</span>
+</span><span class='line'>    <span class="n">argument</span> <span class="ss">:id</span><span class="p">,</span> <span class="o">!</span><span class="n">types</span><span class="o">.</span><span class="n">ID</span>
+</span><span class='line'>    <span class="n">description</span> <span class="s2">&quot;Find a Article by ID&quot;</span>
+</span><span class='line'>    <span class="n">resolve</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span> <span class="no">Article</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">args</span><span class="o">[</span><span class="s2">&quot;id&quot;</span><span class="o">]</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+This will query article by accepting ID as argument
+
+Then, build a schema with QueryType as the query entry point:
+
+Add following in  graphql_ruby_sample_schema.rb
+
+<figure class='code'><figcaption><span>app/graphql/graphql_ruby_sample_schema.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># encoding: utf-8</span>
+</span><span class='line'><span class="no">GraphqlRubySampleSchema</span> <span class="o">=</span> <span class="ss">GraphQL</span><span class="p">:</span><span class="ss">:Schema</span><span class="o">.</span><span class="n">define</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">query</span> <span class="no">QueryType</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Since, we created new folders we have to tell Rails to autoload paths. Put below code in application.rb to autoload graphql and types folder like so:
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">autoload_paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;app/graphql&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">autoload_paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;app/graphql/types&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+This schema is ready to serve GraphQL queries!. play around this query in GraphiQL.
+
+<br/><br/>Here’s an example of a GraphQL query that a client can use to ask a server about the title  of article #1:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">query</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">article</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">title</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+Here’s a possible JSON response for that query:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;article&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;A GraphQL Server&quot;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<img src="/images/graphql_query.png" width="1200" height="260" title="" >
+You can execute queries from a query string:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">query_string</span> <span class="o">=</span> <span class="s2">&quot;</span>
+</span><span class='line'><span class="s2">{</span>
+</span><span class='line'><span class="s2">  article(id: 1) {</span>
+</span><span class='line'><span class="s2">    id</span>
+</span><span class='line'><span class="s2">    title</span>
+</span><span class='line'><span class="s2">  }</span>
+</span><span class='line'><span class="s2">}&quot;</span>
+</span><span class='line'><span class="n">result_hash</span> <span class="o">=</span> <span class="no">GraphqlRubySampleSchema</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query_string</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">output</span><span class="p">:</span>
+</span><span class='line'><span class="c1"># {</span>
+</span><span class='line'><span class="c1">#   &quot;data&quot; =&gt; {</span>
+</span><span class='line'><span class="c1">#     &quot;article&quot; =&gt; {</span>
+</span><span class='line'><span class="c1">#        &quot;id&quot; =&gt; 1,</span>
+</span><span class='line'><span class="c1">#        &quot;title&quot; =&gt; &quot;A GraphQL Server&quot;</span>
+</span><span class='line'><span class="c1">#     }</span>
+</span><span class='line'><span class="c1">#   }</span>
+</span><span class='line'><span class="c1"># }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
+  </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1010,56 +1304,6 @@ MySQL on Travis CI is started on boot, binds to 127.0.0.1 and requires authentic
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/07/10/slide-an-introduction-to-active-record-associations/">Slide - an Introduction to Active Record Associations</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-07-10T12:35:59+05:30" pubdate data-updated="true">Jul 10<span>th</span>, 2015</time>
-        
-           | <a href="/blog/2015/07/10/slide-an-introduction-to-active-record-associations/#disqus_thread"
-             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/07/10/slide-an-introduction-to-active-record-associations/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-    <div dir="ltr" style="text-align: left;" trbidi="on">
-        My second session to the new joinies in <strong>Ruby Software Pvt.Ltd.</strong> is on Active Record Associations. The primary goal of this session is to introduce the basic concepts of Active Record Associations.
-        <br/>
-        The slides of my session is available below ..
-        <br/><br/>
-        <iframe src="//slides.com/shaijunonu/active_record_association_basics/embed" width="95%" height="420" scrolling="no" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-            <br/><br/>
-        Hope you enjoyed my slides.
-    </div>
-</div>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1075,6 +1319,10 @@ MySQL on Travis CI is started on boot, binds to 127.0.0.1 and requires authentic
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/10/15/preload-has-many-associations-in-graphql-ruby-using-graphql-preload/">Preload Has_many Associations in Graphql-ruby Using Graphql-preload</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type/">GraphQL Ruby Mutation With Input Object Type</a>
@@ -1102,10 +1350,6 @@ MySQL on Travis CI is started on boot, binds to 127.0.0.1 and requires authentic
     
       <li class="post">
         <a href="/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/">GraphiQL IDE Alternatives for Development/Testing/Exploring GraphQL Servers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">Solving N+1 Query in GraphQL Using Graphql-batch</a>
       </li>
     
   </ul>

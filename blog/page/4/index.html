@@ -9,7 +9,7 @@
   <meta name="author" content="Shaiju E">
 
   
-  <meta name="description" content="Apipie-rails is a DSL and Rails engine for documenting your RESTful API. Instead of the traditional use of #comments, Apipie lets you describe the &hellip;">
+  <meta name="description" content="One of my recent project was in banking domain. So I had to implement password policies, for that I used devise gem. Password policies : 1 - Enforce &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -88,6 +88,233 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/13/password-policy-implemenation-with-devise-and-devise-security-extension/">Password Policy Implementation With Devise and Devise Security Extension</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-13T14:31:48+05:30" pubdate data-updated="true">Jan 13<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/01/13/password-policy-implemenation-with-devise-and-devise-security-extension/#disqus_thread"
+             data-disqus-identifier="http://tech.eshaiju.in/blog/2015/01/13/password-policy-implemenation-with-devise-and-devise-security-extension/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><div class='post'>
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+     One of my recent project was in banking domain. So I had to implement password policies, for that I used <a href="https://github.com/plataformatec/devise">devise </a> gem.
+     <br/>
+     <br/>
+      <strong>Password policies :</strong><br/>
+      1 - Enforce password history - 5 password should be remembered<br/>
+        2 - maximum password age - 30 days<br/>
+        3 - minimum password length - 10 letters  <br/>
+        4 - password must meet complexity requirements - Should be a combination of letters, numbers and symbols<br/>
+        5 - Account lockout threshold -5 <br/>
+        6 - Account lockout duration - 30 minutes<br/>
+        7 - Email validation - Accept only emails of allowed set of domains <br/><br/>
+        Most of the requirents mentioned above are achivable with simple cofigurations in Devise initializer. But to implement Password expirable, Password archivable and password complexity requirements check I used  security extension <a href="https://github.com/phatworx/devise_security_extension"> devise_security_extension</a>.
+        <br/><br/>
+        In this post I assume that we already had devise setup in our project. Now we need to add <strong>devise_security_extension </strong> in to our project.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem 'devise_security_extension'</span></code></pre></td></tr></table></div></figure>
+
+After you installed Devise Security Extension you need to run the generator:
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails generate devise_security_extension:install</span></code></pre></td></tr></table></div></figure>
+
+The generator will inject the available configuration options into the existing Devise initializer.When you are done, you are ready to add Devise Security Extension modules on top of Devise modules to any of your Devise models.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>devise :password_expirable, :password_archivable, :expirable, :lockable</span></code></pre></td></tr></table></div></figure>
+
+I added this in <strong>User</strong> model
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class User &lt; ActiveRecord::Base
+</span><span class='line'>    devise :database_authenticatable, :registerable, :confirmable,
+</span><span class='line'>           :recoverable, :rememberable, :trackable, :validatable,
+</span><span class='line'>           :password_expirable, :password_archivable, :expirable, :lockable
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+<strong>1 - Enforce password history</strong>
+<br/>
+Uncomment configuration password_archiving_count and deny_old_passwords in Devise initializer and also add a migration creating <strong>old_passwords</strong> tables.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Devise.setup do |config|
+</span><span class='line'>  # How often save old passwords in archive
+</span><span class='line'>   config.password_archiving_count = 5
+</span><span class='line'>
+</span><span class='line'>  # Deny old password (true, false, count)
+</span><span class='line'>   config.deny_old_passwords = true
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>create_table :old_passwords do |t|
+</span><span class='line'>  t.string :encrypted_password, :null => false
+</span><span class='line'>  t.string :password_salt
+</span><span class='line'>  t.string :password_archivable_type, :null => false
+</span><span class='line'>  t.integer :password_archivable_id, :null => false
+</span><span class='line'>  t.datetime :created_at
+</span><span class='line'>end
+</span><span class='line'>add_index :old_passwords, [:password_archivable_type, :password_archivable_id], :name => :index_password_archivable</span></code></pre></td></tr></table></div></figure>
+
+
+<strong>2 - maximum password age - 30 days</strong>
+<br/>
+Uncomment configuration expire_password_after and change to 1.months and also add a migration to store .
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># config.expire_password_after = 1.months</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>create_table :the_resources do |t|
+</span><span class='line'>  # other devise fields
+</span><span class='line'>  t.datetime :password_changed_at
+</span><span class='line'>end
+</span><span class='line'>add_index :the_resources, :password_changed_at</span></code></pre></td></tr></table></div></figure>
+
+Replace our devise model with <strong>the_resources</strong>.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>create_table :users do |t|
+</span><span class='line'>  # other devise fields
+</span><span class='line'>  t.datetime :password_changed_at
+</span><span class='line'>end
+</span><span class='line'>add_index :users, :password_changed_at</span></code></pre></td></tr></table></div></figure>
+
+<strong>3 - minimum password length - 10 letters</strong>  
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Range for password length.
+</span><span class='line'>config.password_length = 10..128</span></code></pre></td></tr></table></div></figure>
+
+<strong>4 - password must meet complexity requirements - Should be a combination of letters, numbers and symbols</strong>
+   <br/>Add password_regex with Regular expression which satisfies our needs.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Need 1 char of A-Z, a-z and 0-9 and special charactor
+</span><span class='line'>config.password_regex = /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W])/</span></code></pre></td></tr></table></div></figure>
+
+<strong>5 - Account lockout threshold -5 </strong>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Number of authentication tries before locking an account if lock_strategy
+</span><span class='line'># is failed attempts.
+</span><span class='line'>config.maximum_attempts = 5</span></code></pre></td></tr></table></div></figure>
+
+<strong>6 - Account lockout duration - 30 minutes</strong>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Time interval to unlock the account if :time is enabled as unlock_strategy.
+</span><span class='line'>config.unlock_in = 30.minutes</span></code></pre></td></tr></table></div></figure>
+
+<strong>7 - Email validation - Accept only emails of allowed set of domains</strong>
+<br/>
+  For this, I added a custom validator which will check the domain name of user entered an email.
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>validate :presence_of_domain_in_email
+</span><span class='line'>
+</span><span class='line'>def presence_of_domain_in_email
+</span><span class='line'>   email_domain = email.split("@").last.downcase
+</span><span class='line'>   allowed_domains = User.allowed_domains
+</span><span class='line'>   unless allowed_domains[email_domain]
+</span><span class='line'>       errors.add :email, "This email domain is not valid. "
+</span><span class='line'>   end
+</span><span class='line'>end
+</span><span class='line'>  
+</span><span class='line'>def self.allowed_domains
+</span><span class='line'>  {
+</span><span class='line'>      'gmail.com' =>'gmail.com',
+</span><span class='line'>      'example.com' => 'example.com',
+</span><span class='line'>      'example1.in' =>'example1.in'
+</span><span class='line'>
+</span><span class='line'>  }
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+    </div>
+</div>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1281,111 +1508,6 @@ Given Project, Task,  and Activity, I&#8217;ve managed to set up has_one :throug
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Autocomplete Using Chosen in Rails Active_admin</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-01T16:29:00+05:30" pubdate data-updated="true">Jan 1<span>st</span>, 2014</time>
-        
-           | <a href="/blog/2014/01/01/autocomplete-using-chosen-in-rails/#disqus_thread"
-             data-disqus-identifier="http://tech.eshaiju.in/blog/2014/01/01/autocomplete-using-chosen-in-rails/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class='post'>
-<div dir="ltr" style="text-align: left;" trbidi="on">
-
-In one of my recent project, I need to implement an autocomplete in active_admin interface to select one or more users from the user list. I tried googling on this and zeroed in on the library Chosen.Chosen by default supports multiple select, selected state.Chosen is available as a gem for Ruby on Rails which fits well with Asset Pipeline.
-<br/>Include Chosen gem in your Gemfile.
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem ‘chosen-rails’</span></code></pre></td></tr></table></div></figure>
-Once the gem is installed, include chosen javascript assets to your js file. 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//= require chosen-jquery</span></code></pre></td></tr></table></div></figure>
-In /app/admin/modelname.rb
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ActiveAdmin.register Modlename do
-</span><span class='line'>  #Customize creates and edit form
-</span><span class='line'>  form do |f|
-</span><span class='line'>    f.inputs do
-</span><span class='line'>       f.input :name
-</span><span class='line'>       f.input :othermodel, :input_html => { :class => "chosen-input" } # other model with has_many relation ship
-</span><span class='line'>    end
-</span><span class='line'>    f.buttons
-</span><span class='line'>  end   
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-in active_admin.js
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$(document).ready(function(){
-</span><span class='line'>   $(".chosen-input").chosen();
-</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
-if you are using coffee script instead of js then use this 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ->
-</span><span class='line'>  # enable chosen js
-</span><span class='line'>  $('.chosen-input').chosen
-</span><span class='line'>    allow_single_deselect: true
-</span><span class='line'>    no_results_text: 'No results matched'</span></code></pre></td></tr></table></div></figure>
-Then, include Chosen stylesheet assets to your css file.
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>*= require chosen</span></code></pre></td></tr></table></div></figure>
-To include more details check <a href='http://harvesthq.github.io/chosen/'>Here </a>
-<br/>
-Thats it, you will have a nice autocomplte with multiselect . Happy coding…
-<br/><br/>
-</div></div>
-<h2>Comments</h2>
-<div class='comments'>
-<div class='comment'>
-<div class='author'>Lobna Mohamed</div>
-<div class='content'>
-Thanks for the good post, but does not save data to the database<br />I guess it related to permit_params I am trying this <br />permit_params :name, :othermodel_ids<br />but still not working, have you another idea??</div>
-
-
-</div>
-</div>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1401,6 +1523,10 @@ Thanks for the good post, but does not save data to the database<br />I guess it
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/10/15/preload-has-many-associations-in-graphql-ruby-using-graphql-preload/">Preload Has_many Associations in Graphql-ruby Using Graphql-preload</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2017/10/14/graphql-ruby-mutation-with-input-object-type/">GraphQL Ruby Mutation With Input Object Type</a>
@@ -1428,10 +1554,6 @@ Thanks for the good post, but does not save data to the database<br />I guess it
     
       <li class="post">
         <a href="/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/">GraphiQL IDE Alternatives for Development/Testing/Exploring GraphQL Servers</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">Solving N+1 Query in GraphQL Using Graphql-batch</a>
       </li>
     
   </ul>
