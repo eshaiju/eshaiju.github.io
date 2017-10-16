@@ -121,8 +121,6 @@ mutation addArticle{
 {%endcodeblock%}
 {% img /images/graphql-mutation.png 1200 260  %}
 If we want to map camel case arguments into DB fields which are in snake case, we can use <strong>as</strong> keyword.
-<br/>
-Example:
 {%codeblock app/graphql/input_objects/comment_input_object_type.rb%}
 CommentInputObjectType = GraphQL::InputObjectType.define do
   name 'CommentInput'
@@ -130,7 +128,12 @@ CommentInputObjectType = GraphQL::InputObjectType.define do
   input_field :userId, !types.ID, as: :user_id
   input_field :comment, !types.String
 end
-{%end%}
+{%endcodeblock%}
+This will convert our input params in snake case so that we can assign this to the object without manually converting into snake case.
+{%codeblock lang:ruby%}
+inputs[:comment].to_h
+=> {"article_id"=>"1", "user_id"=>"1", "comment"=>"New comment"}
+{%endcodeblock%}
 You can see sample code <a href="https://github.com/eshaiju/graphql-ruby-sample">here</a>.
   </div>
 </div>
