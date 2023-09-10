@@ -14,7 +14,7 @@ categories:
   <div dir="ltr" style="text-align: left;" trbidi="on">
     <p>One of the most important pain points in GraphQL is the problem thats commonly referred to as N+1 SQL queries. GraphQL query fields are designed to be stand-alone functions, and resolving those fields with data from a database might result in a new database request per resolved field.</p>
     <p>For a simple RESTful API endpoint logic, it's easy to analyze, detect, and solve N+1 issues by enhancing the constructed SQL queries. For GraphQL dynamically resolved fields, it's not that simple.</p>
-    For example, Consider the GraphQL query to fetch article, its comments and commented user which I mentioned in <a href="http://tech.eshaiju.in/blog/2017/05/08/graphql-server-nested-query-implemenation-example-in-ruby-on-rails/">previous post</a>.
+    For example, Consider the GraphQL query to fetch article, its comments and commented user which I mentioned in <a href="https://tech.eshaiju.com/blog/2017/05/08/graphql-server-nested-query-implemenation-example-in-ruby-on-rails/">previous post</a>.
     {%codeblock lang:ruby%}
 query {
   acticle(id: 1){

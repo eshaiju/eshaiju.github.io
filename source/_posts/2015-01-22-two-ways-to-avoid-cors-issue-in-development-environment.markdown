@@ -30,8 +30,8 @@ We can solve the CORS issue in different ways. The best solution is to implement
       Allow from all 
     </Proxy> 
   
-    ProxyPass /api http://eshaiju.in/api 
-    ProxyPassReverse /api http://eshaiju.in/api 
+    ProxyPass /api https://eshaiju.com/api 
+    ProxyPassReverse /api https://eshaiju.com/api 
              
 ErrorLog /var/log/apache2/error.log 
                

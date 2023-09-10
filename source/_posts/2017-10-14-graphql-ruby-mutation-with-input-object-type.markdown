@@ -11,7 +11,7 @@ categories:
 
 <div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
-  <p>In the previous blog post about <a href='http://tech.eshaiju.in/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field. This method will do the job but it has some issues.</p>
+  <p>In the previous blog post about <a href='https://tech.eshaiju.com/blog/2017/05/15/graphql-mutation-query-implementation-ruby-on-rails/'>GraphQl mutation</a>, we specified each field in input as input_field. This method will do the job but it has some issues.</p>
   Consider an example mutation for saving an article. Here we used the input_field method without InputObjectType.
 {%codeblock app/graphql/mutations/article_mutations.rb%}
 # encoding: utf-8

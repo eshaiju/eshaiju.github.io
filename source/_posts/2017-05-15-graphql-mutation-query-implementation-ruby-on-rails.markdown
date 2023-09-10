@@ -13,7 +13,7 @@ categories:
 <div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
     <p><strong>Mutation</strong> is a special type of query used to change data in the database like Creating, Editing or Deleting Records from a table or Store. These are the equivalent to the POST, PUT, PATCH and DELETE in HTTP/REST speak. Defining mutations is very similar to defining queries. The only difference is how you implement the logic inside the mutation. In mutation, we can control and specify the output data that API need to return after mutation procedure.</p>
-    <p>In this article, I am Adding a mutation query to add comments to an article which we discussed in <a href="http://tech.eshaiju.in/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">previous example</a>.</p>
+    <p>In this article, I am Adding a mutation query to add comments to an article which we discussed in <a href="https://tech.eshaiju.com/blog/2017/05/09/solving-n-plus-1-query-in-graphql-using-graphql-batch/">previous example</a>.</p>
     To add mutations to your GraphQL schema, first we need to define a mutation type in mutations folder
     {%codeblock app/graphql/mutations/mutation_type.rb%}
 MutationType = GraphQL::ObjectType.define do
