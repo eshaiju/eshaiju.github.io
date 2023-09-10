@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://tech.eshaiju.in/sitemap.xml 
+Sitemap: https://tech.eshaiju.com/sitemap.xml 

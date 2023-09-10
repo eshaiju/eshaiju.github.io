@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: GraphiQL | Rails Kitchen]]></title>
-  <link href="http://tech.eshaiju.in/blog/categories/graphiql/atom.xml" rel="self"/>
-  <link href="http://tech.eshaiju.in/"/>
+  <link href="https://tech.eshaiju.com/blog/categories/graphiql/atom.xml" rel="self"/>
+  <link href="https://tech.eshaiju.com/"/>
   <updated>2017-10-16T20:03:23+05:30</updated>
-  <id>http://tech.eshaiju.in/</id>
+  <id>https://tech.eshaiju.com/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[GraphiQL IDE Alternatives for Development/Testing/Exploring GraphQL Servers]]></title>
-    <link href="http://tech.eshaiju.in/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/"/>
+    <link href="https://tech.eshaiju.com/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers/"/>
     <updated>2017-05-11T20:17:26+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers</id>
+    <id>https://tech.eshaiju.com/blog/2017/05/11/graphiql-ide-alternativs-for-development-testing-exploring-graphql-servers</id>
     <content type="html"><![CDATA[<div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
     <p><a href='https://github.com/graphql/graphiql'>GraphiQL</a> is a graphical interactive in-browser GraphQL IDE. This is a great tool for testing GraphQL endpoints and also for Exploring documentation about GraphQL Servers. There are some limitations for default GraphiQL tool, It does not provide any option for saving queries like we have in postman and other API clients. It only saves the latest query in local storage. Another issue with GraphiQL is, it not providing any option for pass headers into GraphQL queries. It is very critical for the testing of application which needs to pass auth-token or some other headers. In this post Iam exploring few alternativs.</p>

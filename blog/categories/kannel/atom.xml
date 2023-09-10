@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Kannel | Rails Kitchen]]></title>
-  <link href="http://tech.eshaiju.in/blog/categories/kannel/atom.xml" rel="self"/>
-  <link href="http://tech.eshaiju.in/"/>
+  <link href="https://tech.eshaiju.com/blog/categories/kannel/atom.xml" rel="self"/>
+  <link href="https://tech.eshaiju.com/"/>
   <updated>2017-10-16T20:03:23+05:30</updated>
-  <id>http://tech.eshaiju.in/</id>
+  <id>https://tech.eshaiju.com/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Changing Kannel Log Level & Log Rotation]]></title>
-    <link href="http://tech.eshaiju.in/blog/2013/11/03/changing-kannel-log-level-log-rotation/"/>
+    <link href="https://tech.eshaiju.com/blog/2013/11/03/changing-kannel-log-level-log-rotation/"/>
     <updated>2013-11-03T12:40:00+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2013/11/03/changing-kannel-log-level-log-rotation</id>
+    <id>https://tech.eshaiju.com/blog/2013/11/03/changing-kannel-log-level-log-rotation</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
   If Kannel is configured so that the bearerbox, wapbox and/or smsbox log to file each of these log files will continue to grow unless administered in some way. &nbsp;One way of reducing logs is by change log level.&nbsp;kannel allow to have 5 log-level ( 0 - debug, 1 - info, 2 - warning, 3 - error, 4 - panic).&nbsp;We can change log level by editing log-level component in configuration file and also done by admin HTTP command without restaring bearerbox.
@@ -63,9 +63,9 @@ In this example the Kannel log files found in <span style="font-weight: bold;">/
   
   <entry>
     <title type="html"><![CDATA[Installing and Configuring SQL-Based Queue Engine for Kannel (SQL Box)]]></title>
-    <link href="http://tech.eshaiju.in/blog/2013/10/31/installing-and-configuring-sql-based/"/>
+    <link href="https://tech.eshaiju.com/blog/2013/10/31/installing-and-configuring-sql-based/"/>
     <updated>2013-10-31T00:57:00+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2013/10/31/installing-and-configuring-sql-based</id>
+    <id>https://tech.eshaiju.com/blog/2013/10/31/installing-and-configuring-sql-based</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
   SQL box is a special Kannel box that sits between bearer box and SMS box and uses a database queue to store and forward messages. Messages are queued on a configurable table (defaults to send_sms) and moved to another table (defaults to sent_sms) afterwards.
@@ -210,9 +210,9 @@ If you are keen to learn more about this , Refer <a href="http://www.blogalex.co
   
   <entry>
     <title type="html"><![CDATA[Kannel Monitoring Tool - Ruby Gem]]></title>
-    <link href="http://tech.eshaiju.in/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/"/>
+    <link href="https://tech.eshaiju.com/blog/2013/10/03/kannel-monitoring-tool-ruby-gem/"/>
     <updated>2013-10-03T23:47:00+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2013/10/03/kannel-monitoring-tool-ruby-gem</id>
+    <id>https://tech.eshaiju.com/blog/2013/10/03/kannel-monitoring-tool-ruby-gem</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
   <div>Last few months I have been facing lots of issues in Kannel SMS gateway.Some time sms are getting queued up, in some other time smsc went to the reconnecting stage. I searched for a tool which will monitor Kannel status unfortunately I didn't find a tool to monitor and give an alert. so decided to write a tool which will monitor Kannel activities.</div>
@@ -240,9 +240,9 @@ If you are keen to learn more about this , Refer <a href="http://www.blogalex.co
   
   <entry>
     <title type="html"><![CDATA[Configuring MySQL DLR Storage]]></title>
-    <link href="http://tech.eshaiju.in/blog/2013/09/09/configuring-mysql-dlr-storage/"/>
+    <link href="https://tech.eshaiju.com/blog/2013/09/09/configuring-mysql-dlr-storage/"/>
     <updated>2013-09-09T18:45:00+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2013/09/09/configuring-mysql-dlr-storage</id>
+    <id>https://tech.eshaiju.com/blog/2013/09/09/configuring-mysql-dlr-storage</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">To support mysql, we have to recompile kannel with --mysql 
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -321,9 +321,9 @@ Create table dlr<br /><br />
   
   <entry>
     <title type="html"><![CDATA[Kannel Installation and Configuration as SMS Gateway Server]]></title>
-    <link href="http://tech.eshaiju.in/blog/2013/09/01/kannel-installation-and-configuration/"/>
+    <link href="https://tech.eshaiju.com/blog/2013/09/01/kannel-installation-and-configuration/"/>
     <updated>2013-09-01T17:53:00+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2013/09/01/kannel-installation-and-configuration</id>
+    <id>https://tech.eshaiju.com/blog/2013/09/01/kannel-installation-and-configuration</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">Kannel is an open source WAP gateway and &nbsp;SMS gateway for GSM networks. &nbsp;The main use for Kannel is to link HTTP based services to various SMS centers using obscure protocols.Kannel is mainly being developed on Linux systems, and should be fairly easy to port to other Unix-like systems. However, kannel don't yet support other platforms.<br /><br /><b>Kannel Installation and Configuration as SMS gateway Server</b><br /><b>Installation</b><br />1 Before installing kannel you will need to install libxml. Download the source and follow the next steps for installation.We can download it from following link.<span style="color: #7a7a7a;">&nbsp;</span><a href="ftp://gd.tuwien.ac.at/pub/libxml/" style="background-color: white; border: 0px; color: #f3686d; font-family: Georgia, Times, serif; font-size: 14px; line-height: 21px; margin: 0px; outline: 0px; padding: 0px; vertical-align: baseline;" target="_blank">ftp://gd.tuwien.ac.at/pub/libxml/</a><br />2 Unzip it into some directory<br />3 Cd into directory where libxml is unzipped and then type the following commands<br />4 Type ./configure<br />5 Type make<br />6 Type make install<br />&nbsp; &nbsp;now you have libxml<br />7 Download latest version of Kannel <a href="http://www.kannel.org/download.shtml">http://www.kannel.org/download.shtml</a>&nbsp;and Unzip it into some directory &nbsp;or use svn co </span><a href="https://svn.kannel.org/gateway/trunk" style="white-space: pre-wrap;">https://svn.kannel.org/gateway/trunk</a>&nbsp; <span style="white-space: pre-wrap;"> to download latest version of gateway</span><br />8 cd into directory where Kannel is unzipped and then type the following commands<br />9 Type &nbsp;<span style="white-space: pre-wrap;">./configure --prefix=/usr/local/kannel-1.5.0 </span><span style="white-space: pre-wrap;">--enable-start-stop-daemon --with-mysql</span><br />10 Type make<br />11 Type make install<br /><br />&nbsp;Now kannel is ready<br /><br />Next step is to add configuration<br /><br />Kannel consists of three programs, usually run as &nbsp;daemons: &nbsp;bearerbox, wapbox, and smsbox. They implement the connection to the phone (SMS or UDP), the WAP protocol stack, and the SMS based services, respectively.<br /><br />We will need only &nbsp;bearerbox and smsbox as we are going to setup it as SMS gateway server. Bearerbox is the main queue and smsbox handles the smscs.<br /><br />Create a file named kannel.conf and add following configuration<br /><br />
 

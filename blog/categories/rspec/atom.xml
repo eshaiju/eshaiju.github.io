@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rspec | Rails Kitchen]]></title>
-  <link href="http://tech.eshaiju.in/blog/categories/rspec/atom.xml" rel="self"/>
-  <link href="http://tech.eshaiju.in/"/>
+  <link href="https://tech.eshaiju.com/blog/categories/rspec/atom.xml" rel="self"/>
+  <link href="https://tech.eshaiju.com/"/>
   <updated>2017-10-16T20:03:23+05:30</updated>
-  <id>http://tech.eshaiju.in/</id>
+  <id>https://tech.eshaiju.com/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rspec Run Specific Set of Tests Using --tag Option]]></title>
-    <link href="http://tech.eshaiju.in/blog/2015/02/18/rspec-run-specific-set-of-tests-using-tag-option/"/>
+    <link href="https://tech.eshaiju.com/blog/2015/02/18/rspec-run-specific-set-of-tests-using-tag-option/"/>
     <updated>2015-02-18T00:04:23+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2015/02/18/rspec-run-specific-set-of-tests-using-tag-option</id>
+    <id>https://tech.eshaiju.com/blog/2015/02/18/rspec-run-specific-set-of-tests-using-tag-option</id>
     <content type="html"><![CDATA[<div class='post'>
     <div dir="ltr" style="text-align: left;" trbidi="on">
 In my current project I wanted to avoid running a few set of slow tests every time. Tagging feature in rspec allow us to filter the examples to be run by tag. <br/><br/>

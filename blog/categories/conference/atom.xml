@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Conference | Rails Kitchen]]></title>
-  <link href="http://tech.eshaiju.in/blog/categories/conference/atom.xml" rel="self"/>
-  <link href="http://tech.eshaiju.in/"/>
+  <link href="https://tech.eshaiju.com/blog/categories/conference/atom.xml" rel="self"/>
+  <link href="https://tech.eshaiju.com/"/>
   <updated>2017-10-16T20:03:23+05:30</updated>
-  <id>http://tech.eshaiju.in/</id>
+  <id>https://tech.eshaiju.com/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Deccan RubyConf 2017 - First Experience as a Speaker]]></title>
-    <link href="http://tech.eshaiju.in/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/"/>
+    <link href="https://tech.eshaiju.com/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker/"/>
     <updated>2017-08-23T22:02:27+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker</id>
+    <id>https://tech.eshaiju.com/blog/2017/08/23/deccan-rubyconf-2017-first-experience-as-a-speaker</id>
     <content type="html"><![CDATA[<div class='post'>
   <div dir="ltr" style="text-align: left;" trbidi="on">
 <img src="/images/decaan2.jpg" width="250" height="220">

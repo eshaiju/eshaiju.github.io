@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rails 5 | Rails Kitchen]]></title>
-  <link href="http://tech.eshaiju.in/blog/categories/rails-5/atom.xml" rel="self"/>
-  <link href="http://tech.eshaiju.in/"/>
+  <link href="https://tech.eshaiju.com/blog/categories/rails-5/atom.xml" rel="self"/>
+  <link href="https://tech.eshaiju.com/"/>
   <updated>2017-10-16T20:03:23+05:30</updated>
-  <id>http://tech.eshaiju.in/</id>
+  <id>https://tech.eshaiju.com/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rails 5 'Belongs_to' Associations Default to Required True]]></title>
-    <link href="http://tech.eshaiju.in/blog/2016/02/15/rails-5-belongs-to-associations-default-to-required-true/"/>
+    <link href="https://tech.eshaiju.com/blog/2016/02/15/rails-5-belongs-to-associations-default-to-required-true/"/>
     <updated>2016-02-15T17:46:29+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2016/02/15/rails-5-belongs-to-associations-default-to-required-true</id>
+    <id>https://tech.eshaiju.com/blog/2016/02/15/rails-5-belongs-to-associations-default-to-required-true</id>
     <content type="html"><![CDATA[<div class='post'>
     <div dir="ltr" style="text-align: left;" trbidi="on">
     5.0.0.beta2 version is released. One of the changes I noticed is <strong>belongs_to</strong> associations by default required is true, that means if you create an object by setting foreign key to be nil it will throw a <strong>must exist</strong> validation error. This change will have some impact if you are migrating an existing rails 4 application in to rails 5 and foreign key is not mandatory in your application.

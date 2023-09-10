@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: ActiveAdmin | Rails Kitchen]]></title>
-  <link href="http://tech.eshaiju.in/blog/categories/activeadmin/atom.xml" rel="self"/>
-  <link href="http://tech.eshaiju.in/"/>
+  <link href="https://tech.eshaiju.com/blog/categories/activeadmin/atom.xml" rel="self"/>
+  <link href="https://tech.eshaiju.com/"/>
   <updated>2017-10-16T20:03:23+05:30</updated>
-  <id>http://tech.eshaiju.in/</id>
+  <id>https://tech.eshaiju.com/</id>
   <author>
     <name><![CDATA[Shaiju E]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Implement Dependent Select in Active Admin]]></title>
-    <link href="http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin/"/>
+    <link href="https://tech.eshaiju.com/blog/2015/02/15/implement-dependent-select-in-active-admin/"/>
     <updated>2015-02-15T14:53:50+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2015/02/15/implement-dependent-select-in-active-admin</id>
+    <id>https://tech.eshaiju.com/blog/2015/02/15/implement-dependent-select-in-active-admin</id>
     <content type="html"><![CDATA[<div class='post'>
     <div dir="ltr" style="text-align: left;" trbidi="on">
     One of my prevois project, I needed to populate product catalogs in second select box depends on the product selected in first select box in active admin input form. I implemented this by refering one of the example by <a href="https://github.com/abhidsm">@abidsm</a> in his github <a href="https://github.com/abhidsm/dependent-select">repo</a>. 
@@ -111,9 +111,9 @@ That's it now you can see catalog select box will be repopulated when we select 
   
   <entry>
     <title type="html"><![CDATA[ActiveSkin - Flat Skin for Active Admin]]></title>
-    <link href="http://tech.eshaiju.in/blog/2015/01/19/activeskin-flat-skin-for-active-admin/"/>
+    <link href="https://tech.eshaiju.com/blog/2015/01/19/activeskin-flat-skin-for-active-admin/"/>
     <updated>2015-01-19T09:25:41+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2015/01/19/activeskin-flat-skin-for-active-admin</id>
+    <id>https://tech.eshaiju.com/blog/2015/01/19/activeskin-flat-skin-for-active-admin</id>
     <content type="html"><![CDATA[<div class='post'>
     <div dir="ltr" style="text-align: left;" trbidi="on">
         <a href="https://github.com/activeadmin/activeadmin">Active Admin</a> is a Ruby on Rails plugin for generating administration style interfaces. It abstracts common business application patterns to make it simple for developers to implement beautiful and elegant interfaces with very little effort.
@@ -174,9 +174,9 @@ You can even change basic colors of the theme by placing some other variables:
   
   <entry>
     <title type="html"><![CDATA[In Page Editing in 'Active Admin' - Using Gem 'Best in Place']]></title>
-    <link href="http://tech.eshaiju.in/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/"/>
+    <link href="https://tech.eshaiju.com/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place/"/>
     <updated>2014-04-30T18:20:30+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place</id>
+    <id>https://tech.eshaiju.com/blog/2014/04/30/in-page-editing-in-rails-active-admin-using-gem-best-in-place</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
 <span style="font-weight: bold;">Best in place </span>is a j Query based Ajax plug in that can help us to add in place editing to our application that takes profit of Restful server-side controllers to allow users to edit stuff with no need of forms. Usage of this gem in rails application is well documented in <a href="https://github.com/bernat/best_in_place">github page</a>. You can checkout their live demo <a href="http://bipapp.heroku.com">here</a>. In this post I concentrating on how we can use best in place gem with is active admin pages.
@@ -233,9 +233,9 @@ For Editable Datepicker with formated output use <span style="font-weight: bold;
   
   <entry>
     <title type="html"><![CDATA[Nested Forms for Belongs_to Relationship - ActiveAdmin]]></title>
-    <link href="http://tech.eshaiju.in/blog/2014/03/16/nested-forms-for-belongsto-relationship/"/>
+    <link href="https://tech.eshaiju.com/blog/2014/03/16/nested-forms-for-belongsto-relationship/"/>
     <updated>2014-03-16T12:27:00+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2014/03/16/nested-forms-for-belongsto-relationship</id>
+    <id>https://tech.eshaiju.com/blog/2014/03/16/nested-forms-for-belongsto-relationship</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
 For my current project I had to add nested form for belongs_to relationship. After lots of searching i found a solution.
@@ -314,9 +314,9 @@ For my current project I had to add nested form for belongs_to relationship. Aft
   
   <entry>
     <title type="html"><![CDATA[FullCalendar - Integration With Ruby on Rails]]></title>
-    <link href="http://tech.eshaiju.in/blog/2014/03/05/fullcalendar-integration-with-ruby-on/"/>
+    <link href="https://tech.eshaiju.com/blog/2014/03/05/fullcalendar-integration-with-ruby-on/"/>
     <updated>2014-03-05T13:02:00+05:30</updated>
-    <id>http://tech.eshaiju.in/blog/2014/03/05/fullcalendar-integration-with-ruby-on</id>
+    <id>https://tech.eshaiju.com/blog/2014/03/05/fullcalendar-integration-with-ruby-on</id>
     <content type="html"><![CDATA[<div class='post'>
 <div dir="ltr" style="text-align: left;" trbidi="on">
 
